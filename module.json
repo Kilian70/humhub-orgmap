@@ -1,0 +1,16 @@
+{
+    "id": "orgmap",
+    "name": "OrgMap",
+    "description": "Visual organization map for communities and organizations.",
+    "keywords": [
+        "organization",
+        "map",
+        "community",
+        "structure",
+        "network"
+    ],
+    "version": "1.2.0",
+    "humhub": {
+        "minVersion": "1.18"
+    }
+}

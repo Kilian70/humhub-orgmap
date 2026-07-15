@@ -1,0 +1,497 @@
+/* =====================================================
+   SCROLL CONTAINER
+===================================================== */
+
+.orgmap-scroll {
+
+    width: 100%;
+
+    overflow: auto;
+
+    padding-bottom: 20px;
+
+    background: #ffffff;
+}
+
+/* =====================================================
+   ORGMAP HAUPTBEREICH
+===================================================== */
+
+.orgmap-wrapper {
+
+    position: relative;
+
+    background: #ffffff;
+
+    border: none;
+
+    overflow: visible;
+
+    transform-origin: top left;
+
+    display: block;
+}
+
+.container:fullscreen {
+	width: 100vw;
+	height: 100vh;
+	padding: 16px;
+	background: #ffffff;
+	overflow: hidden;
+}
+
+.container:fullscreen .orgmap-main,
+.container:fullscreen .orgmap-scroll {
+	height: calc(100vh - 100px);
+}
+
+html[data-bs-theme="dark"] .container:fullscreen {
+	background: #111;
+}
+
+@media print {
+	@page {
+		size: landscape;
+		margin: 8mm;
+	}
+
+	.orgmap-toolbar,
+	.orgmap-sidebar,
+	.orgmap-resize-handle {
+		display: none !important;
+	}
+
+	html,
+	body,
+	.container {
+		width: 100% !important;
+		max-width: none !important;
+		height: auto !important;
+		margin: 0 !important;
+		padding: 0 !important;
+		overflow: visible !important;
+	}
+
+	.orgmap-layout,
+	.orgmap-main,
+	.orgmap-scroll {
+		display: block !important;
+		width: 100% !important;
+		height: auto !important;
+		overflow: visible !important;
+		background: #fff !important;
+	}
+
+	.orgmap-wrapper {
+		zoom: 0.38;
+		transform: none !important;
+		transform-origin: top left !important;
+		box-shadow: none !important;
+		break-inside: avoid !important;
+		page-break-inside: avoid !important;
+	}
+
+	.orgmap-wrapper[data-workspace-size="small"] {
+		zoom: 0.52;
+	}
+
+	.orgmap-wrapper[data-workspace-size="large"] {
+		zoom: 0.28;
+	}
+
+	.orgmap-wrapper[data-workspace-size="custom"] {
+		zoom: 0.3;
+	}
+}
+
+
+/* =====================================================
+   SVG LINIEN
+===================================================== */
+
+#orgmap-svg {
+    z-index: 1;
+}
+
+
+/* =====================================================
+   HTML KNOTEN EBENE
+===================================================== */
+
+.orgmap-background-layer {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 1;
+
+    pointer-events: none;
+}
+
+#orgmap-svg {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 2;
+}
+
+.orgmap-layer {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 3;
+
+    pointer-events: none;
+}
+
+
+/*
+--------------------------------------------------
+ORGMAP Darkmode
+--------------------------------------------------
+*/
+
+html[data-bs-theme="dark"] .orgmap-scroll {
+
+	background: #111;
+}
+
+html[data-bs-theme="dark"] .orgmap-wrapper {
+
+	background: #1b1b1b;
+}
+
+html[data-bs-theme="dark"] .org-node-html {
+
+	color: #f5f5f5;
+}
+
+html[data-bs-theme="dark"] .org-node-content {
+
+	background:
+		rgba(35,35,35,0.88);
+
+	color: #f5f5f5;
+
+	border-color:
+		rgba(255,255,255,0.08);
+}
+
+html[data-bs-theme="dark"] .org-node-panel {
+
+	background:
+		rgba(40,40,40,0.35);
+}
+
+html[data-bs-theme="dark"]
+.org-node-panel
+.org-node-content {
+
+	background:
+		rgba(30,30,30,0.82);
+}
+
+html[data-bs-theme="dark"] .org-node-legend {
+
+	background:
+		rgba(35,35,35,0.7);
+}
+
+/*
+--------------------------------------------------
+Darkmode Secondary Buttons
+--------------------------------------------------
+*/
+
+html[data-bs-theme="dark"] .btn-secondary {
+
+	background-color: #3a3a3a !important;
+
+	border-color: #666 !important;
+
+	color: #ffffff !important;
+}
+
+html[data-bs-theme="dark"] .btn-secondary:hover {
+
+	background-color: #4a4a4a !important;
+
+	border-color: #777 !important;
+
+	color: #ffffff !important;
+}
+
+/*
+--------------------------------------------------
+Darkmode Label Background
+--------------------------------------------------
+*/
+
+html[data-bs-theme="dark"]
+.org-node-label.has-background {
+
+	background: rgba(20,20,20,0.72) !important;
+
+	color: #ffffff !important;
+
+	border-radius: 12px;
+
+	padding: 4px 10px;
+
+	backdrop-filter: blur(3px);
+}
+
+/*
+--------------------------------------------------
+Accessibility Focus
+--------------------------------------------------
+*/
+
+.org-node-html:focus-visible {
+
+	outline: 3px solid #4da3ff;
+
+	outline-offset: 4px;
+}
+
+
+/*
+--------------------------------------------------
+Mobile Layout
+--------------------------------------------------
+*/
+
+@media (max-width: 768px) {
+
+	.orgmap-controls .btn {
+
+		margin-right: 6px;
+	}
+
+	.orgmap-layout {
+
+		display: block;
+	}
+
+	.orgmap-sidebar {
+
+		width: 100% !important;
+
+		min-width: 0 !important;
+
+		max-height: none;
+
+		margin-bottom: 16px;
+	}
+
+	.orgmap-main {
+
+		width: 100%;
+	}
+
+	.orgmap-wrapper {
+
+		display: block;
+	}
+
+	.orgmap-scroll {
+
+		overflow-x: auto;
+	}
+
+	.orgmap-view-btn {
+
+		padding-left: 8px;
+
+		padding-right: 8px;
+
+		font-size: 12px;
+
+		min-width: 0;
+	}
+}
+
+/*
+--------------------------------------------------
+Layout
+--------------------------------------------------
+*/
+
+.orgmap-layout {
+
+	display: flex;
+
+	gap: 20px;
+
+	align-items: flex-start;
+}
+
+.orgmap-sidebar {
+
+	width: 260px;
+
+	min-width: 260px;
+
+	max-height: 80vh;
+
+	overflow: auto;
+
+	padding: 12px;
+
+	border-radius: 16px;
+
+	background: rgba(0,0,0,0.03);
+}
+
+.orgmap-main {
+
+	flex: 1;
+
+	min-width: 0;
+}
+
+html[data-bs-theme="dark"] .orgmap-sidebar {
+
+	background: rgba(255,255,255,0.05);
+}
+
+/*
+--------------------------------------------------
+Connection Types
+--------------------------------------------------
+*/
+
+.org-connection {
+
+	cursor: pointer;
+	vector-effect: non-scaling-stroke;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.org-connection.selected {
+
+	opacity: 1;
+
+	stroke-width: 5;
+}
+
+.org-connection-type-reports_to {
+
+	filter:
+		drop-shadow(
+			0 0 1px rgba(0,0,0,0.2)
+		);
+
+	stroke-width: 3;
+
+	pointer-events: stroke;
+}
+
+.org-connection-type-coordinates {
+
+	opacity: 0.85;
+
+	stroke-width: 2.5;
+}
+
+.org-connection-type-supports {
+
+	opacity: 0.55;
+}
+
+.org-connection-type-collaborates {
+
+	opacity: 0.75;
+
+	stroke-width: 2.5;
+}
+
+.org-connection-type-belongs_to {
+
+	opacity: 0.75;
+
+	stroke-width: 2;
+}
+
+.org-connection-type-decides {
+
+	stroke-width: 3.5;
+}
+
+.org-connection-type-informs {
+
+	opacity: 0.6;
+}
+
+.org-connection-label {
+
+	pointer-events: all;
+
+	cursor: move;
+}
+
+/*
+--------------------------------------------------
+Connection Hover
+--------------------------------------------------
+*/
+
+.org-connection {
+
+	cursor: pointer;
+}
+
+.org-connection-label {
+
+	cursor: move;
+}
+
+/*
+--------------------------------------------------
+ORGMAP Action Buttons
+--------------------------------------------------
+*/
+
+.orgmap-action-buttons {
+
+	display: flex;
+
+	align-items: center;
+
+	gap: 4px;
+}
+
+.orgmap-action-btn {
+
+	width: 28px;
+
+	height: 28px;
+
+	display: inline-flex;
+
+	align-items: center;
+
+	justify-content: center;
+
+	padding: 0;
+
+	flex-shrink: 0;
+}
+
+.orgmap-action-btn:focus {
+
+	outline: 2px solid #0d6efd;
+
+	outline-offset: 2px;
+}
+
+.orgmap-action-btn:last-child {
+
+	margin-right: 0;
+}

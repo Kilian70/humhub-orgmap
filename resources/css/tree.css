@@ -1,0 +1,501 @@
+/*
+--------------------------------------------------
+Tree Navigation
+--------------------------------------------------
+*/
+
+.tree-organ-title {
+
+	margin-top: 14px;
+
+	margin-bottom: 6px;
+
+	font-size: 18px;
+}
+
+.tree-list {
+
+	list-style: none;
+
+	padding-left: 0;
+
+	margin-bottom: 16px;
+}
+
+.tree-list li {
+
+	margin-bottom: 4px;
+
+	padding: 7px 9px;
+
+	border-radius: 10px;
+
+	background: rgba(0,0,0,0.03);
+
+	line-height: 1.15;
+}
+
+.tree-list a {
+
+	text-decoration: none;
+
+	color: inherit;
+
+	display: block;
+}
+
+.tree-list a:hover {
+
+	transform: translateX(2px);
+
+	transition: 0.15s ease;
+}
+
+.tree-list li.active {
+
+	background: rgba(33,150,243,0.12);
+
+	outline: 2px solid rgba(33,150,243,0.35);
+}
+
+.tree-list a:focus-visible {
+
+	outline: 3px solid #4da3ff;
+
+	outline-offset: 3px;
+
+	border-radius: 8px;
+}
+
+html[data-bs-theme="dark"] .tree-list li.active {
+
+	background: rgba(77,163,255,0.16);
+
+	outline: 2px solid rgba(77,163,255,0.45);
+}
+
+html[data-bs-theme="dark"]
+.tree-list a:focus-visible {
+
+	outline-color: #7db8ff;
+}
+
+.tree-list strong {
+
+	font-size: 14px;
+
+	display: block;
+}
+
+.tree-list small {
+
+	font-size: 11px;
+
+	display: block;
+
+	margin-top: 2px;
+
+	opacity: 0.65;
+}
+
+html[data-bs-theme="dark"] .tree-list li {
+
+	background: rgba(255,255,255,0.06);
+}
+
+html[data-bs-theme="dark"] .tree-list li.active {
+
+	outline: 2px solid rgba(255,255,255,0.12);
+}
+
+/*
+--------------------------------------------------
+Tree Grid Layout
+--------------------------------------------------
+*/
+
+.tree-group-grid {
+
+	display: grid;
+
+	grid-template-columns:
+		repeat(auto-fill, minmax(220px, 1fr));
+
+	gap: 12px;
+
+	margin-bottom: 20px;
+	
+	align-items: stretch;
+}
+
+.tree-card {
+
+	border-radius: 10px;
+
+	background: rgba(0,0,0,0.03);
+
+	line-height: 1.15;
+
+	cursor: pointer;
+
+	border: 1px solid transparent;
+
+	transition:
+		transform 0.15s ease,
+		background 0.15s ease,
+		box-shadow 0.15s ease;
+		
+	min-height: 58px;
+
+	overflow: hidden;
+}
+
+.tree-card:hover {
+
+	transform: translateY(-2px);
+
+	background: rgba(0,0,0,0.05);
+	
+	box-shadow:
+		0 2px 8px rgba(0,0,0,0.06);
+
+	border-color: rgba(33,150,243,0.18);
+}
+
+.tree-card:active {
+
+	transform: translateY(0);
+}
+
+.tree-card.active,
+.tree-card:focus-within {
+
+	background: rgba(33,150,243,0.22) !important;
+
+	border-color: #2196f3 !important;
+	box-shadow: 0 0 0 3px rgba(33,150,243,0.75) inset !important;
+
+	transform: translateX(2px);
+}
+
+.tree-link:hover {
+
+	text-decoration: none;
+}
+
+.tree-card strong {
+
+	font-size: 14px;
+
+	display: block;
+	
+	word-break: break-word;
+}
+
+.tree-card small {
+
+	font-size: 11px;
+
+	display: block;
+
+	margin-top: 6px;
+
+	opacity: 0.65;
+	
+	overflow-wrap: break-word;
+}
+
+/*
+--------------------------------------------------
+Tree Card Title
+--------------------------------------------------
+*/
+
+.tree-card-title {
+
+	display: flex;
+
+	align-items: center;
+
+	gap: 8px;
+}
+
+.tree-card-title i {
+
+	width: 18px;
+
+	text-align: center;
+
+	flex-shrink: 0;
+
+	color: inherit;
+}
+
+.tree-card-subtitle {
+
+	padding-left: 26px;
+}
+
+.tree-card a {
+
+	text-decoration: none;
+
+	color: inherit;
+
+	display: block;
+
+	height: 100%;
+	
+	width: 100%;
+	
+	padding: 8px 10px;
+	
+	display: flex;
+
+	flex-direction: column;
+	
+	justify-content: flex-start;
+	
+	box-sizing: border-box;
+}
+
+.tree-card a:focus-visible {
+
+	outline: 3px solid #4da3ff;
+
+	outline-offset: 3px;
+
+	border-radius: 8px;
+}
+
+html[data-bs-theme="dark"] .tree-card {
+
+	background: rgba(255,255,255,0.06);
+	
+	border: 1px solid rgba(255,255,255,0.04);
+}
+
+html[data-bs-theme="dark"] .tree-card:hover {
+
+	background: rgba(255,255,255,0.09);
+	
+	border-color: rgba(255,255,255,0.08);
+}
+
+html[data-bs-theme="dark"] .tree-card.active,
+html[data-bs-theme="dark"] .tree-card:focus-within {
+
+	background: rgba(77,163,255,0.28) !important;
+
+	border-color: #4da3ff !important;
+	box-shadow: 0 0 0 3px rgba(77,163,255,0.8) inset !important;
+}
+
+
+/*
+--------------------------------------------------
+View Modes
+--------------------------------------------------
+*/
+
+.orgmap-layout[data-view-mode="map"]
+.orgmap-sidebar {
+
+	display: none;
+}
+
+.orgmap-layout[data-view-mode="tree"]
+.orgmap-main {
+
+	display: none;
+}
+
+.orgmap-layout[data-view-mode="tree"] {
+
+	display: block;
+}
+
+/*
+--------------------------------------------------
+Tree Only Mode
+--------------------------------------------------
+*/
+
+.orgmap-layout[data-view-mode="tree"]
+.orgmap-sidebar {
+
+	width: 100%;
+
+	min-width: 0;
+
+	max-height: none;
+}
+
+
+/*
+--------------------------------------------------
+Tree Selected Node
+--------------------------------------------------
+*/
+
+.tree-selected-node .org-node-background {
+
+	box-shadow:
+		0 0 0 4px rgba(33,150,243,0.9),
+		0 0 18px rgba(33,150,243,0.35);
+
+	opacity: 1 !important;
+}
+
+.org-node-html {
+
+	transition:
+		opacity 0.2s ease,
+		filter 0.2s ease;
+}
+
+html[data-bs-theme="dark"]
+.tree-selected-node .org-node-background {
+
+	box-shadow:
+		0 0 0 4px rgba(77,163,255,0.75),
+		0 0 20px rgba(77,163,255,0.25);
+}
+
+/*
+--------------------------------------------------
+Tree Toggle
+--------------------------------------------------
+*/
+
+.tree-toggle {
+
+	cursor: pointer;
+
+	user-select: none;
+
+	display: flex;
+
+	align-items: center;
+
+	gap: 8px;
+}
+
+.tree-toggle-icon {
+
+	font-size: 14px;
+
+	transition: transform 0.2s ease;
+}
+
+.tree-toggle.is-collapsed
+.tree-toggle-icon {
+
+	transform: rotate(-90deg);
+}
+
+.tree-title-text {
+
+	flex: 1;
+
+	min-width: 0;
+}
+
+.tree-count {
+
+	flex-shrink: 0;
+
+	opacity: 0.65;
+
+	font-size: 13px;
+}
+
+/*
+--------------------------------------------------
+Collapsed Tree Groups
+--------------------------------------------------
+*/
+
+.tree-organ-content.is-collapsed {
+
+	display: none !important;
+}
+
+/*
+--------------------------------------------------
+Tree Header
+--------------------------------------------------
+*/
+
+.tree-header {
+
+	margin-bottom: 14px;
+}
+
+.tree-search-status {
+	min-height: 18px;
+	margin-top: 4px;
+	font-size: 12px;
+	color: #666;
+}
+
+html[data-bs-theme="dark"] .tree-search-status {
+	color: #bbb;
+}
+
+.tree-header-top {
+
+	display: flex;
+
+	align-items: center;
+
+	justify-content: space-between;
+
+	margin-bottom: 10px;
+}
+
+.tree-header h3 {
+
+	margin: 0;
+}
+
+.tree-actions {
+
+	display: flex;
+
+	gap: 6px;
+}
+
+.tree-actions .btn {
+
+	min-width: 32px;
+
+	padding-left: 0;
+
+	padding-right: 0;
+}
+
+#tree-search {
+
+	max-width: 260px;
+}
+
+/*
+--------------------------------------------------
+Split Mode Navigation
+--------------------------------------------------
+*/
+
+.orgmap-layout[data-view-mode="split"]
+.tree-organ-title {
+
+	font-size: 15px;
+
+	line-height: 1.2;
+}
+
+.orgmap-layout[data-view-mode="split"]
+.tree-count {
+
+	font-size: 12px;
+}
