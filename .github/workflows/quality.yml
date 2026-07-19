@@ -1,0 +1,67 @@
+name: Modul prüfen
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  syntax:
+    name: PHP, JavaScript und Moduldatei
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Repository laden
+        uses: actions/checkout@v4
+
+      - name: PHP 8.1 einrichten
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: PHP-Syntax prüfen
+        shell: bash
+        run: |
+          find . -name '*.php' -not -path './vendor/*' -print0 \
+            | xargs -0 -n1 php -l
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: JavaScript-Syntax prüfen
+        shell: bash
+        run: |
+          find resources/js -name '*.js' -print0 \
+            | xargs -0 -n1 node --check
+
+      - name: module.json validieren
+        shell: bash
+        run: |
+          php -r '
+          $module = json_decode(
+              file_get_contents("module.json"),
+              true,
+              512,
+              JSON_THROW_ON_ERROR
+          );
+
+          foreach (["id", "name", "version", "humhub"] as $field) {
+              if (!array_key_exists($field, $module)) {
+                  throw new RuntimeException("Fehlendes Feld: " . $field);
+              }
+          }
+
+          echo "OrgMap " . $module["version"] . PHP_EOL;
+          '
