@@ -74,6 +74,11 @@ $this->title = Yii::t(
 
 	<?php $form = ActiveForm::begin(); ?>
 
+	<?= $form->errorSummary($model, [
+		'class' => 'alert alert-danger',
+		'role' => 'alert',
+	]) ?>
+
 	<?php
 	/*
 	--------------------------------------------------
@@ -84,12 +89,12 @@ $this->title = Yii::t(
 	
 	<hr>
 
-	<h3>
+	<h2 class="h3">
 		<?= Yii::t(
 			'OrgmapModule.base',
 			'Verbindung'
 		) ?>
-	</h3>
+	</h2>
 
 	<?= $form->field($model, 'type')
 		->label(
@@ -189,12 +194,12 @@ $this->title = Yii::t(
 	
 	<hr>
 
-	<h3>
+	<h2 class="h3">
 		<?= Yii::t(
 			'OrgmapModule.base',
 			'Beschriftung'
 		) ?>
-	</h3>
+	</h2>
 
 	<?= $form->field($model, 'label')
 		->label(
@@ -244,12 +249,12 @@ $this->title = Yii::t(
 
 	<hr>
 	
-	<h3>
+	<h2 class="h3">
 		<?= Yii::t(
 			'OrgmapModule.base',
 			'Position'
 		) ?>
-	</h3>
+	</h2>
 
 	<?= $form->field($model, 'label_offset_x')
 		->label(
@@ -275,12 +280,12 @@ $this->title = Yii::t(
 
 	<hr>
 
-	<h3>
+	<h2 class="h3">
 		<?= Yii::t(
 			'OrgmapModule.base',
 			'Vorschau'
 		) ?>
-	</h3>
+	</h2>
 	
 	<?php
 	
@@ -324,8 +329,9 @@ $this->title = Yii::t(
 	
 	?>
 	
-	<div
-		style="
+		<div
+			aria-hidden="true"
+			style="
 			padding:20px;
 			text-align:center;
 			border:1px solid #ddd;

@@ -190,6 +190,7 @@ return [
     'Verbindung' => 'Verbindung',
     'Verbindung bearbeiten' => 'Verbindung bearbeiten',
     'Verbindungen' => 'Verbindungen',
+    'Vollbild verlassen' => 'Vollbild verlassen',
     'Verbindungen auswählen' => 'Verbindungen auswählen',
     'Verbindungslinien anzeigen' => 'Verbindungslinien anzeigen',
     'Verbindungstyp' => 'Verbindungstyp',
@@ -222,5 +223,11 @@ return [
 
     'Erlaubt das Anzeigen des Organigramms.' => 'Erlaubt das Anzeigen des Organigramms.',
     'Erlaubt das Bearbeiten des Organigramms.' => 'Erlaubt das Bearbeiten des Organigramms.',
+	'Werkzeuge' => 'Werkzeuge',
+	'Kartenbereich' => 'Kartenbereich',
+	'öffnet in neuem Tab' => 'öffnet in neuem Tab',
+	'Suche...' => 'Suche...',
+	'Treffer' => 'Treffer',
+	'Zoom' => 'Zoom',
 
 ];

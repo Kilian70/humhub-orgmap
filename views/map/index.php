@@ -54,24 +54,30 @@
 	
 			<h1><?= Html::encode($this->title) ?></h1>
 	
-			<p class="orgmap-toolbar">
+			<p
+				class="orgmap-toolbar"
+				role="toolbar"
+				aria-label="<?= Yii::t('OrgmapModule.base', 'Werkzeuge') ?>"
+			>
 
         <?php if (Yii::$app->user->isAdmin()): ?>
 
-            <a
+			<a
                 href="<?= Url::to(['/orgmap/admin/index']) ?>"
                 class="btn btn-secondary btn-sm"
-                title="<?= Yii::t('OrgmapModule.base', 'Verwaltung') ?>"
-            >
-                <i class="fa fa-cog"></i>
+				title="<?= Yii::t('OrgmapModule.base', 'Verwaltung') ?>"
+				aria-label="<?= Yii::t('OrgmapModule.base', 'Verwaltung') ?>"
+			>
+				<i class="fa fa-cog" aria-hidden="true"></i>
             </a>
 
 <a
 	href="<?= Url::to(['/orgmap/map/index', 'edit' => 1]) ?>"
 	class="btn btn-secondary btn-sm"
 	title="<?= Yii::t('OrgmapModule.base', 'Bearbeitungsmodus') ?>"
+	aria-label="<?= Yii::t('OrgmapModule.base', 'Bearbeitungsmodus') ?>"
 >
-	<i class="fa fa-pencil"></i>
+	<i class="fa fa-pencil" aria-hidden="true"></i>
 </a>
 
         <?php endif; ?>
@@ -81,6 +87,7 @@
 	type="button"
 	class="btn btn-secondary btn-sm orgmap-view-btn"
 	data-view="tree"
+	aria-pressed="false"
 >
 	<?= Yii::t(
 		'OrgmapModule.base',
@@ -88,10 +95,19 @@
 	) ?>
 </button>
 
+<span
+	id="orgmap-zoom-status"
+	class="sr-only"
+	aria-live="polite"
+	aria-atomic="true"
+	data-label="<?= Yii::t('OrgmapModule.base', 'Zoom') ?>"
+></span>
+
 <button
 	type="button"
 	class="btn btn-secondary btn-sm orgmap-view-btn"
 	data-view="map"
+	aria-pressed="false"
 >
 	<?= Yii::t(
 		'OrgmapModule.base',
@@ -103,6 +119,7 @@
 	type="button"
 	class="btn btn-secondary btn-sm orgmap-view-btn"
 	data-view="split"
+	aria-pressed="true"
 >
 	<?= Yii::t(
 		'OrgmapModule.base',
@@ -150,6 +167,9 @@
 	class="btn btn-secondary btn-sm"
 	title="<?= Yii::t('OrgmapModule.base', 'Vollbild') ?>"
 	aria-label="<?= Yii::t('OrgmapModule.base', 'Vollbild') ?>"
+	aria-pressed="false"
+	data-label-enter="<?= Yii::t('OrgmapModule.base', 'Vollbild') ?>"
+	data-label-exit="<?= Yii::t('OrgmapModule.base', 'Vollbild verlassen') ?>"
 >
 	<i class="fa fa-expand"></i>
 </button>
@@ -163,6 +183,7 @@
 >
 	<i class="fa fa-print"></i>
 </button>
+		</p>
     
 
 <?php
@@ -243,18 +264,29 @@ foreach ($nodes as $workspaceNode) {
 	data-view-mode="<?= $viewMode ?>"
 >
 
-	<div class="orgmap-sidebar">
+	<nav
+		class="orgmap-sidebar"
+		aria-label="<?= Yii::t('OrgmapModule.base', 'Navigation') ?>"
+	>
 
 			<?= $this->render('tree', [
 				'organs' => $organs,
 				'treeNodes' => $treeNodes,
 			]) ?>
 
-	</div>
+	</nav>
 
-	<div class="orgmap-main">
+	<section
+		class="orgmap-main"
+		aria-label="<?= Yii::t('OrgmapModule.base', 'Karte') ?>"
+	>
 	
-	<div class="orgmap-scroll">
+		<div
+			class="orgmap-scroll"
+			tabindex="0"
+			role="region"
+			aria-label="<?= Yii::t('OrgmapModule.base', 'Kartenbereich') ?>"
+		>
 	
 <div
     class="orgmap-wrapper"
@@ -273,8 +305,10 @@ foreach ($nodes as $workspaceNode) {
 >
 
 	
-			<svg
-				id="orgmap-svg"
+				<svg
+					id="orgmap-svg"
+					aria-hidden="true"
+					focusable="false"
 				width="<?= $workspaceWidth ?>"
 				height="<?= $workspaceHeight ?>"
 				viewBox="0 0 <?= $workspaceWidth ?> <?= $workspaceHeight ?>"
@@ -510,6 +544,30 @@ foreach ($nodes as $workspaceNode) {
 
 </svg>
 
+<?php if ($showLines && !empty($connections)): ?>
+	<section class="sr-only" aria-labelledby="orgmap-connections-title">
+		<h2 id="orgmap-connections-title">
+			<?= Yii::t('OrgmapModule.base', 'Verbindungen') ?>
+		</h2>
+		<ul>
+			<?php foreach ($connections as $connection): ?>
+				<?php
+				$fromNode = $nodesById[$connection->from_node_id] ?? null;
+				$toNode = $nodesById[$connection->to_node_id] ?? null;
+				if (!$fromNode || !$toNode) {
+					continue;
+				}
+				$typeLabels = \humhub\modules\orgmap\models\Connection::getTypeOptions();
+				$relation = $connection->label ?: ($typeLabels[$connection->type] ?? Yii::t('OrgmapModule.base', 'Verbindung'));
+				?>
+				<li>
+					<?= Html::encode($fromNode->title . ' – ' . $relation . ' – ' . $toNode->title) ?>
+				</li>
+			<?php endforeach; ?>
+		</ul>
+		</section>
+	<?php endif; ?>
+
 
 <?php
 /*
@@ -537,7 +595,7 @@ Node Rendering
 
 	<?php endforeach; ?>
 
-</div>
+	</div>
 
 <div class="orgmap-layer">
 
@@ -562,6 +620,8 @@ Node Rendering
 </div>
 
 </div>
+
+</section>
 
 </div>
 

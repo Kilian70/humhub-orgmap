@@ -15,7 +15,12 @@ $this->title = Yii::t('OrgmapModule.base', 'Organ');
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?php $form = ActiveForm::begin(); ?>
+	<?php $form = ActiveForm::begin(); ?>
+
+	<?= $form->errorSummary($model, [
+		'class' => 'alert alert-danger',
+		'role' => 'alert',
+	]) ?>
 
     <?= $form->field($model, 'name') ?>
 

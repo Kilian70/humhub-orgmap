@@ -273,9 +273,9 @@ function initTreeToggle() {
 				'is-collapsed'
 			);
 
-			toggle.classList.remove(
-				'is-collapsed'
-			);
+				toggle.classList.remove(
+					'is-collapsed'
+				);
 		}
 
 		toggle.setAttribute(
@@ -402,12 +402,10 @@ document.addEventListener(
 			.querySelectorAll(
 				'.tree-toggle'
 			)
-			.forEach(toggle => {
-
-				toggle.classList.remove(
-					'is-collapsed'
-				);
-			});
+				.forEach(toggle => {
+					toggle.classList.remove('is-collapsed');
+					toggle.setAttribute('aria-expanded', 'true');
+				});
 
 		localStorage.setItem(
 			'orgmapCollapsedGroups',
@@ -454,12 +452,10 @@ document.addEventListener(
 			.querySelectorAll(
 				'.tree-toggle'
 			)
-			.forEach(toggle => {
-
-				toggle.classList.add(
-					'is-collapsed'
-				);
-			});
+				.forEach(toggle => {
+					toggle.classList.add('is-collapsed');
+					toggle.setAttribute('aria-expanded', 'false');
+				});
 
 		localStorage.setItem(
 			'orgmapCollapsedGroups',
@@ -548,10 +544,11 @@ document.addEventListener(
 			const visibleCount = Array.from(
 				document.querySelectorAll('.tree-card')
 			).filter(card => card.style.display !== 'none').length;
-			const status = document.getElementById('tree-search-status');
-			if (status) {
-				status.textContent = value ? `Treffer: ${visibleCount}` : '';
-			}
+				const status = document.getElementById('tree-search-status');
+				if (status) {
+					const resultLabel = search.dataset.resultLabel || 'Results';
+					status.textContent = value ? `${resultLabel}: ${visibleCount}` : '';
+				}
 	}
 );
 
@@ -566,16 +563,6 @@ document.addEventListener('keydown', function (event) {
 });
 
 document.addEventListener('keydown', function (event) {
-	const toggle = event.target.closest('.tree-toggle');
-	if (!toggle || (event.key !== 'Enter' && event.key !== ' ')) {
-		return;
-	}
-
-	event.preventDefault();
-	toggle.click();
-});
-
-document.addEventListener('keydown', function (event) {
 	const currentLink = event.target.closest('.tree-link');
 	if (!currentLink || !['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) {
 		return;
@@ -583,10 +570,11 @@ document.addEventListener('keydown', function (event) {
 
 	const visibleLinks = Array.from(
 		document.querySelectorAll('.tree-link')
-	).filter(link => {
-		const card = link.closest('.tree-card');
-		const group = link.closest('.tree-organ-content');
-		return card
+		).filter(link => {
+			const card = link.closest('.tree-card');
+			const group = link.closest('.tree-organ-content');
+			return card
+				&& link.getAttribute('aria-disabled') !== 'true'
 			&& card.style.display !== 'none'
 			&& (!group || (!group.classList.contains('is-collapsed') && !group.classList.contains('search-hidden')));
 	});

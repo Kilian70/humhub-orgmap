@@ -186,43 +186,45 @@ $organNames[0] = Yii::t(
 <?= Html::endForm() ?>
 
 
-    <table class="table table-hover table-striped">
+	<div class="table-responsive" tabindex="0" role="region" aria-label="<?= Html::encode($this->title) ?>">
+	<table class="table table-hover table-striped">
+		<caption class="sr-only"><?= Html::encode($this->title) ?></caption>
 
         <thead>
 
             <tr>
 
-                <th width="30%">
+				<th scope="col" width="30%">
 
                     <?= Yii::t('OrgmapModule.base', 'Name') ?>
 
                 </th>
 
-                <th width="25%">
+				<th scope="col" width="25%">
 
                     <?= Yii::t('OrgmapModule.base', 'Bereich') ?>
 
                 </th>
 
-                <th width="15%">
+				<th scope="col" width="15%">
 
                     <?= Yii::t('OrgmapModule.base', 'Elementtyp') ?>
 
                 </th>
 
-                <th width="10%">
+				<th scope="col" width="10%">
 
                     <?= Yii::t('OrgmapModule.base', 'Extern') ?>
 
                 </th>
                 
-                <th width="10%">
+				<th scope="col" width="10%">
 
 					<?= Yii::t('OrgmapModule.base', 'Sichtbar') ?>
 				
 				</th>
 
-                <th width="20%">
+				<th scope="col" width="20%">
 
                     <?= Yii::t('OrgmapModule.base', 'Aktionen') ?>
 
@@ -553,6 +555,7 @@ $externalNodes = Node::find()
        
        </tbody>
 
-    </table>
+	</table>
+	</div>
 
 </div>

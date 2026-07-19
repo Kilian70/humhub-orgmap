@@ -28,6 +28,16 @@
 			layout.dataset.viewMode =
 				savedView;
 		}
+
+		function updateViewState(mode) {
+			viewButtons.forEach(button => {
+				const isActive = button.dataset.view === mode;
+				button.setAttribute('aria-pressed', String(isActive));
+				button.classList.toggle('active', isActive);
+			});
+		}
+
+		updateViewState(layout.dataset.viewMode);
 	
 		viewButtons.forEach(button => {
 	
@@ -38,6 +48,8 @@
 	
 				layout.dataset.viewMode =
 					mode;
+
+				updateViewState(mode);
 	
 				localStorage.setItem(
 					'orgmapViewMode',
@@ -48,6 +60,11 @@
 	}
 	
 	initOrgmapViewSwitcher();
+
+	const fullscreenButton = document.getElementById('orgmap-fullscreen');
+	if (fullscreenButton && !document.fullscreenEnabled) {
+		fullscreenButton.disabled = true;
+	}
 	
 	initIconPicker();
 	
@@ -146,13 +163,20 @@
 	});
 
 	document.addEventListener('fullscreenchange', function () {
-		const icon = document.querySelector('#orgmap-fullscreen i');
-		if (!icon) {
+		const button = document.querySelector('#orgmap-fullscreen');
+		const icon = button?.querySelector('i');
+		if (!button || !icon) {
 			return;
 		}
 
 		icon.classList.toggle('fa-expand', !document.fullscreenElement);
 		icon.classList.toggle('fa-compress', Boolean(document.fullscreenElement));
+		button.setAttribute('aria-pressed', String(Boolean(document.fullscreenElement)));
+		const label = document.fullscreenElement
+			? button.dataset.labelExit
+			: button.dataset.labelEnter;
+		button.setAttribute('aria-label', label);
+		button.setAttribute('title', label);
 
 		setTimeout(function () {
 			if (typeof fitWorkspace === 'function') {

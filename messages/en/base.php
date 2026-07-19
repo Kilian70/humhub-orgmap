@@ -258,7 +258,9 @@ return [
     => 'Edit Connection',
 
 'Verbindungen'
-    => 'Connections',
+=> 'Connections',
+'Vollbild verlassen'
+=> 'Exit fullscreen',
 
 'Verbindungen auswählen'
     => 'Select Connections',
@@ -348,5 +350,23 @@ return [
 
 'Erlaubt das Bearbeiten des Organigramms.'
     => 'Allows editing the organization map.',
+
+'Werkzeuge'
+	=> 'Tools',
+
+'Kartenbereich'
+	=> 'Map area',
+
+'öffnet in neuem Tab'
+	=> 'opens in a new tab',
+
+'Suche...'
+	=> 'Search...',
+
+'Treffer'
+	=> 'Results',
+
+'Zoom'
+	=> 'Zoom',
     
     ];

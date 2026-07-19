@@ -33,7 +33,12 @@ $this->title = Yii::t('OrgmapModule.base', 'ORG. Kreis');
 
 </p>
 
-    <?php $form = ActiveForm::begin(); ?>
+	<?php $form = ActiveForm::begin(); ?>
+
+	<?= $form->errorSummary($model, [
+		'class' => 'alert alert-danger',
+		'role' => 'alert',
+	]) ?>
 
     <?= $form->field($model, 'space_id')
         ->hiddenInput()
@@ -48,7 +53,7 @@ $this->title = Yii::t('OrgmapModule.base', 'ORG. Kreis');
 		'attribute' => 'icon_class',
 	]) ?>
 
-	<label class="control-label">
+		<label class="control-label" for="node-content">
 		Inhalt
 	</label>
 	
@@ -117,12 +122,12 @@ $this->title = Yii::t('OrgmapModule.base', 'ORG. Kreis');
 	
 	<hr>
 	
-	<h3>
+	<h2 class="h3">
 		<?= Yii::t(
 			'OrgmapModule.base',
 			'Darstellung'
 		) ?>
-	</h3>
+	</h2>
 	
 		<?= $form->field($model, 'display_mode')->dropDownList([
 		
@@ -296,12 +301,12 @@ $this->title = Yii::t('OrgmapModule.base', 'ORG. Kreis');
 	
 	<hr>
 	
-	<h3>
+	<h2 class="h3">
 		<?= Yii::t(
 			'OrgmapModule.base',
 			'Verbindungen'
 		) ?>
-	</h3>
+	</h2>
 		
 		
 	<?= $form->field($model, 'connectionIds')
@@ -354,48 +359,50 @@ $this->title = Yii::t('OrgmapModule.base', 'ORG. Kreis');
 	
 	<?php if (!$model->isNewRecord): ?>
 
+	<div class="table-responsive" tabindex="0" role="region" aria-label="<?= Yii::t('OrgmapModule.base', 'Verbindungen') ?>">
 	<table class="table table-bordered">
+		<caption class="sr-only"><?= Yii::t('OrgmapModule.base', 'Verbindungen') ?></caption>
 
 		<thead>
 
 			<tr>
 
-				<th>
+				<th scope="col">
 					<?= Yii::t(
 						'OrgmapModule.base',
 						'Ziel'
 					) ?>
 				</th>
 				
-				<th>
+				<th scope="col">
 					<?= Yii::t(
 						'OrgmapModule.base',
 						'Typ'
 					) ?>
 				</th>
 
-				<th>
+				<th scope="col">
 					<?= Yii::t(
 						'OrgmapModule.base',
 						'Farbe'
 					) ?>
 				</th>
 
-				<th>
+				<th scope="col">
 					<?= Yii::t(
 						'OrgmapModule.base',
 						'Dicke'
 					) ?>
 				</th>
 
-				<th>
+				<th scope="col">
 					<?= Yii::t(
 						'OrgmapModule.base',
 						'Stil'
 					) ?>
 				</th>
 				
-				<th>
+				<th scope="col">
 					<?= Yii::t(
 						'OrgmapModule.base',
 						'Aktionen'
@@ -511,18 +518,19 @@ $this->title = Yii::t('OrgmapModule.base', 'ORG. Kreis');
 		</tbody>
 
 	</table>
+	</div>
 
 <?php endif; ?>
 
 	
 	<hr>
 
-	<h3>
+	<h2 class="h3">
 	<?= Yii::t(
 		'OrgmapModule.base',
 		'Position und Grösse'
 	) ?>
-</h3>
+</h2>
 
 <div class="form-group">
 
@@ -565,12 +573,12 @@ $this->title = Yii::t('OrgmapModule.base', 'ORG. Kreis');
 <?= $form->field($model, 'font_size') ?>    
     <hr>
 
-	<h3>
+	<h2 class="h3">
 		<?= Yii::t(
 			'OrgmapModule.base',
 			'Verhalten'
 		) ?>
-	</h3>
+	</h2>
     
     <?= $form->field($model, 'label_background')->checkbox() ?>
     
