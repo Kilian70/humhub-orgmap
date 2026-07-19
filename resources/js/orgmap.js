@@ -1,5 +1,3 @@
-	console.log('ORGMAP JS LOADED');
-	
 	/*
 	--------------------------------------------------
 	View Mode Switcher

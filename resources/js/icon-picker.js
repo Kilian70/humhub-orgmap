@@ -1,5 +1,3 @@
-console.log('ICON PICKER LOADED');
-
 function initIconPicker() {
 
 	const input =
