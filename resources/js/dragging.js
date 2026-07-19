@@ -1,5 +1,3 @@
-	console.log('DRAGGING JS LOADED');
-	
 	/*
 	==================================================
 	Dragging
@@ -93,8 +91,6 @@
 	
 				state.selectedConnectionLabel =
 					this;
-				
-				console.log('LABEL DOWN');
 				
 				state.dragStartX =
 					event.clientX;

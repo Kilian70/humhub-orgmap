@@ -1,5 +1,3 @@
-console.log('PANNING JS LOADED');
-
 /*
 ==================================================
 Panning

@@ -1,5 +1,3 @@
-	console.log('CORE JS LOADED');
-	
 	const state = {
 	
 		selectedNode: null,
@@ -83,18 +81,6 @@
 		SCROLL.clientHeight;
 		
 	
-	console.log(
-	'WORKSPACE:',
-	WORKSPACE_WIDTH,
-	WORKSPACE_HEIGHT
-	);
-	
-	console.log(
-		'AVAILABLE:',
-		AVAILABLE_WIDTH,
-		AVAILABLE_HEIGHT
-	);
-		
 	/*
 	--------------------------------------------------
 	Einheitliche Kamera
@@ -152,11 +138,6 @@
 	
 		panY: DEFAULT_PAN_Y
 	};
-	
-	console.log(
-	'INITIAL VIEW:',
-	window.orgmapView
-);
 	
 	/*
 --------------------------------------------------
@@ -305,11 +286,6 @@ function getContentBounds() {
 		const bounds =
 			getMapBounds();
 	
-		console.log(
-			'MAP BOUNDS:',
-			bounds
-		);
-	
 		if (bounds) {
 	
 			const padding = 0;
@@ -328,10 +304,6 @@ function getContentBounds() {
 				Math.min(zoomX, zoomY)
 			);
 	
-			console.log(
-				'AUTO ZOOM:',
-				window.orgmapView.zoom
-			);
 		}
 	
 	/*
@@ -350,9 +322,6 @@ function getContentBounds() {
 			40
 			- (bounds.minY * window.orgmapView.zoom);
 	
-		console.log(
-			'MOBILE AUTO CENTER'
-		);
 	}
 	
 	}

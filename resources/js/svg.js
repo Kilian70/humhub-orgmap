@@ -1,5 +1,3 @@
-console.log('SVG JS LOADED');
-
 const svg =
 	document.getElementById(
 		'orgmap-svg'
@@ -129,4 +127,3 @@ const svg =
 	                }
             });
         }
-

@@ -230,12 +230,7 @@ function initTreeToggle() {
 	const toggles =
 		document.querySelectorAll('.tree-toggle');
 
-	const collapsedGroups =
-		JSON.parse(
-			localStorage.getItem(
-				'orgmapCollapsedGroups'
-			) || '[]'
-		);
+	const collapsedGroups = readCollapsedGroups();
 
 	toggles.forEach(toggle => {
 
@@ -331,12 +326,7 @@ document.addEventListener(
 			String(!content.classList.contains('is-collapsed'))
 		);
 
-		let groups =
-			JSON.parse(
-				localStorage.getItem(
-					'orgmapCollapsedGroups'
-				) || '[]'
-			);
+		let groups = readCollapsedGroups();
 
 		if (
 			content.classList.contains(
@@ -617,3 +607,24 @@ $(document).on(
 		restoreActiveTreeCard();
 	}
 );
+function readCollapsedGroups() {
+	try {
+		const storedGroups = JSON.parse(
+			localStorage.getItem('orgmapCollapsedGroups') || '[]'
+		);
+
+		if (!Array.isArray(storedGroups)) {
+			throw new TypeError('orgmapCollapsedGroups ist kein Array.');
+		}
+
+		return storedGroups.map(String);
+	} catch (error) {
+		try {
+			localStorage.removeItem('orgmapCollapsedGroups');
+		} catch (storageError) {
+			// Navigation funktioniert auch ohne verfügbaren Web Storage.
+		}
+
+		return [];
+	}
+}

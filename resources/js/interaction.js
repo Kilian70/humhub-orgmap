@@ -1,5 +1,3 @@
-console.log('INTERACTION JS LOADED');
-
 /*
 ==================================================
 Interaktionen
@@ -225,16 +223,6 @@ function initMouseUp() {
 	function resetInteractionState() {
 	
 	if (state.selectedConnectionLabel) {
-	
-		console.log(
-			'X:',
-			state.selectedConnectionLabel.getAttribute('x')
-		);
-	
-		console.log(
-			'Y:',
-			state.selectedConnectionLabel.getAttribute('y')
-		);
 	
 			const saveLabelUrl = document.querySelector('.orgmap-wrapper')
 				?.dataset.saveLabelUrl;

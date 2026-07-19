@@ -695,7 +695,6 @@ function insertContentTag(tag)
 		);
 
 	if (!textarea) {
-		console.log('Textarea nicht gefunden');
 		return;
 	}
 
