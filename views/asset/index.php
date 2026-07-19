@@ -39,48 +39,51 @@ $this->title = Yii::t(
 
 	</p>
 
-	<table class="table table-bordered">
+		<div class="table-responsive" tabindex="0" role="region" aria-label="<?= Html::encode($this->title) ?>">
+		<table class="table table-bordered">
+			<caption class="sr-only"><?= Html::encode($this->title) ?></caption>
+			<thead>
 
-		<tr>
+			<tr>
 
-			<th>ID</th>
+				<th scope="col">ID</th>
 
-			<th>
+				<th scope="col">
 				<?= Yii::t(
 					'OrgmapModule.base',
 					'Vorschau'
 				) ?>
 			</th>
 
-			<th>
+				<th scope="col">
 				<?= Yii::t(
 					'OrgmapModule.base',
 					'Titel'
 				) ?>
 			</th>
 
-			<th>
+				<th scope="col">
 				<?= Yii::t(
 					'OrgmapModule.base',
 					'Datei'
 				) ?>
 			</th>
 
-			<th>
+				<th scope="col">
 				<?= Yii::t(
 					'OrgmapModule.base',
 					'Typ'
 				) ?>
 			</th>
 			
-			<th>
+				<th scope="col">
 				<?= Yii::t(
 					'OrgmapModule.base',
 					'Verwendet von'
 				) ?>
 			</th>
 			
-			<th>
+				<th scope="col">
 				<?= Yii::t(
 					'OrgmapModule.base',
 					'Aktionen'
@@ -113,8 +116,9 @@ $this->title = Yii::t(
 
 					<?php if ($asset->filename): ?>
 
-						<img
-							src="<?= Yii::getAlias('@web') ?>/uploads/orgmap/assets/<?= Html::encode($asset->filename) ?>"
+							<img
+								src="<?= Yii::getAlias('@web') ?>/uploads/orgmap/assets/<?= Html::encode($asset->filename) ?>"
+								alt=""
 							style="
 								width: 120px;
 								height: auto;
@@ -215,9 +219,13 @@ $this->title = Yii::t(
 				</td>
 
 			</tr>
+			</thead>
+			<tbody>
 
-		<?php endforeach; ?>
+			<?php endforeach; ?>
+			</tbody>
 
-	</table>
+		</table>
+		</div>
 
 </div>

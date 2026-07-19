@@ -7,6 +7,33 @@ Versioning** where practical.
 
 ------------------------------------------------------------------------
 
+## \[1.3.0\] - 2026-07-19
+
+### Added
+
+-   Accessible landmarks, table captions and relationship descriptions
+-   Keyboard operation for icon selection, tree groups and node resizing
+-   Live announcements for search results and map zoom
+-   Support for reduced motion and Windows high-contrast mode
+-   Accessible form error summaries and scrollable regions
+
+### Changed
+
+-   Clear visual distinction between focus, selection and active views
+-   Improved text size, subtitle contrast and dark-mode focus styles
+-   Correct heading hierarchy and semantic controls throughout the module
+-   New-tab links are announced before activation
+
+### Fixed
+
+-   Hidden node content caused by overriding screen-reader labels
+-   Dead links appearing in the keyboard navigation order
+-   Invalid interactive nesting in map edit mode
+-   Missing image alternatives and form label associations
+-   Invalid toolbar and map container markup
+
+------------------------------------------------------------------------
+
 ## \[1.2.0\] - 2026-07-11
 
 ### Added

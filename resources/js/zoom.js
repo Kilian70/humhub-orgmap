@@ -25,7 +25,8 @@
 					window.orgmapView.zoom = 3;
 				}
 	
-				applyZoom();
+					applyZoom();
+					updateZoomControls(true);
 			}
 	
 			if (event.target.closest('#zoom-out')) {
@@ -36,10 +37,37 @@
 					window.orgmapView.zoom = 0.3;
 				}
 	
-				applyZoom();
+					applyZoom();
+					updateZoomControls(true);
 			}
-		});
-	}
+			});
+
+			updateZoomControls(false);
+		}
+
+		function updateZoomControls(announce) {
+			const zoom = window.orgmapView?.zoom;
+			if (typeof zoom !== 'number') {
+				return;
+			}
+
+			const zoomIn = document.getElementById('zoom-in');
+			const zoomOut = document.getElementById('zoom-out');
+			if (zoomIn) {
+				zoomIn.disabled = zoom >= 2.999;
+			}
+			if (zoomOut) {
+				zoomOut.disabled = zoom <= 0.301;
+			}
+
+			if (announce) {
+				const status = document.getElementById('orgmap-zoom-status');
+				if (status) {
+					const label = status.dataset.label || 'Zoom';
+					status.textContent = `${label}: ${Math.round(zoom * 100)} %`;
+				}
+			}
+		}
 	
 	initZoom();
 	
@@ -142,11 +170,13 @@
 		wrapper.style.transformOrigin =
 			'top left';
 	
-		wrapper.style.transform =
+			wrapper.style.transform =
 			'translate('
 			+ window.orgmapView.panX + 'px, '
 			+ window.orgmapView.panY + 'px)'
-			+ ' scale(' + window.orgmapView.zoom + ')';
+				+ ' scale(' + window.orgmapView.zoom + ')';
+
+			updateZoomControls(false);
 		
 		}
 	

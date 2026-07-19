@@ -23,7 +23,12 @@ $this->title = Yii::t(
 			'enctype' => 'multipart/form-data'
 		]
 
-	]); ?>
+		]); ?>
+
+		<?= $form->errorSummary($model, [
+			'class' => 'alert alert-danger',
+			'role' => 'alert',
+		]) ?>
 
 	<?= $form->field($model, 'title')
 		->textInput() ?>

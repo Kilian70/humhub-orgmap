@@ -9,16 +9,20 @@ use humhub\modules\orgmap\helpers\IconPickerHelper;
 
 ?>
 
-<div class="orgmap-icon-picker">
+<div
+	class="orgmap-icon-picker"
+	role="group"
+	aria-labelledby="orgmap-icon-picker-label"
+>
 
-	<label class="control-label">
+		<span class="control-label" id="orgmap-icon-picker-label">
 		<?= Yii::t(
 			'OrgmapModule.base',
 			'Icon'
 		) ?>
-	</label>
+		</span>
 
-	<div class="orgmap-selected-icon">
+		<div class="orgmap-selected-icon" role="status" aria-live="polite" aria-atomic="true">
 
 		<?php if (!empty($model->$attribute)): ?>
 	
@@ -32,9 +36,11 @@ use humhub\modules\orgmap\helpers\IconPickerHelper;
 
 	<p class="orgmap-icon-actions">
 
-		<button
-			type="button"
-			class="btn btn-secondary orgmap-icon-open">
+			<button
+				type="button"
+				class="btn btn-secondary orgmap-icon-open"
+				aria-expanded="false"
+				aria-controls="orgmap-icon-panel">
 
 			<?= Icon::get('pencil') ?>
 
@@ -47,18 +53,21 @@ use humhub\modules\orgmap\helpers\IconPickerHelper;
 
 	</p>
 
-	<div
-		class="orgmap-icon-panel"
+		<div
+			id="orgmap-icon-panel"
+			class="orgmap-icon-panel"
 		hidden>
 	
 		<button
 			type="button"
 			class="orgmap-icon-option"
 			data-icon=""
-			title="<?= Yii::t(
+				title="<?= Yii::t(
 				'OrgmapModule.base',
 				'Kein Icon'
-			) ?>">
+				) ?>"
+				aria-label="<?= Yii::t('OrgmapModule.base', 'Kein Icon') ?>"
+				aria-pressed="false">
 	
 		</button>
 	
@@ -71,9 +80,11 @@ use humhub\modules\orgmap\helpers\IconPickerHelper;
 				type="button"
 				class="orgmap-icon-option"
 				data-icon="<?= Html::encode($icon) ?>"
-				title="<?= Html::encode($icon) ?>">
+					title="<?= Html::encode($icon) ?>"
+					aria-label="<?= Html::encode($icon) ?>"
+					aria-pressed="false">
 
-				<i class="fa <?= Html::encode($icon) ?>"></i>
+					<i class="fa <?= Html::encode($icon) ?>" aria-hidden="true"></i>
 
 			</button>
 

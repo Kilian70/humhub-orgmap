@@ -50,6 +50,22 @@
 	
 			});
 
+			resizeHandle.addEventListener('keydown', function (event) {
+				if (!['ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft'].includes(event.key)) {
+					return;
+				}
+
+				event.preventDefault();
+				event.stopPropagation();
+				state.selectedNode = node;
+				const direction = ['ArrowUp', 'ArrowRight'].includes(event.key) ? 1 : -1;
+				const step = event.shiftKey ? 1 : 10;
+				const size = Math.max(40, node.offsetWidth + (direction * step));
+				handleResize(size);
+				resizeHandle.setAttribute('aria-valuenow', String(Math.round(size)));
+				savePosition();
+			});
+
 	/*
 	--------------------------------------------------
 	Dragging nur Desktop

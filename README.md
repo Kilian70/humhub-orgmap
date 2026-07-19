@@ -9,12 +9,13 @@
 -   Assets, background nodes and reusable images
 -   German and English translations
 -   Dark mode support
+-   Accessible keyboard navigation and screen reader support
 
 ------------------------------------------------------------------------
 
 # ORGMAP
 
-**Version:** 1.2.0\
+**Version:** 1.3.0\
 **Author & Maintainer:** Kilian Schmid\
 **Compatible with:** HumHub 1.18 -- 2.x\
 **License:** MIT License

@@ -19,8 +19,8 @@ class ActionButtonHelper
 		return Html::a(
 	
 			$visible
-				? '<i class="fa fa-eye"></i>'
-				: '<i class="fa fa-eye-slash"></i>',	
+					? '<i class="fa fa-eye" aria-hidden="true"></i>'
+					: '<i class="fa fa-eye-slash" aria-hidden="true"></i>',
 			$url,
 	
 			[
@@ -30,15 +30,19 @@ class ActionButtonHelper
 			
 				'encode' => false,
 			
-				'title' => $visible
+					'title' => $visible
 					? Yii::t(
 						'OrgmapModule.base',
 						'Ausblenden'
 					)
 					: Yii::t(
 						'OrgmapModule.base',
-						'Einblenden'
-					),
+							'Einblenden'
+						),
+
+					'aria-label' => $visible
+						? Yii::t('OrgmapModule.base', 'Ausblenden')
+						: Yii::t('OrgmapModule.base', 'Einblenden'),
 			
 				'data-bs-toggle' => 'tooltip',
 			
@@ -56,7 +60,7 @@ class ActionButtonHelper
 
 		return Html::a(
 
-			'<i class="fa fa-pencil"></i>',
+				'<i class="fa fa-pencil" aria-hidden="true"></i>',
 
 			$url,
 
@@ -65,10 +69,12 @@ class ActionButtonHelper
 
 				'encode' => false,
 
-				'title' => Yii::t(
+					'title' => Yii::t(
 					'OrgmapModule.base',
 					'Bearbeiten'
-				),
+					),
+
+					'aria-label' => Yii::t('OrgmapModule.base', 'Bearbeiten'),
 
 				'data-bs-toggle' => 'tooltip',
 
@@ -84,7 +90,7 @@ class ActionButtonHelper
 	
 		return Html::a(
 	
-			'<i class="fa fa-align-center"></i>',
+				'<i class="fa fa-align-center" aria-hidden="true"></i>',
 	
 			$url,
 	
@@ -93,10 +99,12 @@ class ActionButtonHelper
 	
 				'encode' => false,
 	
-				'title' => Yii::t(
+					'title' => Yii::t(
 					'OrgmapModule.base',
 					'Text zentrieren'
-				),
+					),
+
+					'aria-label' => Yii::t('OrgmapModule.base', 'Text zentrieren'),
 	
 				'data-bs-toggle' => 'tooltip',
 	
@@ -116,7 +124,7 @@ class ActionButtonHelper
 	
 		return Html::a(
 	
-			'<i class="fa fa-trash"></i>',
+				'<i class="fa fa-trash" aria-hidden="true"></i>',
 	
 			$url,
 	
@@ -125,10 +133,12 @@ class ActionButtonHelper
 	
 				'encode' => false,
 	
-				'title' => Yii::t(
+					'title' => Yii::t(
 					'OrgmapModule.base',
 					'Entfernen'
-				),
+					),
+
+					'aria-label' => Yii::t('OrgmapModule.base', 'Entfernen'),
 	
 				'data-bs-toggle' => 'tooltip',
 	
@@ -168,7 +178,7 @@ class ActionButtonHelper
 	
 		return Html::a(
 	
-			'<i class="fa fa-arrow-left"></i> '
+				'<i class="fa fa-arrow-left" aria-hidden="true"></i> '
 			. Yii::t(
 				'OrgmapModule.base',
 				'Zurück'
@@ -187,7 +197,7 @@ class ActionButtonHelper
 	
 		return Html::a(
 	
-			'<i class="fa fa-image"></i> '
+				'<i class="fa fa-image" aria-hidden="true"></i> '
 			. Yii::t(
 				'OrgmapModule.base',
 				'Assets'
@@ -219,7 +229,7 @@ class ActionButtonHelper
 	
 		return Html::a(
 	
-			'<i class="fa fa-gear"></i> '
+				'<i class="fa fa-gear" aria-hidden="true"></i> '
 			. Yii::t(
 				'OrgmapModule.base',
 				'Einstellungen'

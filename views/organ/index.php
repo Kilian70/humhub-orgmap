@@ -47,27 +47,29 @@ $this->title = Yii::t('OrgmapModule.base', 'Organe');
 
         </p>
 
-        <table class="table table-hover">
+		<div class="table-responsive" tabindex="0" role="region" aria-label="<?= Html::encode($this->title) ?>">
+		<table class="table table-hover">
+			<caption class="sr-only"><?= Html::encode($this->title) ?></caption>
 
             <thead>
 
                 <tr>
 
-                    <th>ID</th>
+					<th scope="col">ID</th>
 
-                    <th>
+					<th scope="col">
                         <?= Yii::t('OrgmapModule.base', 'Name') ?>
                     </th>
 
-                    <th>
+					<th scope="col">
                         <?= Yii::t('OrgmapModule.base', 'Parent') ?>
                     </th>
 
-                    <th>
+					<th scope="col">
                         <?= Yii::t('OrgmapModule.base', 'Sort') ?>
                     </th>
 
-                    <th>
+					<th scope="col">
                         <?= Yii::t('OrgmapModule.base', 'Aktionen') ?>
                     </th>
 
@@ -152,7 +154,8 @@ $this->title = Yii::t('OrgmapModule.base', 'Organe');
 
             </tbody>
 
-        </table>
+		</table>
+		</div>
 
     </div>
 

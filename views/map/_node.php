@@ -189,6 +189,10 @@ if ($node->is_background) {
 	$tabIndex = '-1';
 }
 
+if (!$editMode && $link === '#') {
+	$tabIndex = '-1';
+}
+
 if (!empty($node->content)) {
 
 	$nodeClasses[] =
@@ -203,6 +207,17 @@ if (!empty($imageToUse)) {
 
 $isBackground =
 	(bool) $node->is_background;
+
+$nodeTag = $editMode ? 'div' : 'a';
+
+if ($editMode) {
+	$tabIndex = '-1';
+}
+
+$accessibleTitle = $node->title;
+if ($node->open_in_new_tab && $link !== '#') {
+	$accessibleTitle .= ', ' . Yii::t('OrgmapModule.base', 'öffnet in neuem Tab');
+}
 
 ?>
 
@@ -220,22 +235,26 @@ $top =
 
 <div class="org-node">
 
-	<a
+	<<?= $nodeTag ?>
 		class="<?= Html::encode(implode(' ', $nodeClasses)) ?>"
 
 		data-id="<?= $node->id ?>"
 		data-x="<?= (int) $node->pos_x ?>"
 		data-y="<?= (int) $node->pos_y ?>"
 
-		<?php if (!$editMode && $tabIndex !== '-1'): ?>
+			<?php if (!$editMode && $tabIndex !== '-1' && $link !== '#'): ?>
 
 				href="<?= Html::encode($link) ?>"
 		
 		<?php endif; ?>
 
-			<?= $node->open_in_new_tab ? 'target="_blank" rel="noopener noreferrer"' : '' ?>
+			<?= !$editMode && $node->open_in_new_tab && $link !== '#' ? 'target="_blank" rel="noopener noreferrer"' : '' ?>
 
-		aria-label="<?= Html::encode($node->title) ?>"
+			<?php if ((int) $node->show_label !== 1): ?>
+				aria-label="<?= Html::encode($accessibleTitle) ?>"
+			<?php endif; ?>
+
+			<?= $isBackground ? 'aria-hidden="true"' : '' ?>
 
 		tabindex="<?= $tabIndex ?>"
 		
@@ -287,7 +306,7 @@ $top =
 							$node->content,
 							[
 								'HTML.Allowed' =>
-									'h1,h2,h3,h4,p,br,strong,em,ul,ol,li,span'
+									'h3,h4,p,br,strong,em,ul,ol,li,span'
 							]
 						) ?>
 
@@ -303,14 +322,26 @@ $top =
 
 			</div>
 
+			<?php endif; ?>
+
+			<?php if ((int) $node->show_label === 1 && $node->open_in_new_tab && $link !== '#'): ?>
+				<span class="sr-only">(<?= Yii::t('OrgmapModule.base', 'öffnet in neuem Tab') ?>)</span>
+			<?php endif; ?>
+
+			<?php if ($editMode): ?>
+
+				<div
+					class="org-node-resize"
+					role="slider"
+					tabindex="0"
+					aria-label="<?= Yii::t('OrgmapModule.base', 'Grösse') ?>"
+					aria-valuemin="40"
+					aria-valuemax="2000"
+					aria-valuenow="<?= (int) $nodeWidth ?>"
+				></div>
+
 		<?php endif; ?>
 
-		<?php if ($editMode): ?>
-
-			<div class="org-node-resize"></div>
-
-		<?php endif; ?>
-
-	</a>
+	</<?= $nodeTag ?>>
 
 </div>

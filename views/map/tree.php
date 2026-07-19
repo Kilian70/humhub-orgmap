@@ -33,7 +33,7 @@ $typeLabels = [
 
 	<div class="tree-header-top">
 
-		<h3>Navigation</h3>
+		<h2 class="h3">Navigation</h2>
 
 		<div class="tree-actions">
 
@@ -59,14 +59,16 @@ $typeLabels = [
 
 	</div>
 
-	<input
-		type="text"
-		id="tree-search"
-		class="form-control"
-		placeholder="Suche..."
-		aria-label="<?= Yii::t('OrgmapModule.base', 'Organisation durchsuchen') ?>"
-		aria-describedby="tree-search-status"
-	>
+		<input
+			type="search"
+			id="tree-search"
+			class="form-control"
+			placeholder="<?= Yii::t('OrgmapModule.base', 'Suche...') ?>"
+			aria-label="<?= Yii::t('OrgmapModule.base', 'Organisation durchsuchen') ?>"
+			aria-describedby="tree-search-status"
+			data-result-label="<?= Yii::t('OrgmapModule.base', 'Treffer') ?>"
+			autocomplete="off"
+		>
 	<div id="tree-search-status" class="tree-search-status" aria-live="polite"></div>
 
 </div>
@@ -85,13 +87,14 @@ if ($count === 0) {
 
 ?>
 
-<h2
-	class="tree-organ-title tree-toggle"
-	data-organ-id="<?= $organ->id ?>"
-	role="button"
-	tabindex="0"
-	aria-expanded="true"
->
+<h2 class="tree-organ-title">
+	<button
+		type="button"
+		class="tree-toggle"
+		data-organ-id="<?= (int) $organ->id ?>"
+		aria-expanded="true"
+		aria-controls="tree-organ-content-<?= (int) $organ->id ?>"
+	>
 
 	<span class="tree-toggle-icon">
 
@@ -111,10 +114,12 @@ if ($count === 0) {
 	
 	</span>
 
+	</button>
 </h2>
 
 <div
 	class="tree-organ-content"
+	id="tree-organ-content-<?= (int) $organ->id ?>"
 	data-organ-content="<?= $organ->id ?>"
 >
 
@@ -184,17 +189,17 @@ if ($count === 0) {
 	"
 >
 <a
-	href="<?= Html::encode($link) ?>"
 	class="tree-link"
 	data-node-id="<?= $node->id ?>"
-	<?= $node->open_in_new_tab ? 'target="_blank" rel="noopener noreferrer"' : '' ?>
+	<?= $link !== '#' ? 'href="' . Html::encode($link) . '"' : 'aria-disabled="true" tabindex="-1"' ?>
+	<?= $node->open_in_new_tab && $link !== '#' ? 'target="_blank" rel="noopener noreferrer"' : '' ?>
 >
 
 	<div class="tree-card-title">
 
 		<?php if (!empty($node->icon_class)): ?>
 	
-			<i class="fa <?= Html::encode($node->icon_class) ?>"></i>
+			<i class="fa <?= Html::encode($node->icon_class) ?>" aria-hidden="true"></i>
 	
 		<?php endif; ?>
 	
@@ -214,6 +219,10 @@ if ($count === 0) {
 	
 		</small>
 	
+	<?php endif; ?>
+
+	<?php if ($node->open_in_new_tab && $link !== '#'): ?>
+		<span class="sr-only">(<?= Yii::t('OrgmapModule.base', 'öffnet in neuem Tab') ?>)</span>
 	<?php endif; ?>
 
 </a>
@@ -267,18 +276,18 @@ if ($count === 0) {
 				6px solid <?= Html::encode($node->color ?: '#999') ?>;
 	"
 >
-	<a
-		href="<?= Html::encode($link) ?>"
-		class="tree-link"
-		data-node-id="<?= (int) $node->id ?>"
-		<?= $node->open_in_new_tab ? 'target="_blank" rel="noopener noreferrer"' : '' ?>
+		<a
+			class="tree-link"
+			data-node-id="<?= (int) $node->id ?>"
+			<?= $link !== '#' ? 'href="' . Html::encode($link) . '"' : 'aria-disabled="true" tabindex="-1"' ?>
+			<?= $node->open_in_new_tab && $link !== '#' ? 'target="_blank" rel="noopener noreferrer"' : '' ?>
 	>
 
 			<div class="tree-card-title">
 
 			<?php if (!empty($node->icon_class)): ?>
 		
-				<i class="fa <?= Html::encode($node->icon_class) ?>"></i>
+					<i class="fa <?= Html::encode($node->icon_class) ?>" aria-hidden="true"></i>
 		
 			<?php endif; ?>
 		
@@ -298,6 +307,10 @@ if ($count === 0) {
 		
 			</small>
 		
+		<?php endif; ?>
+
+		<?php if ($node->open_in_new_tab && $link !== '#'): ?>
+			<span class="sr-only">(<?= Yii::t('OrgmapModule.base', 'öffnet in neuem Tab') ?>)</span>
 		<?php endif; ?>
 	</a>
 

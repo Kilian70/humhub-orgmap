@@ -89,13 +89,13 @@ html[data-bs-theme="dark"]
 
 .tree-list small {
 
-	font-size: 11px;
+	font-size: 12px;
 
 	display: block;
 
 	margin-top: 2px;
 
-	opacity: 0.65;
+	opacity: 0.78;
 }
 
 html[data-bs-theme="dark"] .tree-list li {
@@ -170,12 +170,18 @@ Tree Grid Layout
 .tree-card.active,
 .tree-card:focus-within {
 
-	background: rgba(33,150,243,0.22) !important;
+	background: rgba(0,0,0,0.045) !important;
 
+	border-color: rgba(33,150,243,0.55) !important;
+	box-shadow: 0 0 0 1px rgba(33,150,243,0.28) inset !important;
+
+	transform: none;
+}
+
+.tree-card:has(.tree-link:focus-visible) {
+	background: rgba(33,150,243,0.06) !important;
 	border-color: #2196f3 !important;
-	box-shadow: 0 0 0 3px rgba(33,150,243,0.75) inset !important;
-
-	transform: translateX(2px);
+	box-shadow: 0 0 0 2px rgba(33,150,243,0.45) inset !important;
 }
 
 .tree-link:hover {
@@ -194,13 +200,13 @@ Tree Grid Layout
 
 .tree-card small {
 
-	font-size: 11px;
+	font-size: 12px;
 
 	display: block;
 
 	margin-top: 6px;
 
-	opacity: 0.65;
+	opacity: 0.78;
 	
 	overflow-wrap: break-word;
 }
@@ -218,6 +224,43 @@ Tree Card Title
 	align-items: center;
 
 	gap: 8px;
+
+}
+
+.tree-toggle:focus-visible {
+	outline: 3px solid #2196f3;
+	outline-offset: 3px;
+	border-radius: 3px;
+}
+
+.tree-actions .btn:focus-visible {
+	outline: 3px solid #1261a0;
+	outline-offset: 3px;
+	border-color: #1261a0;
+	background: #e6f3ff;
+	color: #12344d;
+	box-shadow: 0 0 0 2px #fff;
+}
+
+html[data-bs-theme="dark"] .tree-actions .btn:focus-visible {
+	outline-color: #76bdff;
+	border-color: #76bdff;
+	background: #183b59;
+	color: #fff;
+	box-shadow: 0 0 0 2px #111;
+}
+
+@media (forced-colors: active) {
+	.tree-toggle:focus-visible,
+	.tree-actions .btn:focus-visible,
+	.tree-card:has(.tree-link:focus-visible) {
+		outline: 3px solid Highlight !important;
+		outline-offset: 3px;
+	}
+
+	.tree-card.active {
+		border: 3px solid Highlight !important;
+	}
 }
 
 .tree-card-title i {
@@ -285,10 +328,16 @@ html[data-bs-theme="dark"] .tree-card:hover {
 html[data-bs-theme="dark"] .tree-card.active,
 html[data-bs-theme="dark"] .tree-card:focus-within {
 
-	background: rgba(77,163,255,0.28) !important;
+	background: rgba(255,255,255,0.075) !important;
 
+	border-color: rgba(77,163,255,0.58) !important;
+	box-shadow: 0 0 0 1px rgba(77,163,255,0.3) inset !important;
+}
+
+html[data-bs-theme="dark"] .tree-card:has(.tree-link:focus-visible) {
+	background: rgba(77,163,255,0.1) !important;
 	border-color: #4da3ff !important;
-	box-shadow: 0 0 0 3px rgba(77,163,255,0.8) inset !important;
+	box-shadow: 0 0 0 2px rgba(77,163,255,0.5) inset !important;
 }
 
 
@@ -379,6 +428,14 @@ Tree Toggle
 	align-items: center;
 
 	gap: 8px;
+
+	width: 100%;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	font: inherit;
+	text-align: left;
 }
 
 .tree-toggle-icon {
