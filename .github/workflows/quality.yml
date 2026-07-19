@@ -35,6 +35,9 @@ jobs:
           find . -name '*.php' -not -path './vendor/*' -print0 \
             | xargs -0 -n1 php -l
 
+      - name: Geometrie-Verhalten testen
+        run: php tests/ConnectionSvgHelperTest.php
+
       - name: Node.js einrichten
         uses: actions/setup-node@v4
         with:
