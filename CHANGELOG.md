@@ -7,6 +7,21 @@ Versioning** where practical.
 
 ------------------------------------------------------------------------
 
+## \[1.3.1\] - 2026-07-21
+
+### Changed
+
+-   Updated TopMenu registration to the HumHub 1.19 menu API
+-   Replaced the deprecated array entry with `MenuLink` and `addEntry()`
+-   Added the unique menu ID `topmenu-orgmap`
+-   Updated active-state detection to use PHP nullsafe access
+
+### Fixed
+
+-   Dashboard startup failure caused by the removed `TopMenu::addItem()` method
+
+------------------------------------------------------------------------
+
 ## \[1.3.0\] - 2026-07-19
 
 ### Added
