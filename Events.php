@@ -2,8 +2,8 @@
 
 namespace humhub\modules\orgmap;
 
+use humhub\modules\ui\menu\MenuLink;
 use Yii;
-use yii\helpers\Url;
 
 class Events
 {
@@ -28,7 +28,9 @@ class Events
 			return;
 		}
 		
-        $event->sender->addItem([
+        $event->sender->addEntry(new MenuLink([
+
+            'id' => 'topmenu-orgmap',
 
             'label' => Yii::$app
 				->getModule('orgmap')
@@ -38,9 +40,9 @@ class Events
 					'ORG.'
 				),
 
-            'url' => Url::to(['/orgmap/map/index']),
+            'url' => ['/orgmap/map/index'],
 
-            'icon' => '<i class="fa fa-circle-o"></i>',
+            'icon' => 'fa-circle-o',
 
             'sortOrder' => Yii::$app
                 ->getModule('orgmap')
@@ -50,12 +52,7 @@ class Events
                     250
                 ),
 
-            'isActive' => (
-
-                Yii::$app->controller->module
-
-                && Yii::$app->controller->module->id === 'orgmap'
-            ),
-        ]);
+            'isActive' => Yii::$app->controller?->module?->id === 'orgmap',
+        ]));
     }
 }
