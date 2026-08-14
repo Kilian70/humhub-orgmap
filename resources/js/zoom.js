@@ -68,17 +68,64 @@
 		}
 	
 	initZoom();
-	
-	setTimeout(function () {
 
-		if (window.innerWidth >= 768) {
-	
-			fitWorkspace();
-		}
-	
-		applyZoom();
-	
-	}, 50);
+	let layoutResizeTimer = null;
+
+	function runWorkspaceFit() {
+		requestAnimationFrame(function () {
+			requestAnimationFrame(function () {
+				fitWorkspace();
+				applyZoom();
+
+				if (typeof updateLines === 'function') {
+					updateLines();
+				}
+			});
+		});
+	}
+
+	function scheduleWorkspaceFit(delay = 0) {
+		window.setTimeout(runWorkspaceFit, delay);
+	}
+
+	function scheduleWorkspaceFitAfterResize() {
+		window.clearTimeout(layoutResizeTimer);
+		layoutResizeTimer = window.setTimeout(runWorkspaceFit, 120);
+	}
+
+	function watchMapImages() {
+		document
+			.querySelectorAll('.org-node-print-image')
+			.forEach(function (image) {
+				if (image.complete) {
+					return;
+				}
+
+				image.addEventListener('load', runWorkspaceFit, {once: true});
+				image.addEventListener('error', runWorkspaceFit, {once: true});
+			});
+	}
+
+	/* HumHub, Webfonts und Bilder können die endgültige Grösse zeitversetzt
+	   liefern. Mehrere kurze Messpunkte verhindern die falsche Erstposition. */
+	watchMapImages();
+	scheduleWorkspaceFit(0);
+	scheduleWorkspaceFit(150);
+	scheduleWorkspaceFit(500);
+
+	window.addEventListener('load', runWorkspaceFit, {once: true});
+	window.addEventListener('resize', scheduleWorkspaceFitAfterResize);
+
+	if (window.visualViewport) {
+		window.visualViewport.addEventListener(
+			'resize',
+			scheduleWorkspaceFitAfterResize
+		);
+	}
+
+	if (document.fonts && document.fonts.ready) {
+		document.fonts.ready.then(runWorkspaceFit);
+	}
 
 	/*
 	--------------------------------------------------
@@ -87,11 +134,6 @@
 	*/
 	
 	function fitWorkspace() {
-
-	if (window.innerWidth < 768) {
-		return;
-	}
-
 	const scroll =
 		document.querySelector('.orgmap-scroll');
 
@@ -110,29 +152,66 @@
 	
 	const availableHeight =
 		scroll.clientHeight;
-	
-	const CAMERA_PADDING = 40;
-	
-	const zoom = Math.min(
-	
-		(availableWidth - CAMERA_PADDING * 2)
-		/ mapBounds.width,
-	
-		(availableHeight - CAMERA_PADDING * 2)
-		/ mapBounds.height
-	);
+
+	if (availableWidth <= 0 || mapBounds.width <= 0 || mapBounds.height <= 0) {
+		return;
+	}
+
+	const isMobile = window.innerWidth < 768;
+	const cameraPadding = isMobile ? 12 : 40;
+	const widthZoom =
+		(availableWidth - cameraPadding * 2) / mapBounds.width;
+	let zoom = widthZoom;
+
+	if (!isMobile && availableHeight > cameraPadding * 2) {
+		zoom = Math.min(
+			widthZoom,
+			(availableHeight - cameraPadding * 2) / mapBounds.height
+		);
+	}
 
 	window.orgmapView.zoom =
-		Math.min(zoom, 1);
+		Math.max(0.20, Math.min(zoom, 1));
 
 	
+	const renderedWidth = mapBounds.width * window.orgmapView.zoom;
+	const renderedHeight = mapBounds.height * window.orgmapView.zoom;
+	const horizontalOffset = Math.max(
+		cameraPadding,
+		(availableWidth - renderedWidth) / 2
+	);
+	/* Auf Smartphones ist der Scrollbereich oft wesentlich höher als der
+	   sichtbare Viewport. Vertikales Zentrieren würde die Karte deshalb weit
+	   nach unten verschieben. Mobil immer oben beginnen; Desktop bleibt
+	   innerhalb der verfügbaren Fläche vertikal zentriert. */
+	const verticalOffset = isMobile
+		? cameraPadding
+		: Math.max(
+			cameraPadding,
+			(availableHeight - renderedHeight) / 2
+		);
+
+	/* Kleine Karteninhalte (zum Beispiel der erste neu erstellte Kreis)
+	   in der sichtbaren Fläche zentrieren. Grosse Karten behalten den
+	   Sicherheitsabstand zum oberen und linken Rand. */
 	window.orgmapView.panX =
-		CAMERA_PADDING
+		horizontalOffset
 		- (mapBounds.minX * window.orgmapView.zoom);
-	
+
 	window.orgmapView.panY =
-		CAMERA_PADDING
-	- (mapBounds.minY * window.orgmapView.zoom);
+		verticalOffset
+		- (mapBounds.minY * window.orgmapView.zoom);
+
+	/* CSS-Transforms verkleinern nur die Darstellung, nicht die im Dokument
+	   reservierte Höhe des Workspace. Auf Mobilgeräten würde deshalb unter
+	   der Karte die komplette unskalierte Resthöhe als Leerraum bleiben. */
+	if (isMobile) {
+		scroll.style.height = Math.ceil(
+			renderedHeight + (cameraPadding * 2)
+		) + 'px';
+	} else {
+		scroll.style.height = '';
+	}
 	
 	}
 		
@@ -186,12 +265,7 @@
 	*/
 	
 	$(document).on('pjax:success', function () {
-	
-		setTimeout(function () {
-	
-			fitWorkspace();
-	
-			applyZoom();
-	
-		}, 50);
+		watchMapImages();
+		scheduleWorkspaceFit(0);
+		scheduleWorkspaceFit(150);
 	});

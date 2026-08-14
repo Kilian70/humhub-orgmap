@@ -40,7 +40,7 @@ class NodeStyleHelper
 		$opacity =
 			$node->opacity !== null
 			? ($node->opacity / 100)
-			: 0.45;
+			: 1;
 	
 			$backgroundSize =
 				in_array($node->background_size, ['cover', 'contain'], true) ? $node->background_size : 'cover';

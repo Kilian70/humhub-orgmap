@@ -20,6 +20,9 @@ class OrgMapAsset extends AssetBundle
         // Core
         'js/core.js',
 
+		// SVG-Geometrie muss vor Kamera und Interaktionen verfügbar sein
+		'js/svg.js',
+
 		// Main
 		'js/icon-picker.js',
 		'js/orgmap.js',
@@ -33,9 +36,6 @@ class OrgMapAsset extends AssetBundle
         'js/dragging.js',
         'js/resize.js',
         'js/interaction.js',
-
-        // Rendering
-        'js/svg.js',
     ];
 
     public $depends = [

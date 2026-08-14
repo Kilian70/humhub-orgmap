@@ -8,6 +8,14 @@ use humhub\modules\orgmap\models\Connection;
 
 class Node extends ActiveRecord
 {
+	public function init()
+	{
+		parent::init();
+
+		if ($this->opacity === null) {
+			$this->opacity = 100;
+		}
+	}
 
     public static function tableName()
     {
@@ -155,7 +163,7 @@ class Node extends ActiveRecord
 				[['shape'], 'in', 'range' => array_keys(self::getShapeOptions())],
 				[['background_size'], 'in', 'range' => array_keys(self::getBackgroundSizeOptions())],
 				[['display_mode'], 'in', 'range' => ['color', 'image', 'mixed', 'none']],
-				[['image_source'], 'in', 'range' => ['space', 'custom', 'asset']],
+				[['image_source'], 'in', 'range' => ['none', 'space', 'custom', 'asset']],
 				[['link_type'], 'in', 'range' => ['', 'space_home', 'space_about', 'external']],
 				[['type'], 'in', 'range' => ['core', 'organ', 'space', 'tool', 'external']],
 				[['color', 'border_color'], 'match', 'pattern' => '/^#[0-9a-fA-F]{6}$/'],

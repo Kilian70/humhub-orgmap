@@ -1,8 +1,3 @@
-const svg =
-	document.getElementById(
-		'orgmap-svg'
-	);
-
 	/*
 	==================================================
 	SVG Linien
@@ -10,6 +5,10 @@ const svg =
 	*/
 	
 	function updateLines() {
+		const svg =
+			document.getElementById(
+				'orgmap-svg'
+			);
 
 	            if (!svg) {
 	                return;
@@ -40,43 +39,61 @@ const svg =
                     return;
                 }
 
-	                const parentRadiusX = parent.offsetWidth / 2;
-	                const parentRadiusY = parent.offsetHeight / 2;
-	                const childRadiusX = child.offsetWidth / 2;
-	                const childRadiusY = child.offsetHeight / 2;
+	                /*
+	                 * Die Verbindungen leben im Koordinatensystem des SVG.
+	                 * getBoundingClientRect()/getScreenCTM() ist hier nicht
+	                 * zuverlässig: Nach dem Rücksprung aus einem Formular
+	                 * können Browser den Seiten- und Scrollversatz zu
+	                 * unterschiedlichen Zeitpunkten melden. Dadurch wurden
+	                 * Endpunkte um die Höhe der HumHub-Kopfzeile verschoben.
+	                 *
+	                 * data-x/data-y sind die eindeutigen Workspace-Mittelpunkte
+	                 * und werden bereits während des Ziehens aktualisiert.
+	                 * Auch Breite und Höhe kommen aus data-Werten: Im
+	                 * Bearbeitungsmodus darf der zusätzliche Resize-Griff die
+	                 * geometrische Kreisgrösse nicht beeinflussen.
+	                 */
+	                const parentWidth =
+	                    parseFloat(parent.dataset.width) || parent.offsetWidth;
+	                const parentHeight =
+	                    parseFloat(parent.dataset.height) || parent.offsetHeight;
+	                const childWidth =
+	                    parseFloat(child.dataset.width) || child.offsetWidth;
+	                const childHeight =
+	                    parseFloat(child.dataset.height) || child.offsetHeight;
+	                const parentX = parseFloat(parent.dataset.x);
+	                const parentY = parseFloat(parent.dataset.y);
+	                const childX = parseFloat(child.dataset.x);
+	                const childY = parseFloat(child.dataset.y);
 
-                const parentX =
-                    parseFloat(parent.dataset.x);
+	                if (
+	                    !Number.isFinite(parentX)
+	                    || !Number.isFinite(parentY)
+	                    || !Number.isFinite(childX)
+	                    || !Number.isFinite(childY)
+	                    || parentWidth <= 0
+	                    || parentHeight <= 0
+	                    || childWidth <= 0
+	                    || childHeight <= 0
+	                ) {
+	                    return;
+	                }
 
-                const parentY =
-                    parseFloat(parent.dataset.y);
+	                const dx = childX - parentX;
+	                const dy = childY - parentY;
+	                const distance = Math.sqrt(dx * dx + dy * dy);
 
-                const childX =
-                    parseFloat(child.dataset.x);
-
-                const childY =
-                    parseFloat(child.dataset.y);
-
-                const dx =
-                    childX - parentX;
-
-                const dy =
-                    childY - parentY;
-
-                const distance =
-                    Math.sqrt(dx * dx + dy * dy);
-
-                if (distance === 0) {
-                    return;
-                }
+	                if (distance === 0) {
+	                    return;
+	                }
 
 	                const parentScale = 1 / Math.sqrt(
-	                    (dx * dx) / (parentRadiusX * parentRadiusX)
-	                    + (dy * dy) / (parentRadiusY * parentRadiusY)
+	                    (dx * dx) / Math.pow(parentWidth / 2, 2)
+	                    + (dy * dy) / Math.pow(parentHeight / 2, 2)
 	                );
 	                const childScale = 1 / Math.sqrt(
-	                    (dx * dx) / (childRadiusX * childRadiusX)
-	                    + (dy * dy) / (childRadiusY * childRadiusY)
+	                    (dx * dx) / Math.pow(childWidth / 2, 2)
+	                    + (dy * dy) / Math.pow(childHeight / 2, 2)
 	                );
 
 	                const x1 = parentX + dx * parentScale;
@@ -125,5 +142,55 @@ const svg =
 	                        }
 	                    }
 	                }
-            });
-        }
+	            });
+	        }
+
+	/*
+	--------------------------------------------------
+	Linien nach jedem relevanten Layoutwechsel erneuern
+	--------------------------------------------------
+
+	Die vom Server ausgegebenen Pfade sind nur eine sichere
+	Startdarstellung. Erst der Browser kennt die endgültigen
+	Knotengrössen. Besonders nach Cache-Neuaufbau, PJAX oder
+	dem Wechsel aus dem Bearbeitungsmodus muss deshalb noch
+	einmal anhand des fertigen DOM gerechnet werden.
+	*/
+	function scheduleLineUpdate() {
+		window.requestAnimationFrame(function () {
+			window.requestAnimationFrame(updateLines);
+		});
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', scheduleLineUpdate, {once: true});
+	} else {
+		scheduleLineUpdate();
+	}
+
+	window.addEventListener('load', scheduleLineUpdate);
+	window.addEventListener('pageshow', scheduleLineUpdate);
+	window.addEventListener('resize', scheduleLineUpdate);
+	document.addEventListener('fullscreenchange', scheduleLineUpdate);
+
+	if (window.ResizeObserver) {
+		const lineLayoutObserver = new ResizeObserver(scheduleLineUpdate);
+		const mapScroll = document.querySelector('.orgmap-scroll');
+		const mapWrapper = document.querySelector('.orgmap-wrapper');
+		if (mapScroll) {
+			lineLayoutObserver.observe(mapScroll);
+		}
+		if (mapWrapper) {
+			lineLayoutObserver.observe(mapWrapper);
+		}
+	}
+
+	document.addEventListener('click', function (event) {
+		if (event.target.closest('.orgmap-view-btn')) {
+			scheduleLineUpdate();
+		}
+	});
+
+	if (window.jQuery) {
+		window.jQuery(document).on('pjax:success', scheduleLineUpdate);
+	}

@@ -126,6 +126,35 @@ class AdminController extends Controller
 	
 		$model = new Node();
 
+	/*
+	----------------------------------------------------
+	Neue Knoten in der Mitte der Arbeitsfläche anlegen
+	----------------------------------------------------
+
+	Die Datenbankvorgabe (0/0) bezeichnet den Mittelpunkt
+	des Knotens. Dadurch lag ein neuer Kreis zur Hälfte
+	ausserhalb der Karte. Die Formularvorgabe richtet sich
+	nun nach der tatsächlich konfigurierten Arbeitsfläche.
+	*/
+	$module = Yii::$app->getModule('orgmap');
+	$workspaceSize = $module->settings->get('workspaceSize', 'medium');
+	$workspaceWidth = 2400;
+	$workspaceHeight = 1350;
+
+	if ($workspaceSize === 'small') {
+		$workspaceWidth = 1600;
+		$workspaceHeight = 900;
+	} elseif ($workspaceSize === 'large') {
+		$workspaceWidth = 3200;
+		$workspaceHeight = 1800;
+	} elseif ($workspaceSize === 'custom') {
+		$workspaceWidth = (int) $module->settings->get('workspaceWidth', 2400);
+		$workspaceHeight = (int) $module->settings->get('workspaceHeight', 1350);
+	}
+
+	$model->pos_x = (int) round($workspaceWidth / 2);
+	$model->pos_y = (int) round($workspaceHeight / 2);
+
 
 	/*
 	----------------------------------------------------

@@ -303,12 +303,23 @@ foreach ($nodes as $workspaceNode) {
         height: <?= $workspaceHeight ?>px;
     "
 >
+	<div class="orgmap-background-layer">
+		<?php foreach ($nodes as $backgroundNode): ?>
+			<?php if ($backgroundNode->is_background): ?>
+				<?= $this->render('_node', [
+					'node' => $backgroundNode,
+					'editMode' => $editMode,
+				]) ?>
+			<?php endif; ?>
+		<?php endforeach; ?>
+	</div>
 
 	
 				<svg
 					id="orgmap-svg"
 					aria-hidden="true"
 					focusable="false"
+					overflow="visible"
 				width="<?= $workspaceWidth ?>"
 				height="<?= $workspaceHeight ?>"
 				viewBox="0 0 <?= $workspaceWidth ?> <?= $workspaceHeight ?>"
@@ -324,40 +335,36 @@ foreach ($nodes as $workspaceNode) {
 		?>
 		
 		<defs>
+			<?php foreach ($connections as $markerConnection): ?>
+				<?php
+				$markerId = (int) $markerConnection->id;
+				$markerColor = Html::encode($markerConnection->color ?: '#666');
+				?>
 
-			<marker
-				id="arrow-end"
-				markerWidth="10"
-				markerHeight="10"
+				<marker
+					id="arrow-end-<?= $markerId ?>"
+					markerWidth="10"
+					markerHeight="10"
 					markerUnits="strokeWidth"
-				refX="8"
-				refY="3"
-				orient="auto"
-			>
+					refX="8"
+					refY="3"
+					orient="auto"
+				>
+					<path d="M0,0 L0,6 L9,3 z" fill="<?= $markerColor ?>" />
+				</marker>
 
-				<path
-					d="M0,0 L0,6 L9,3 z"
-					fill="context-stroke"
-				/>
-
-			</marker>
-
-			<marker
-				id="arrow-start"
-				markerWidth="10"
-				markerHeight="10"
+				<marker
+					id="arrow-start-<?= $markerId ?>"
+					markerWidth="10"
+					markerHeight="10"
 					markerUnits="strokeWidth"
-				refX="1"
-				refY="3"
-				orient="auto"
-			>
-
-				<path
-					d="M9,0 L9,6 L0,3 z"
-					fill="context-stroke"
-				/>
-
-			</marker>
+					refX="1"
+					refY="3"
+					orient="auto"
+				>
+					<path d="M9,0 L9,6 L0,3 z" fill="<?= $markerColor ?>" />
+				</marker>
+			<?php endforeach; ?>
 
 		</defs>
 
@@ -418,7 +425,7 @@ foreach ($nodes as $workspaceNode) {
 		$distance = $data['distance'];
 		
 		$angle = $data['angle'];
-	
+
 		if ($distance == 0) {
 			continue;
 		}
@@ -576,26 +583,6 @@ Node Rendering
 --------------------------------------------------
 */
 ?>
-
-<div class="orgmap-background-layer">
-
-	<?php foreach ($nodes as $node): ?>
-
-		<?php if ($node->is_background): ?>
-
-			<?= $this->render('_node', [
-
-				'node' => $node,
-
-				'editMode' => $editMode
-
-			]) ?>
-
-		<?php endif; ?>
-
-	<?php endforeach; ?>
-
-	</div>
 
 <div class="orgmap-layer">
 

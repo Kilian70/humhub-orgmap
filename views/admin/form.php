@@ -192,6 +192,11 @@ $this->title = Yii::t('OrgmapModule.base', 'ORG. Kreis');
 	]) ?>
 	
 	<?= $form->field($model, 'image_source')->dropDownList([
+
+		'none' => Yii::t(
+			'OrgmapModule.base',
+			'Keine'
+		),
 	
 		'space' => Yii::t(
 			'OrgmapModule.base',

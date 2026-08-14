@@ -203,6 +203,9 @@ if (!empty($imageToUse)) {
 
 	$nodeClasses[] =
 		'org-node-has-image';
+
+	$nodeClasses[] =
+		'org-node-has-print-image';
 }
 
 $isBackground =
@@ -233,14 +236,15 @@ $top =
 ?>
 
 
-<div class="org-node">
-
 	<<?= $nodeTag ?>
 		class="<?= Html::encode(implode(' ', $nodeClasses)) ?>"
 
 		data-id="<?= $node->id ?>"
 		data-x="<?= (int) $node->pos_x ?>"
 		data-y="<?= (int) $node->pos_y ?>"
+		data-width="<?= (int) $nodeWidth ?>"
+		data-height="<?= (int) $nodeHeight ?>"
+		data-radius="<?= (int) $node->radius ?>"
 
 			<?php if (!$editMode && $tabIndex !== '-1' && $link !== '#'): ?>
 
@@ -281,6 +285,21 @@ $top =
 			<?= (int) ($node->border_width ?? 3) ?>px;
 		"
 	>
+		<?php if (!empty($imageToUse)): ?>
+			<img
+				class="org-node-print-image"
+				src="<?= Html::encode($imageToUse) ?>"
+				alt=""
+				aria-hidden="true"
+				loading="eager"
+				decoding="async"
+				<?= $isBackground ? 'fetchpriority="high"' : '' ?>
+				style="
+					object-fit: <?= $node->background_size === 'contain' ? 'contain' : 'cover' ?>;
+					opacity: <?= Html::encode((string) ($node->opacity !== null ? $node->opacity / 100 : 1)) ?>;
+				"
+			/>
+		<?php endif; ?>
 		
 		<div
 			class="org-node-background"
@@ -343,5 +362,3 @@ $top =
 		<?php endif; ?>
 
 	</<?= $nodeTag ?>>
-
-</div>
