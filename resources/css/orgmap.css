@@ -41,6 +41,8 @@ html[data-bs-theme="dark"] .table-responsive:focus-visible {
     transform-origin: top left;
 
     display: block;
+
+	isolation: isolate;
 }
 
 .container:fullscreen {
@@ -93,8 +95,20 @@ html[data-bs-theme="dark"] .container:fullscreen {
 		background: #fff !important;
 	}
 
+	.orgmap-layout {
+		box-sizing: border-box !important;
+		padding: 8mm !important;
+		margin-top: 5mm !important;
+	}
+
+	.orgmap-wrapper,
+	.orgmap-wrapper * {
+		-webkit-print-color-adjust: exact !important;
+		print-color-adjust: exact !important;
+	}
+
 	.orgmap-wrapper {
-		zoom: 0.38;
+		zoom: 0.35;
 		transform: none !important;
 		transform-origin: top left !important;
 		box-shadow: none !important;
@@ -103,15 +117,59 @@ html[data-bs-theme="dark"] .container:fullscreen {
 	}
 
 	.orgmap-wrapper[data-workspace-size="small"] {
-		zoom: 0.52;
+		zoom: 0.48;
 	}
 
 	.orgmap-wrapper[data-workspace-size="large"] {
-		zoom: 0.28;
+		zoom: 0.25;
 	}
 
 	.orgmap-wrapper[data-workspace-size="custom"] {
-		zoom: 0.3;
+		zoom: 0.27;
+	}
+
+	/* Druckertreiber reduzieren transparente SVG-Linien sonst teilweise bis
+	   zur Unsichtbarkeit. Für den Ausdruck werden sie bewusst verstärkt. */
+	#orgmap-svg,
+	.org-connection,
+	.org-connection-label {
+		opacity: 1 !important;
+		filter: none !important;
+		visibility: visible !important;
+	}
+
+	.org-connection {
+		stroke-width: 4px !important;
+	}
+
+	.org-connection-label {
+		fill: #111 !important;
+		stroke: #fff !important;
+	}
+
+	/* Die Legende muss unabhängig von Dark Mode und Drucker-Farbkorrektur
+	   mit schwarzer Schrift auf dem hellen Feld ausgegeben werden. */
+	.org-node-legend,
+	.org-node-legend .org-node-label,
+	.org-node-legend .org-node-content,
+	.org-node-legend .org-node-content *,
+	.org-node-panel,
+	.org-node-panel .org-node-label,
+	.org-node-panel .org-node-content,
+	.org-node-panel .org-node-content *,
+	.org-node-html,
+	.org-node-html .org-node-label,
+	.org-node-html .org-node-content,
+	.org-node-html .org-node-content * {
+		color: #000 !important;
+		-webkit-text-fill-color: #000 !important;
+		-webkit-text-stroke: 0 transparent !important;
+		text-stroke: 0 transparent !important;
+		mix-blend-mode: normal !important;
+		filter: none !important;
+		opacity: 1 !important;
+		text-shadow: none !important;
+		text-rendering: optimizeLegibility;
 	}
 }
 
@@ -135,7 +193,7 @@ html[data-bs-theme="dark"] .container:fullscreen {
 
     inset: 0;
 
-    z-index: 1;
+    z-index: 0;
 
     pointer-events: none;
 }
@@ -144,9 +202,20 @@ html[data-bs-theme="dark"] .container:fullscreen {
 
     position: absolute;
 
-    inset: 0;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: block;
+	overflow: visible;
+	clip: auto;
+	clip-path: none;
 
-    z-index: 2;
+	/* Über Knoten-/Bildflächen zeichnen, damit keine transparente oder weisse
+	   HTML-Ebene Teile einer Verbindung verdeckt. Die leere SVG-Fläche nimmt
+	   dank pointer-events keine Mausaktionen von den Knoten weg. */
+	z-index: 30;
+	pointer-events: none;
 }
 
 .orgmap-layer {
@@ -155,7 +224,7 @@ html[data-bs-theme="dark"] .container:fullscreen {
 
     inset: 0;
 
-    z-index: 3;
+    z-index: 20;
 
     pointer-events: none;
 }
@@ -407,6 +476,7 @@ Connection Types
 	vector-effect: non-scaling-stroke;
 	stroke-linecap: round;
 	stroke-linejoin: round;
+	pointer-events: stroke;
 }
 
 .org-connection.selected {

@@ -121,6 +121,7 @@ return [
     'Datei' => 'Datei',
     'Ganzes Bild anzeigen' => 'Ganzes Bild anzeigen',
     'Hintergrund' => 'Hintergrund',
+	'Keine' => 'Keine',
     'Neues Asset' => 'Neues Asset',
     'Nur Bild' => 'Nur Bild',
     'Nur Farbe' => 'Nur Farbe',

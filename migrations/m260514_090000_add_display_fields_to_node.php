@@ -20,11 +20,11 @@ class m260514_090000_add_display_fields_to_node extends Migration
             $this->string()->null()
         );
 
-        $this->addColumn(
-            'orgmap_node',
-            'opacity',
-            $this->integer()->defaultValue(45)
-        );
+		$this->addColumn(
+			'orgmap_node',
+			'opacity',
+			$this->integer()->defaultValue(100)
+		);
     }
 
     public function safeDown()

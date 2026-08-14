@@ -110,22 +110,6 @@
 	
 	/*
 	--------------------------------------------------
-	Mobile nutzt dieselbe Kamera
-	--------------------------------------------------
-	*/
-	
-	const MOBILE_ZOOM = 0.45;
-	
-	const MOBILE_PAN_X = 0;
-	
-	const MOBILE_PAN_Y = 0;
-	
-	const MOBILE_OFFSET_X = 0;
-	
-	const MOBILE_OFFSET_Y = 0;
-	
-	/*
-	--------------------------------------------------
 	Global View State
 	--------------------------------------------------
 	*/
@@ -161,10 +145,12 @@ function getMapBounds() {
 	if (background) {
 
 		const width =
-			background.offsetWidth;
+			parseFloat(background.dataset.width)
+			|| background.offsetWidth;
 
 		const height =
-			background.offsetHeight;
+			parseFloat(background.dataset.height)
+			|| background.offsetHeight;
 
 		const centerX =
 			parseFloat(background.dataset.x);
@@ -228,10 +214,12 @@ function getContentBounds() {
 			parseFloat(node.dataset.y);
 
 		const width =
-			node.offsetWidth;
+			parseFloat(node.dataset.width)
+			|| node.offsetWidth;
 
 		const height =
-			node.offsetHeight;
+			parseFloat(node.dataset.height)
+			|| node.offsetHeight;
 
 		minX = Math.min(
 			minX,
@@ -269,63 +257,6 @@ function getContentBounds() {
 	};
 }
 		
-	/*
-	--------------------------------------------------
-	Mobile Startansicht
-	--------------------------------------------------
-	*/
-	
-	if (window.innerWidth < 768) {
-	
-		window.orgmapView.zoom = MOBILE_ZOOM;
-	
-		window.orgmapView.panX = MOBILE_PAN_X;
-	
-		window.orgmapView.panY = MOBILE_PAN_Y;
-	
-		const bounds =
-			getMapBounds();
-	
-		if (bounds) {
-	
-			const padding = 0;
-	
-			const zoomX =
-				(window.innerWidth - padding)
-				/ bounds.width;
-	
-			const zoomY =
-				(window.innerHeight - padding)
-				/ bounds.height;
-	
-			window.orgmapView.zoom =
-			Math.max(
-				0.20,
-				Math.min(zoomX, zoomY)
-			);
-	
-		}
-	
-	/*
-	--------------------------------------------------
-	Auto Center
-	--------------------------------------------------
-	*/
-	
-	if (bounds) {
-
-		window.orgmapView.panX =
-			(window.innerWidth - (bounds.width * window.orgmapView.zoom)) / 2
-			- (bounds.minX * window.orgmapView.zoom);
-	
-		window.orgmapView.panY =
-			40
-			- (bounds.minY * window.orgmapView.zoom);
-	
-	}
-	
-	}
-	
 	/*
 	--------------------------------------------------
 	Initialisierung

@@ -67,7 +67,7 @@ class ConnectionRenderHelper
 		) {
 	
 			$attributes[] =
-				'marker-end="url(#arrow-end)"';
+				'marker-end="url(#arrow-end-' . (int) $connection->id . ')"';
 		}
 	
 		if (
@@ -77,7 +77,7 @@ class ConnectionRenderHelper
 		) {
 	
 			$attributes[] =
-				'marker-start="url(#arrow-start)"';
+				'marker-start="url(#arrow-start-' . (int) $connection->id . ')"';
 		}
 	
 		return implode("\n", $attributes);
