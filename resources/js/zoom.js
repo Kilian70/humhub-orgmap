@@ -71,11 +71,23 @@
 
 	let layoutResizeTimer = null;
 
-	function runWorkspaceFit() {
+	function runWorkspaceFit(resetScroll = false) {
 		requestAnimationFrame(function () {
 			requestAnimationFrame(function () {
 				fitWorkspace();
 				applyZoom();
+
+				/* Beim Wechsel zwischen Navigation, Karte und Split kann der
+				   Browser die alte horizontale Scrollposition wiederherstellen.
+				   Erst nach dem neuen Transform zurücksetzen, weil sich die
+				   Scrollgrenzen durch applyZoom() nochmals ändern. */
+				if (resetScroll === true) {
+					const scroll = document.querySelector('.orgmap-scroll');
+					if (scroll) {
+						scroll.scrollLeft = 0;
+						scroll.scrollTop = 0;
+					}
+				}
 
 				if (typeof updateLines === 'function') {
 					updateLines();
@@ -84,8 +96,10 @@
 		});
 	}
 
-	function scheduleWorkspaceFit(delay = 0) {
-		window.setTimeout(runWorkspaceFit, delay);
+	function scheduleWorkspaceFit(delay = 0, resetScroll = false) {
+		window.setTimeout(function () {
+			runWorkspaceFit(resetScroll);
+		}, delay);
 	}
 
 	function scheduleWorkspaceFitAfterResize() {
@@ -109,9 +123,9 @@
 		/* Nach dem Einblenden mehrfach kurz nachmessen. Safari und grosse
 		   Karten mit vielen Bildern liefern ihre endgültige Breite teilweise
 		   erst nach dem ersten Layoutdurchlauf. */
-		scheduleWorkspaceFit(0);
-		scheduleWorkspaceFit(80);
-		scheduleWorkspaceFit(250);
+		scheduleWorkspaceFit(0, true);
+		scheduleWorkspaceFit(80, true);
+		scheduleWorkspaceFit(250, true);
 	}
 
 	function fitAfterPageRestore() {
@@ -127,9 +141,9 @@
 		}
 
 		watchMapImages();
-		scheduleWorkspaceFit(0);
-		scheduleWorkspaceFit(100);
-		scheduleWorkspaceFit(300);
+		scheduleWorkspaceFit(0, true);
+		scheduleWorkspaceFit(100, true);
+		scheduleWorkspaceFit(300, true);
 	}
 
 	function watchMapImages() {
@@ -204,12 +218,14 @@
 	}
 
 	const isMobile = window.innerWidth < 768;
+	const fitToBackground = document.querySelector('.orgmap-wrapper')
+		?.dataset.workspaceSize === 'background';
 	const cameraPadding = isMobile ? 12 : 40;
 	const widthZoom =
 		(availableWidth - cameraPadding * 2) / mapBounds.width;
 	let zoom = widthZoom;
 
-	if (!isMobile && availableHeight > cameraPadding * 2) {
+	if (!isMobile && !fitToBackground && availableHeight > cameraPadding * 2) {
 		zoom = Math.min(
 			widthZoom,
 			(availableHeight - cameraPadding * 2) / mapBounds.height
@@ -230,7 +246,7 @@
 	   sichtbare Viewport. Vertikales Zentrieren würde die Karte deshalb weit
 	   nach unten verschieben. Mobil immer oben beginnen; Desktop bleibt
 	   innerhalb der verfügbaren Fläche vertikal zentriert. */
-	const verticalOffset = isMobile
+	const verticalOffset = (isMobile || fitToBackground)
 		? cameraPadding
 		: Math.max(
 			cameraPadding,
@@ -251,7 +267,7 @@
 	/* CSS-Transforms verkleinern nur die Darstellung, nicht die im Dokument
 	   reservierte Höhe des Workspace. Auf Mobilgeräten würde deshalb unter
 	   der Karte die komplette unskalierte Resthöhe als Leerraum bleiben. */
-	if (isMobile) {
+	if (isMobile || fitToBackground) {
 		scroll.style.height = Math.ceil(
 			renderedHeight + (cameraPadding * 2)
 		) + 'px';

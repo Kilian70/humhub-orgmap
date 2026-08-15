@@ -39,7 +39,7 @@ class SettingsForm extends Model
 			],
 		
 				[['moduleTitle'], 'string', 'max' => 255],
-				[['workspaceSize'], 'in', 'range' => ['small', 'medium', 'large', 'custom']],
+				[['workspaceSize'], 'in', 'range' => ['small', 'medium', 'large', 'custom', 'background']],
 		];
 	}
 	

@@ -194,68 +194,13 @@ Workspace
 --------------------------------------------------
 */
 
-$workspaceSize = Yii::$app
+$workspace = \humhub\modules\orgmap\helpers\WorkspaceHelper::getDimensions();
+$workspaceWidth = $workspace['width'];
+$workspaceHeight = $workspace['height'];
+$workspaceSize = (string) Yii::$app
 	->getModule('orgmap')
 	->settings
 	->get('workspaceSize', 'medium');
-
-$workspaceWidth = 2400;
-$workspaceHeight = 1350;
-
-if ($workspaceSize === 'small') {
-
-	$workspaceWidth = 1600;
-	$workspaceHeight = 900;
-}
-
-if ($workspaceSize === 'large') {
-
-	$workspaceWidth = 3200;
-	$workspaceHeight = 1800;
-}
-
-if ($workspaceSize === 'custom') {
-
-	$workspaceWidth = Yii::$app
-		->getModule('orgmap')
-		->settings
-		->get(
-			'workspaceWidth',
-			2400
-		);
-
-	$workspaceHeight = Yii::$app
-		->getModule('orgmap')
-		->settings
-		->get(
-			'workspaceHeight',
-			1350
-		);
-}
-
-/*
-foreach ($nodes as $workspaceNode) {
-
-    if (
-        $workspaceNode->is_background
-        && $workspaceNode->width
-        && $workspaceNode->height
-    ) {
-
-        $workspaceWidth = max(
-            $workspaceWidth,
-            $workspaceNode->pos_x
-                + ($workspaceNode->width / 2)
-        );
-
-        $workspaceHeight = max(
-            $workspaceHeight,
-            $workspaceNode->pos_y
-                + ($workspaceNode->height / 2)
-        );
-    }
-}
-*/
 	
 	?>
 	

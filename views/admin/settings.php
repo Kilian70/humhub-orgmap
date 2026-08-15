@@ -67,6 +67,11 @@ $this->title =
 				'OrgmapModule.base',
 				'Eigene Grösse'
 			),
+
+			'background' => Yii::t(
+				'OrgmapModule.base',
+				'An Hintergrundbild anpassen'
+			),
 		],
 
 		[
@@ -127,6 +132,25 @@ $this->title =
 
     <?php ActiveForm::end(); ?>
 
+	<div id="background-workspace-action">
+		<p class="help-block">
+			<?= Html::encode(Yii::t(
+				'OrgmapModule.base',
+				'Die Anpassung verschiebt die gesamte Karte gemeinsam, damit ihre Anordnung erhalten bleibt.'
+			)) ?>
+		</p>
+
+		<?= Html::beginForm(['/orgmap/admin/fit-workspace-to-background'], 'post') ?>
+		<?= Html::submitButton(
+			Yii::t('OrgmapModule.base', 'Arbeitsfläche jetzt an Hintergrund anpassen'),
+			[
+				'class' => 'btn btn-info btn-sm',
+				'data-confirm' => Yii::t('OrgmapModule.base', 'Arbeitsfläche wirklich an das Hintergrundbild anpassen?'),
+			]
+		) ?>
+		<?= Html::endForm() ?>
+	</div>
+
 <?php
 
 $this->registerJs(<<<JS
@@ -138,13 +162,20 @@ function toggleWorkspaceFields() {
 
 	const fields =
 		document.getElementById('custom-workspace-fields');
+	const backgroundAction =
+		document.getElementById('background-workspace-action');
 
-	if (!select || !fields) {
+	if (!select || !fields || !backgroundAction) {
 		return;
 	}
 
 	fields.style.display =
 		select.value === 'custom'
+		? 'block'
+		: 'none';
+
+	backgroundAction.style.display =
+		select.value === 'background'
 		? 'block'
 		: 'none';
 }

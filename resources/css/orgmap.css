@@ -128,6 +128,10 @@ html[data-bs-theme="dark"] .container:fullscreen {
 		zoom: 0.27;
 	}
 
+	.orgmap-wrapper[data-workspace-size="background"] {
+		zoom: 0.27;
+	}
+
 	/* Druckertreiber reduzieren transparente SVG-Linien sonst teilweise bis
 	   zur Unsichtbarkeit. Für den Ausdruck werden sie bewusst verstärkt. */
 	#orgmap-svg,

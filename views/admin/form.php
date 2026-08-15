@@ -628,46 +628,9 @@ $this->title = Yii::t('OrgmapModule.base', 'ORG. Kreis');
 
 <?php
 
-$workspaceSize = Yii::$app
-	->getModule('orgmap')
-	->settings
-	->get(
-		'workspaceSize',
-		'medium'
-	);
-
-switch ($workspaceSize) {
-
-	case 'small':
-
-		$workspaceWidth = 1600;
-		$workspaceHeight = 900;
-		break;
-
-	case 'large':
-
-		$workspaceWidth = 3200;
-		$workspaceHeight = 1800;
-		break;
-
-	case 'custom':
-
-		$workspaceWidth = Yii::$app
-			->getModule('orgmap')
-			->settings
-			->get('workspaceWidth', 2400);
-
-		$workspaceHeight = Yii::$app
-			->getModule('orgmap')
-			->settings
-			->get('workspaceHeight', 1350);
-		break;
-
-	default:
-
-		$workspaceWidth = 2400;
-		$workspaceHeight = 1350;
-}
+$workspace = \humhub\modules\orgmap\helpers\WorkspaceHelper::getDimensions();
+$workspaceWidth = $workspace['width'];
+$workspaceHeight = $workspace['height'];
 
 $centerX = round($workspaceWidth / 2);
 $centerY = round($workspaceHeight / 2);

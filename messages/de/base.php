@@ -230,5 +230,12 @@ return [
 	'Suche...' => 'Suche...',
 	'Treffer' => 'Treffer',
 	'Zoom' => 'Zoom',
+	'Arbeitsfläche jetzt an Hintergrund anpassen' => 'Arbeitsfläche jetzt an Hintergrund anpassen',
+	'Arbeitsfläche wirklich an das Hintergrundbild anpassen?' => 'Arbeitsfläche wirklich an das Hintergrundbild anpassen?',
+	'Arbeitsfläche wurde an das Hintergrundbild angepasst.' => 'Arbeitsfläche wurde an das Hintergrundbild angepasst.',
+	'An Hintergrundbild anpassen' => 'An Hintergrundbild anpassen',
+	'Anpassung fehlgeschlagen.' => 'Anpassung fehlgeschlagen.',
+	'Die Anpassung verschiebt die gesamte Karte gemeinsam, damit ihre Anordnung erhalten bleibt.' => 'Die Anpassung verschiebt die gesamte Karte gemeinsam, damit ihre Anordnung erhalten bleibt.',
+	'Kein geeignetes Hintergrundbild gefunden.' => 'Kein geeignetes Hintergrundbild gefunden.',
 
 ];
