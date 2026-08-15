@@ -196,10 +196,16 @@
 	function fitWorkspace() {
 	const scroll =
 		document.querySelector('.orgmap-scroll');
+	const wrapper =
+		document.querySelector('.orgmap-wrapper');
 
-	if (!scroll) {
+	if (!scroll || !wrapper) {
 		return;
 	}
+
+	const fitToBackground = wrapper.dataset.workspaceSize === 'background';
+	const isEditMode = wrapper.dataset.editMode === '1';
+	const fitToScreen = fitToBackground && !isEditMode;
 
 	const mapBounds =
 		getMapBounds();
@@ -207,19 +213,15 @@
 	if (!mapBounds) {
 		return;
 	}
-	const availableWidth =
-		scroll.clientWidth;
+	const availableWidth = scroll.clientWidth;
 	
-	const availableHeight =
-		scroll.clientHeight;
+	const availableHeight = scroll.clientHeight;
 
 	if (availableWidth <= 0 || mapBounds.width <= 0 || mapBounds.height <= 0) {
 		return;
 	}
 
 	const isMobile = window.innerWidth < 768;
-	const fitToBackground = document.querySelector('.orgmap-wrapper')
-		?.dataset.workspaceSize === 'background';
 	const cameraPadding = isMobile ? 12 : 40;
 	const widthZoom =
 		(availableWidth - cameraPadding * 2) / mapBounds.width;
@@ -233,7 +235,7 @@
 	}
 
 	window.orgmapView.zoom =
-		Math.max(0.20, Math.min(zoom, 1));
+		Math.max(0.20, Math.min(zoom, fitToScreen ? 1.5 : 1));
 
 	
 	const renderedWidth = mapBounds.width * window.orgmapView.zoom;
@@ -274,6 +276,7 @@
 	} else {
 		scroll.style.height = '';
 	}
+
 	
 	}
 		

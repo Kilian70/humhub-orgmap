@@ -7,6 +7,23 @@ Versioning** where practical.
 
 ------------------------------------------------------------------------
 
+## \[1.4.0-beta.5\] - 2026-08-15
+
+### Changed
+
+-   Background-fitted maps now scale proportionally to the available map
+    width on different screen sizes
+-   Smaller background images can be enlarged moderately to use the
+    available map area
+
+### Fixed
+
+-   Excessive white margins introduced by fitting wide maps to the
+    available browser height
+-   Inconsistent map width caused by the scroll container box model
+
+------------------------------------------------------------------------
+
 ## \[1.4.0-beta.4\] - 2026-08-15
 
 ### Added
