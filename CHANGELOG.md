@@ -7,6 +7,21 @@ Versioning** where practical.
 
 ------------------------------------------------------------------------
 
+## \[1.4.0-beta.3\] - 2026-08-15
+
+### Changed
+
+-   Added a dedicated lightweight asset bundle for OrgMap administration
+-   Map, camera, connection and interaction scripts now load only on map pages
+
+### Fixed
+
+-   Broken map initialization after opening a node edit form or line settings
+-   Incorrect scaling after returning from administration to the map
+-   Unsafe workspace measurements on pages without a map
+
+------------------------------------------------------------------------
+
 ## \[1.4.0-beta.2\] - 2026-08-15
 
 ### Fixed

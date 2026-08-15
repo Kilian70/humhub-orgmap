@@ -3,10 +3,10 @@
 use yii\helpers\Html;
 use humhub\modules\orgmap\models\Node;
 use humhub\modules\orgmap\models\Organ;
-use humhub\modules\orgmap\assets\OrgMapAsset;
+use humhub\modules\orgmap\assets\OrgMapAdminAsset;
 use humhub\modules\orgmap\helpers\ActionButtonHelper;
 
-OrgMapAsset::register($this);
+OrgMapAdminAsset::register($this);
 
 /** @var $spaces */
 /** @var $nodes */

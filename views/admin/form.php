@@ -8,7 +8,7 @@ use humhub\modules\orgmap\models\Node;
 use humhub\modules\orgmap\models\Organ;
 use humhub\modules\orgmap\models\Connection;
 use humhub\modules\ui\icon\widgets\Icon;
-use humhub\modules\orgmap\assets\OrgMapAsset;
+use humhub\modules\orgmap\assets\OrgMapAdminAsset;
 use humhub\modules\orgmap\helpers\IconPickerHelper;
 use humhub\modules\orgmap\widgets\IconPickerWidget;
 use humhub\modules\orgmap\helpers\ActionButtonHelper;
@@ -16,7 +16,7 @@ use humhub\modules\orgmap\helpers\ActionButtonHelper;
 
 /** @var $model */
 
-OrgMapAsset::register($this);
+OrgMapAdminAsset::register($this);
 
 $this->title = Yii::t('OrgmapModule.base', 'ORG. Kreis');
 ?>

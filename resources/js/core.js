@@ -62,25 +62,6 @@
 		document.querySelector('.orgmap-wrapper')
 		?.dataset.workspaceSize || 'medium';
 	
-	const WRAPPER =
-	document.querySelector('.orgmap-wrapper');
-
-	const SCROLL =
-		document.querySelector('.orgmap-scroll');
-	
-	const WORKSPACE_WIDTH =
-		WRAPPER.offsetWidth;
-	
-	const WORKSPACE_HEIGHT =
-		WRAPPER.offsetHeight;
-	
-	const AVAILABLE_WIDTH =
-		SCROLL.clientWidth;
-	
-	const AVAILABLE_HEIGHT =
-		SCROLL.clientHeight;
-		
-	
 	/*
 	--------------------------------------------------
 	Einheitliche Kamera
