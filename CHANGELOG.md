@@ -7,6 +7,28 @@ Versioning** where practical.
 
 ------------------------------------------------------------------------
 
+## \[1.4.0-beta.4\] - 2026-08-15
+
+### Added
+
+-   Workspace size option to fit the map deliberately to the background
+
+### Changed
+
+-   Workspace dimensions are now resolved centrally for the map, editor,
+    new nodes and background-image optimization
+-   Fitting the workspace preserves the complete visual node arrangement
+    and never runs automatically after an image change
+-   Background-fitted maps also reduce the visible scroll area to the
+    scaled image height instead of retaining unused white space
+
+### Fixed
+
+-   White area on the right in split view caused by a restored horizontal
+    scroll position after changing the view mode
+
+------------------------------------------------------------------------
+
 ## \[1.4.0-beta.3\] - 2026-08-15
 
 ### Changed

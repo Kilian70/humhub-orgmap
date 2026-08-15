@@ -8,6 +8,7 @@ use humhub\modules\orgmap\models\Node;
 use humhub\modules\orgmap\models\Connection;
 use humhub\modules\orgmap\models\SettingsForm;
 use humhub\modules\orgmap\models\Organ;
+use humhub\modules\orgmap\helpers\WorkspaceHelper;
 use humhub\modules\space\models\Space;
 use yii\filters\VerbFilter;
 
@@ -21,6 +22,7 @@ class AdminController extends Controller
 				'actions' => [
 					'delete' => ['POST'], 'toggle-visible' => ['POST'], 'toggle-lines' => ['POST'],
 					'reset-label' => ['POST'], 'save-connection-label' => ['POST'],
+					'fit-workspace-to-background' => ['POST'],
 				],
 			],
 		]);
@@ -136,21 +138,9 @@ class AdminController extends Controller
 	ausserhalb der Karte. Die Formularvorgabe richtet sich
 	nun nach der tatsächlich konfigurierten Arbeitsfläche.
 	*/
-	$module = Yii::$app->getModule('orgmap');
-	$workspaceSize = $module->settings->get('workspaceSize', 'medium');
-	$workspaceWidth = 2400;
-	$workspaceHeight = 1350;
-
-	if ($workspaceSize === 'small') {
-		$workspaceWidth = 1600;
-		$workspaceHeight = 900;
-	} elseif ($workspaceSize === 'large') {
-		$workspaceWidth = 3200;
-		$workspaceHeight = 1800;
-	} elseif ($workspaceSize === 'custom') {
-		$workspaceWidth = (int) $module->settings->get('workspaceWidth', 2400);
-		$workspaceHeight = (int) $module->settings->get('workspaceHeight', 1350);
-	}
+	$workspace = WorkspaceHelper::getDimensions();
+	$workspaceWidth = $workspace['width'];
+	$workspaceHeight = $workspace['height'];
 
 	$model->pos_x = (int) round($workspaceWidth / 2);
 	$model->pos_y = (int) round($workspaceHeight / 2);
@@ -624,6 +614,46 @@ public function actionSettings()
 			'medium'
 		),
 	]);
+}
+
+public function actionFitWorkspaceToBackground()
+{
+	$background = Node::find()->where(['is_background' => 1, 'visible' => 1])->orderBy(['id' => SORT_ASC])->one()
+		?? Node::find()->where(['is_background' => 1])->orderBy(['id' => SORT_ASC])->one();
+	$width = (int) ($background->width ?? 0);
+	$height = (int) ($background->height ?? 0);
+
+	if ($background === null || $width < 500 || $height < 500 || $width > 10000 || $height > 10000) {
+		Yii::$app->session->setFlash('danger', Yii::t('OrgmapModule.base', 'Kein geeignetes Hintergrundbild gefunden.'));
+
+		return $this->redirect(['/orgmap/admin/settings']);
+	}
+
+	$deltaX = (int) round(($width / 2) - (int) $background->pos_x);
+	$deltaY = (int) round(($height / 2) - (int) $background->pos_y);
+	$transaction = Yii::$app->db->beginTransaction();
+
+	try {
+		if ($deltaX !== 0 || $deltaY !== 0) {
+			Node::updateAllCounters(['pos_x' => $deltaX, 'pos_y' => $deltaY]);
+		}
+
+		$settings = Yii::$app->getModule('orgmap')->settings;
+		$settings->set('workspaceWidth', $width);
+		$settings->set('workspaceHeight', $height);
+		$settings->set('workspaceSize', 'background');
+		$transaction->commit();
+	} catch (\Throwable $exception) {
+		$transaction->rollBack();
+		Yii::error($exception, __METHOD__);
+		Yii::$app->session->setFlash('danger', Yii::t('OrgmapModule.base', 'Anpassung fehlgeschlagen.'));
+
+		return $this->redirect(['/orgmap/admin/settings']);
+	}
+
+	Yii::$app->session->setFlash('success', Yii::t('OrgmapModule.base', 'Arbeitsfläche wurde an das Hintergrundbild angepasst.'));
+
+	return $this->redirect(['/orgmap/admin/settings']);
 }
 
 /*

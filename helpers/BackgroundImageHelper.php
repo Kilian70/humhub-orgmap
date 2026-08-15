@@ -72,52 +72,9 @@ class BackgroundImageHelper
 		----------------------------------------------------
 		*/
 		
-		$settings =
-			Yii::$app
-				->getModule('orgmap')
-				->settings;
-		
-		$workspaceSize =
-			$settings->get(
-				'workspaceSize',
-				'medium'
-			);
-		
-		switch ($workspaceSize) {
-		
-			case 'small':
-		
-				$workspaceWidth = 1600;
-				$workspaceHeight = 900;
-				break;
-		
-			case 'large':
-		
-				$workspaceWidth = 3200;
-				$workspaceHeight = 1800;
-				break;
-		
-			case 'custom':
-		
-				$workspaceWidth =
-					(int) $settings->get(
-						'workspaceWidth',
-						2400
-					);
-		
-				$workspaceHeight =
-					(int) $settings->get(
-						'workspaceHeight',
-						1350
-					);
-		
-				break;
-		
-			default:
-		
-				$workspaceWidth = 2400;
-				$workspaceHeight = 1350;
-		}
+		$workspace = WorkspaceHelper::getDimensions();
+		$workspaceWidth = $workspace['width'];
+		$workspaceHeight = $workspace['height'];
 		
 		/*
 		----------------------------------------------------

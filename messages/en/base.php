@@ -369,5 +369,26 @@ return [
 
 'Zoom'
 	=> 'Zoom',
+
+'Arbeitsfläche jetzt an Hintergrund anpassen'
+	=> 'Fit workspace to background now',
+
+'Arbeitsfläche wirklich an das Hintergrundbild anpassen?'
+	=> 'Really fit the workspace to the background image?',
+
+'Arbeitsfläche wurde an das Hintergrundbild angepasst.'
+	=> 'The workspace was fitted to the background image.',
+
+'An Hintergrundbild anpassen'
+	=> 'Fit to background image',
+
+'Anpassung fehlgeschlagen.'
+	=> 'Adjustment failed.',
+
+'Die Anpassung verschiebt die gesamte Karte gemeinsam, damit ihre Anordnung erhalten bleibt.'
+	=> 'The adjustment moves the entire map together so its layout is preserved.',
+
+'Kein geeignetes Hintergrundbild gefunden.'
+	=> 'No suitable background image was found.',
     
     ];
