@@ -35,6 +35,20 @@
 			});
 		}
 
+		function notifyViewChange(mode) {
+			/* Die Kartenbreite ist im Navigationsmodus 0, weil .orgmap-main dort
+			   ausgeblendet ist. Erst nach zwei Frames ist der neue View-Modus
+			   vollständig im Layout angekommen und kann zuverlässig vermessen
+			   werden. */
+			window.requestAnimationFrame(function () {
+				window.requestAnimationFrame(function () {
+					document.dispatchEvent(new CustomEvent('orgmap:viewchange', {
+						detail: {mode: mode}
+					}));
+				});
+			});
+		}
+
 		updateViewState(layout.dataset.viewMode);
 	
 		viewButtons.forEach(button => {
@@ -53,6 +67,8 @@
 					'orgmapViewMode',
 					mode
 				);
+
+				notifyViewChange(mode);
 			});
 		});
 	}

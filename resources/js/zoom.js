@@ -93,6 +93,45 @@
 		layoutResizeTimer = window.setTimeout(runWorkspaceFit, 120);
 	}
 
+	function fitAfterViewChange(event) {
+		const mode = event.detail?.mode;
+
+		if (mode !== 'map' && mode !== 'split') {
+			return;
+		}
+
+		const scroll = document.querySelector('.orgmap-scroll');
+		if (scroll) {
+			scroll.scrollLeft = 0;
+			scroll.scrollTop = 0;
+		}
+
+		/* Nach dem Einblenden mehrfach kurz nachmessen. Safari und grosse
+		   Karten mit vielen Bildern liefern ihre endgültige Breite teilweise
+		   erst nach dem ersten Layoutdurchlauf. */
+		scheduleWorkspaceFit(0);
+		scheduleWorkspaceFit(80);
+		scheduleWorkspaceFit(250);
+	}
+
+	function fitAfterPageRestore() {
+		const layout = document.querySelector('.orgmap-layout');
+		if (!layout || layout.dataset.viewMode === 'tree') {
+			return;
+		}
+
+		const scroll = document.querySelector('.orgmap-scroll');
+		if (scroll) {
+			scroll.scrollLeft = 0;
+			scroll.scrollTop = 0;
+		}
+
+		watchMapImages();
+		scheduleWorkspaceFit(0);
+		scheduleWorkspaceFit(100);
+		scheduleWorkspaceFit(300);
+	}
+
 	function watchMapImages() {
 		document
 			.querySelectorAll('.org-node-print-image')
@@ -114,7 +153,14 @@
 	scheduleWorkspaceFit(500);
 
 	window.addEventListener('load', runWorkspaceFit, {once: true});
+	window.addEventListener('pageshow', fitAfterPageRestore);
 	window.addEventListener('resize', scheduleWorkspaceFitAfterResize);
+	document.addEventListener('orgmap:viewchange', fitAfterViewChange);
+	document.addEventListener('visibilitychange', function () {
+		if (!document.hidden) {
+			fitAfterPageRestore();
+		}
+	});
 
 	if (window.visualViewport) {
 		window.visualViewport.addEventListener(
@@ -268,4 +314,5 @@
 		watchMapImages();
 		scheduleWorkspaceFit(0);
 		scheduleWorkspaceFit(150);
+		scheduleWorkspaceFit(350);
 	});
