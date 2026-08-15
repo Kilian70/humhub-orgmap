@@ -7,6 +7,16 @@ Versioning** where practical.
 
 ------------------------------------------------------------------------
 
+## \[1.4.0-beta.2\] - 2026-08-15
+
+### Fixed
+
+-   Incorrect map scaling after switching from navigation to map or split view
+-   Stale map position after returning from OrgMap administration
+-   Missing recalculation after browser cache restoration, tab restoration and PJAX navigation
+
+------------------------------------------------------------------------
+
 ## \[1.4.0-beta.1\] - 2026-08-14
 
 ### Added
