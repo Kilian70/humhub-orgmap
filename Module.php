@@ -4,6 +4,7 @@ namespace humhub\modules\orgmap;
 
 use humhub\modules\orgmap\permissions\ManageOrgMap;
 use humhub\modules\orgmap\permissions\ViewOrgMap;
+use yii\helpers\Url;
 
 class Module extends \humhub\components\Module
 {
@@ -18,6 +19,11 @@ class Module extends \humhub\components\Module
 	public function getDescription()
 	{
 		return 'Visual organization map.';
+	}
+
+	public function getConfigUrl()
+	{
+		return Url::to(['/orgmap/admin/index']);
 	}
 	
 	/*

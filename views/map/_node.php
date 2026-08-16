@@ -199,13 +199,20 @@ if (!empty($node->content)) {
 		'org-node-has-content';
 }
 
-if (!empty($imageToUse)) {
+$displayImage =
+	!empty($imageToUse)
+	&& in_array($node->display_mode, ['image', 'mixed'], true);
+
+if ($displayImage) {
 
 	$nodeClasses[] =
 		'org-node-has-image';
 
 	$nodeClasses[] =
 		'org-node-has-print-image';
+
+	$nodeClasses[] =
+		'org-node-display-' . $node->display_mode;
 }
 
 $isBackground =
@@ -285,7 +292,7 @@ $top =
 			<?= (int) ($node->border_width ?? 3) ?>px;
 		"
 	>
-		<?php if (!empty($imageToUse)): ?>
+		<?php if ($displayImage): ?>
 			<img
 				class="org-node-print-image"
 				src="<?= Html::encode($imageToUse) ?>"
@@ -296,7 +303,7 @@ $top =
 				<?= $isBackground ? 'fetchpriority="high"' : '' ?>
 				style="
 					object-fit: <?= $node->background_size === 'contain' ? 'contain' : 'cover' ?>;
-					opacity: <?= Html::encode((string) ($node->opacity !== null ? $node->opacity / 100 : 1)) ?>;
+					opacity: <?= Html::encode((string) (($node->image_opacity ?? $node->opacity ?? 100) / 100)) ?>;
 				"
 			/>
 		<?php endif; ?>

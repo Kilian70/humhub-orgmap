@@ -47,6 +47,18 @@ html[data-bs-theme="dark"] .table-responsive:focus-visible {
 	isolation: isolate;
 }
 
+.orgmap-stage {
+	position: relative;
+	max-width: none;
+	overflow: visible;
+}
+
+.orgmap-stage > .orgmap-wrapper {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
 .container:fullscreen {
 	width: 100vw;
 	height: 100vh;

@@ -232,7 +232,14 @@ $workspaceSize = (string) Yii::$app
 			role="region"
 			aria-label="<?= Yii::t('OrgmapModule.base', 'Kartenbereich') ?>"
 		>
-	
+
+<div
+	class="orgmap-stage"
+	style="
+		width: <?= $workspaceWidth ?>px;
+		height: <?= $workspaceHeight ?>px;
+	"
+>
 <div
     class="orgmap-wrapper"
 
@@ -546,6 +553,8 @@ Node Rendering
 		<?php endif; ?>
 
 	<?php endforeach; ?>
+
+</div>
 
 </div>
 

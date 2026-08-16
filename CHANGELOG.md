@@ -7,6 +7,24 @@ Versioning** where practical.
 
 ------------------------------------------------------------------------
 
+## \[1.4.0-beta.6\] - 2026-08-16
+
+### Added
+
+-   Separate color and image transparency controls for nodes
+-   Dedicated OrgMap module image for HumHub's module overview
+-   Configurable main-menu visibility: hidden, administrators only, or all
+-   Configure button in HumHub's module administration
+
+### Changed
+
+-   Existing node transparency values are migrated without changing the
+    current appearance of color, image, or mixed nodes
+-   Map workspaces use their rendered footprint to avoid unused white space
+-   Fullscreen maps also consider the available viewport height
+
+------------------------------------------------------------------------
+
 ## \[1.4.0-beta.5\] - 2026-08-15
 
 ### Changed

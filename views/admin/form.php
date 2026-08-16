@@ -301,7 +301,21 @@ $this->title = Yii::t('OrgmapModule.base', 'ORG. Kreis');
 	
 	</div>	
 
-	<?= $form->field($model, 'opacity')->textInput() ?>	
+	<div class="orgmap-color-opacity-field">
+		<?= $form->field($model, 'color_opacity')->input('number', [
+			'min' => 0,
+			'max' => 100,
+			'step' => 1,
+		]) ?>
+	</div>
+
+	<div class="orgmap-image-opacity-field">
+		<?= $form->field($model, 'image_opacity')->input('number', [
+			'min' => 0,
+			'max' => 100,
+			'step' => 1,
+		]) ?>
+	</div>
 		
 	
 	<hr>
@@ -723,6 +737,34 @@ function updateImageSourceFields()
 				? 'block'
 				: 'none';
 	}
+}
+
+function updateOpacityFields()
+{
+	const displayMode = document.getElementById('node-display_mode');
+	const colorField = document.querySelector('.orgmap-color-opacity-field');
+	const imageField = document.querySelector('.orgmap-image-opacity-field');
+
+	if (!displayMode) {
+		return;
+	}
+
+	if (colorField) {
+		colorField.style.display =
+			['color', 'mixed'].includes(displayMode.value) ? 'block' : 'none';
+	}
+
+	if (imageField) {
+		imageField.style.display =
+			['image', 'mixed'].includes(displayMode.value) ? 'block' : 'none';
+	}
+}
+
+const displayModeSelect = document.getElementById('node-display_mode');
+
+if (displayModeSelect) {
+	displayModeSelect.addEventListener('change', updateOpacityFields);
+	updateOpacityFields();
 }
 
 var imageSourceSelect =

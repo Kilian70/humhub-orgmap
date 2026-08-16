@@ -198,8 +198,10 @@
 		document.querySelector('.orgmap-scroll');
 	const wrapper =
 		document.querySelector('.orgmap-wrapper');
+	const stage =
+		document.querySelector('.orgmap-stage');
 
-	if (!scroll || !wrapper) {
+	if (!scroll || !wrapper || !stage) {
 		return;
 	}
 
@@ -215,19 +217,37 @@
 	}
 	const availableWidth = scroll.clientWidth;
 	
-	const availableHeight = scroll.clientHeight;
+	let availableHeight = scroll.clientHeight;
 
 	if (availableWidth <= 0 || mapBounds.width <= 0 || mapBounds.height <= 0) {
 		return;
 	}
 
 	const isMobile = window.innerWidth < 768;
+	const isFullscreen = Boolean(document.fullscreenElement);
 	const cameraPadding = isMobile ? 12 : 40;
 	const widthZoom =
 		(availableWidth - cameraPadding * 2) / mapBounds.width;
 	let zoom = widthZoom;
 
-	if (!isMobile && !fitToBackground && availableHeight > cameraPadding * 2) {
+	if (isFullscreen) {
+		const viewportHeight = window.visualViewport?.height || window.innerHeight;
+		availableHeight = Math.max(
+			240,
+			viewportHeight - scroll.getBoundingClientRect().top - 16
+		);
+	}
+
+	if (
+		isFullscreen
+		&& fitToScreen
+		&& availableHeight > cameraPadding * 2
+	) {
+		zoom = Math.min(
+			widthZoom,
+			(availableHeight - cameraPadding * 2) / mapBounds.height
+		);
+	} else if (!isMobile && !fitToBackground && availableHeight > cameraPadding * 2) {
 		zoom = Math.min(
 			widthZoom,
 			(availableHeight - cameraPadding * 2) / mapBounds.height
@@ -270,10 +290,20 @@
 	   reservierte Höhe des Workspace. Auf Mobilgeräten würde deshalb unter
 	   der Karte die komplette unskalierte Resthöhe als Leerraum bleiben. */
 	if (isMobile || fitToBackground) {
-		scroll.style.height = Math.ceil(
+		const cameraHeight = Math.ceil(
 			renderedHeight + (cameraPadding * 2)
-		) + 'px';
+		);
+		const cameraWidth = Math.max(
+			availableWidth,
+			Math.ceil(renderedWidth + (cameraPadding * 2))
+		);
+
+		stage.style.width = cameraWidth + 'px';
+		stage.style.height = cameraHeight + 'px';
+		scroll.style.height = cameraHeight + 'px';
 	} else {
+		stage.style.width = wrapper.style.width;
+		stage.style.height = wrapper.style.height;
 		scroll.style.height = '';
 	}
 

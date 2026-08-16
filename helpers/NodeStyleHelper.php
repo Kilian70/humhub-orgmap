@@ -37,10 +37,11 @@ class NodeStyleHelper
 		$imageToUse = null
 	) {
 	
-		$opacity =
-			$node->opacity !== null
-			? ($node->opacity / 100)
-			: 1;
+		$colorOpacityValue =
+			$node->color_opacity !== null
+			? $node->color_opacity
+			: ($node->opacity ?? 100);
+		$colorOpacity = $colorOpacityValue / 100;
 	
 			$backgroundSize =
 				in_array($node->background_size, ['cover', 'contain'], true) ? $node->background_size : 'cover';
@@ -66,18 +67,8 @@ class NodeStyleHelper
 		--------------------------------------------------
 		*/
 
-		if (
-			$node->display_mode === 'image'
-			&& $imageToUse
-		) {
-		
-			return "
-				background-image:url('{$imageToUse}');
-				background-size: {$backgroundSize};
-				background-position: top left;
-				background-repeat: no-repeat;
-				opacity: {$opacity};
-			";
+		if ($node->display_mode === 'image' && $imageToUse) {
+			return "background: transparent;";
 		}
 		/*
 		--------------------------------------------------
@@ -90,15 +81,7 @@ class NodeStyleHelper
 			&& $imageToUse
 		) {
 		
-			return "
-				background-image:url('{$imageToUse}');
-				background-size: {$backgroundSize};
-				background-position: top left;
-				background-repeat: no-repeat;
-				background-color:
-					rgba($r, $g, $b, $opacity);
-				background-blend-mode: multiply;
-			";
+			return "background: rgba($r, $g, $b, $colorOpacity);";
 		}
 
 		/*
@@ -119,7 +102,7 @@ class NodeStyleHelper
 		*/
 
 		return
-			"background: rgba($r, $g, $b, $opacity);";
+			"background: rgba($r, $g, $b, $colorOpacity);";
 	}
 	
 		public static function buildLabelStyle($node)

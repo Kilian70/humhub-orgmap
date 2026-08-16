@@ -100,8 +100,19 @@ $this->title =
 
 	<?= $form->field($model, 'showLines')->checkbox() ?>
 	    
-		<?= $form->field($model, 'allowGuestAccess')
+	<?= $form->field($model, 'allowGuestAccess')
 		->checkbox() ?>
+
+	<?= $form->field($model, 'topMenuVisibility')
+		->dropDownList([
+			'hidden' => Yii::t('OrgmapModule.base', 'Ausgeblendet'),
+			'admin' => Yii::t('OrgmapModule.base', 'Nur Administratoren'),
+			'all' => Yii::t('OrgmapModule.base', 'Für alle sichtbar'),
+		])
+		->hint(Yii::t(
+			'OrgmapModule.base',
+			'Diese Einstellung steuert nur den Eintrag im Hauptmenü. Die Zugriffsrechte auf OrgMap bleiben unverändert.'
+		)) ?>
 	
 	<?= $form->field($model, 'topMenuSortOrder')
 		->textInput([

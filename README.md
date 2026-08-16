@@ -15,10 +15,10 @@
 
 # ORGMAP
 
-**Version:** 1.3.1\
+**Version:** 1.4.0\
 **Author & Maintainer:** Kilian Schmid\
 **Compatible with:** HumHub 1.18 -- 2.x\
-**License:** MIT License
+**License:** GNU Affero General Public License v3.0 or later (`AGPL-3.0-or-later`)
 
 ------------------------------------------------------------------------
 
@@ -60,6 +60,7 @@ Each node supports:
 -   Position
 -   Size
 -   Opacity
+-   Separate color and image opacity
 -   URL
 -   Labels
 
@@ -169,8 +170,10 @@ Available settings include:
 -   Workspace size
 -   Workspace dimensions
 -   Guest access
+-   Main-menu visibility (hidden, administrators only, or all users)
 -   Top menu position
 -   Connection visibility
+-   Workspace fitting to the background image
 
 ------------------------------------------------------------------------
 

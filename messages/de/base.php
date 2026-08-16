@@ -130,6 +130,8 @@ return [
     'Panel' => 'Panel',
     'Spacebild' => 'Spacebild',
     'Transparenz' => 'Transparenz',
+    'Farbtransparenz' => 'Farbtransparenz',
+    'Bildtransparenz' => 'Bildtransparenz',
     'Verwendet von' => 'Verwendet von',
 
     /*
@@ -214,6 +216,11 @@ return [
     'Mittel (2400 × 1350)' => 'Mittel (2400 × 1350)',
     'Modultitel' => 'Modultitel',
     'Position im Hauptmenü' => 'Position im Hauptmenü',
+    'Sichtbarkeit im Hauptmenü' => 'Sichtbarkeit im Hauptmenü',
+    'Ausgeblendet' => 'Ausgeblendet',
+    'Nur Administratoren' => 'Nur Administratoren',
+    'Für alle sichtbar' => 'Für alle sichtbar',
+    'Diese Einstellung steuert nur den Eintrag im Hauptmenü. Die Zugriffsrechte auf OrgMap bleiben unverändert.' => 'Diese Einstellung steuert nur den Eintrag im Hauptmenü. Die Zugriffsrechte auf OrgMap bleiben unverändert.',
     'Verhalten' => 'Verhalten',
 
     /*
