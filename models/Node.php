@@ -15,6 +15,14 @@ class Node extends ActiveRecord
 		if ($this->opacity === null) {
 			$this->opacity = 100;
 		}
+
+		if ($this->color_opacity === null) {
+			$this->color_opacity = $this->opacity;
+		}
+
+		if ($this->image_opacity === null) {
+			$this->image_opacity = $this->opacity;
+		}
 	}
 
     public static function tableName()
@@ -129,6 +137,8 @@ class Node extends ActiveRecord
 				'label_y',
 				'font_size',
 				'opacity',
+				'color_opacity',
+				'image_opacity',
 				'border_width'
 			], 'integer'],		
 						[[
@@ -169,7 +179,7 @@ class Node extends ActiveRecord
 				[['color', 'border_color'], 'match', 'pattern' => '/^#[0-9a-fA-F]{6}$/'],
 				[['url', 'custom_image'], 'url', 'validSchemes' => ['http', 'https'], 'skipOnEmpty' => true],
 				[['radius', 'width', 'height'], 'integer', 'min' => 20, 'max' => 5000],
-				[['opacity'], 'integer', 'min' => 0, 'max' => 100],
+				[['opacity', 'color_opacity', 'image_opacity'], 'integer', 'min' => 0, 'max' => 100],
 				[['font_size'], 'integer', 'min' => 8, 'max' => 100],
 				[['border_width'], 'integer', 'min' => 0, 'max' => 20],
 				[['parent_id'], 'exist', 'targetClass' => self::class, 'targetAttribute' => ['parent_id' => 'id'], 'skipOnEmpty' => true],
@@ -265,6 +275,16 @@ class Node extends ActiveRecord
 			'opacity' => Yii::t(
 				'OrgmapModule.base',
 				'Transparenz'
+			),
+
+			'color_opacity' => Yii::t(
+				'OrgmapModule.base',
+				'Farbtransparenz'
+			),
+
+			'image_opacity' => Yii::t(
+				'OrgmapModule.base',
+				'Bildtransparenz'
 			),
 	
 			'image_source' => Yii::t(

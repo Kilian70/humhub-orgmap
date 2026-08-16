@@ -60,6 +60,17 @@ Farbebene
 	pointer-events: none;
 }
 
+/* Bild- und Farbebene bleiben getrennt. Dadurch kann ihre Transparenz
+   unabhängig voneinander eingestellt werden. */
+.org-node-display-image .org-node-print-image,
+.org-node-display-mixed .org-node-print-image {
+	display: block;
+}
+
+.org-node-display-mixed .org-node-print-image {
+	mix-blend-mode: multiply;
+}
+
 /* Grosse Kartenhintergründe als echtes Bild rendern. CSS-Hintergrundbilder
    können beim asynchronen Laden in einer eigenen Raster-Kachel landen und
    dadurch SVG-Verbindungen teilweise überdecken. */
@@ -67,7 +78,7 @@ Farbebene
 	display: block;
 }
 
-.orgmap-background-layer .org-node-has-print-image .org-node-background {
+.orgmap-background-layer .org-node-display-image .org-node-background {
 	background: transparent !important;
 }
 

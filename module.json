@@ -2,6 +2,7 @@
     "id": "orgmap",
     "name": "OrgMap",
     "description": "Visual organization map for communities and organizations.",
+    "licence": "AGPL-3.0-or-later",
     "keywords": [
         "organization",
         "map",
@@ -9,7 +10,7 @@
         "structure",
         "network"
     ],
-    "version": "1.4.0-beta.5",
+    "version": "1.4.0-beta.6",
     "humhub": {
         "minVersion": "1.18"
     }

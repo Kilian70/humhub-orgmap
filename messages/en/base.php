@@ -130,6 +130,8 @@ return [
 'Panel' => 'Panel',
 'Spacebild' => 'Space Image',
 'Transparenz' => 'Opacity',
+'Farbtransparenz' => 'Color Opacity',
+'Bildtransparenz' => 'Image Opacity',
 'Verwendet von' => 'Used By',
 
 /*
@@ -335,6 +337,21 @@ return [
 
 'Position im Hauptmenü'
     => 'Top Menu Position',
+
+'Sichtbarkeit im Hauptmenü'
+    => 'Visibility in the Main Menu',
+
+'Ausgeblendet'
+    => 'Hidden',
+
+'Nur Administratoren'
+    => 'Administrators Only',
+
+'Für alle sichtbar'
+    => 'Visible to Everyone',
+
+'Diese Einstellung steuert nur den Eintrag im Hauptmenü. Die Zugriffsrechte auf OrgMap bleiben unverändert.'
+    => 'This setting only controls the main-menu entry. OrgMap access permissions remain unchanged.',
 
 'Verhalten'
     => 'Behavior',

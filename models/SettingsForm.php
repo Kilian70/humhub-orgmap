@@ -12,6 +12,8 @@ class SettingsForm extends Model
 
 	public $allowGuestAccess;
 
+	public $topMenuVisibility;
+
 	public $topMenuSortOrder;
 	
 	public $moduleTitle;
@@ -28,6 +30,8 @@ class SettingsForm extends Model
 			[['showLines'], 'boolean'],
 		
 			[['allowGuestAccess'], 'boolean'],
+
+			[['topMenuVisibility'], 'in', 'range' => ['hidden', 'admin', 'all']],
 		
 			[['topMenuSortOrder'], 'integer'],
 		
@@ -55,6 +59,11 @@ class SettingsForm extends Model
 			'allowGuestAccess' => Yii::t(
 				'OrgmapModule.base',
 				'Gastzugriff erlauben'
+			),
+
+			'topMenuVisibility' => Yii::t(
+				'OrgmapModule.base',
+				'Sichtbarkeit im Hauptmenü'
 			),
 	
 			'topMenuSortOrder' => Yii::t(
@@ -105,6 +114,12 @@ class SettingsForm extends Model
 				false
 			);
 
+		$this->topMenuVisibility =
+			$settings->get(
+				'topMenuVisibility',
+				'all'
+			);
+
 		$this->topMenuSortOrder =
 			$settings->get(
 				'topMenuSortOrder',
@@ -150,6 +165,11 @@ class SettingsForm extends Model
 		$settings->set(
 			'allowGuestAccess',
 			$this->allowGuestAccess
+		);
+
+		$settings->set(
+			'topMenuVisibility',
+			$this->topMenuVisibility
 		);
 
 		$settings->set(

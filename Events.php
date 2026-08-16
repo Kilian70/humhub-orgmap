@@ -10,15 +10,22 @@ class Events
 
     public static function onTopMenuInit($event)
     {
-    
-			$allowGuestAccess =
-			Yii::$app
-				->getModule('orgmap')
-				->settings
-				->get(
-					'allowGuestAccess',
-					false
-				);
+		$module = Yii::$app->getModule('orgmap');
+		$settings = $module->settings;
+		$visibility = $settings->get('topMenuVisibility', 'all');
+
+		if ($visibility === 'hidden') {
+			return;
+		}
+
+		if (
+			$visibility === 'admin'
+			&& (Yii::$app->user->isGuest || !Yii::$app->user->isAdmin())
+		) {
+			return;
+		}
+
+		$allowGuestAccess = $settings->get('allowGuestAccess', false);
 		
 		if (
 			Yii::$app->user->isGuest
@@ -32,25 +39,13 @@ class Events
 
             'id' => 'topmenu-orgmap',
 
-            'label' => Yii::$app
-				->getModule('orgmap')
-				->settings
-				->get(
-					'moduleTitle',
-					'ORG.'
-				),
+            'label' => $settings->get('moduleTitle', 'ORG.'),
 
             'url' => ['/orgmap/map/index'],
 
             'icon' => 'fa-circle-o',
 
-            'sortOrder' => Yii::$app
-                ->getModule('orgmap')
-                ->settings
-                ->get(
-                    'topMenuSortOrder',
-                    250
-                ),
+            'sortOrder' => $settings->get('topMenuSortOrder', 250),
 
             'isActive' => Yii::$app->controller?->module?->id === 'orgmap',
         ]));
