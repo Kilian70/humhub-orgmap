@@ -7,6 +7,34 @@ Versioning** where practical.
 
 ------------------------------------------------------------------------
 
+## \[1.4.0\] - 2026-08-16
+
+### Released
+
+-   First stable OrgMap 1.4 release
+-   Verified installation and map editing on clean HumHub 1.18
+-   Compatible with HumHub 1.18, HumHub 1.19 and later supported versions
+-   Includes the accessibility, responsive workspace, printing, menu
+    visibility and node appearance improvements from the 1.4 beta series
+
+------------------------------------------------------------------------
+
+## \[1.4.0-beta.7\] - 2026-08-16
+
+### Changed
+
+-   Print output is automatically scaled to one A4 landscape page
+-   Print images are fully loaded and decoded before the print dialog opens
+-   Print layers use stable opacity and blending for reliable image output
+
+### Fixed
+
+-   Small print output when browser scaling was set to 100 percent
+-   Maps split across two printed pages
+-   Images intermittently missing from PDF or physical print output
+
+------------------------------------------------------------------------
+
 ## \[1.4.0-beta.6\] - 2026-08-16
 
 ### Added

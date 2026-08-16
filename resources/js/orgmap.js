@@ -168,13 +168,113 @@
 		}
 	});
 
-	document.addEventListener('click', function (event) {
-		if (!event.target.closest('#orgmap-print')) {
+	document.addEventListener('click', async function (event) {
+		const button = event.target.closest('#orgmap-print');
+		if (!button || button.dataset.printPreparing === '1') {
 			return;
 		}
 
-		window.print();
+		button.dataset.printPreparing = '1';
+		button.disabled = true;
+
+		try {
+			await waitForOrgMapPrintImages();
+			prepareOrgMapPrint();
+			await waitForOrgMapPaint();
+			window.print();
+		} finally {
+			button.disabled = false;
+			delete button.dataset.printPreparing;
+		}
 	});
+
+	function waitForOrgMapPaint() {
+		return new Promise(function (resolve) {
+			requestAnimationFrame(function () {
+				requestAnimationFrame(resolve);
+			});
+		});
+	}
+
+	async function waitForOrgMapPrintImages() {
+		const images = Array.from(
+			document.querySelectorAll('.org-node-print-image')
+		);
+
+		await Promise.all(images.map(async function (image) {
+			if (!image.complete) {
+				await new Promise(function (resolve) {
+					let finished = false;
+					const done = function () {
+						if (finished) {
+							return;
+						}
+
+						finished = true;
+						image.removeEventListener('load', done);
+						image.removeEventListener('error', done);
+						resolve();
+					};
+
+					image.addEventListener('load', done, { once: true });
+					image.addEventListener('error', done, { once: true });
+
+					/* Verhindert eine Race Condition, falls das Bild genau
+					   zwischen der Prüfung und den Listenern fertig wurde. */
+					if (image.complete) {
+						done();
+					}
+				});
+			}
+
+			if (image.naturalWidth > 0 && typeof image.decode === 'function') {
+				try {
+					await image.decode();
+				} catch (error) {
+					/* Bereits geladene Bilder können in einzelnen Browsern
+					   decode() ablehnen und sind trotzdem druckbar. */
+				}
+			}
+		}));
+	}
+
+	function prepareOrgMapPrint() {
+		const wrapper = document.querySelector('.orgmap-wrapper');
+		const stage = document.querySelector('.orgmap-stage');
+
+		if (!wrapper || !stage) {
+			return;
+		}
+
+		/* A4 quer mit 5 mm Seitenrand. Die Überschrift und Werkzeugleiste
+		   werden im Druck ausgeblendet, damit die Karte die Seite ausfüllt. */
+		const millimetre = 96 / 25.4;
+		const printableWidth = 277 * millimetre;
+		const printableHeight = 190 * millimetre;
+		const workspaceWidth = wrapper.offsetWidth;
+		const workspaceHeight = wrapper.offsetHeight;
+
+		if (workspaceWidth <= 0 || workspaceHeight <= 0) {
+			return;
+		}
+
+		const scale = Math.min(
+			printableWidth / workspaceWidth,
+			printableHeight / workspaceHeight
+		);
+
+		stage.style.setProperty('--orgmap-print-scale', String(scale));
+		stage.style.setProperty(
+			'--orgmap-print-width',
+			`${Math.ceil(workspaceWidth * scale)}px`
+		);
+		stage.style.setProperty(
+			'--orgmap-print-height',
+			`${Math.ceil(workspaceHeight * scale)}px`
+		);
+	}
+
+	window.addEventListener('beforeprint', prepareOrgMapPrint);
 
 	document.addEventListener('fullscreenchange', function () {
 		const button = document.querySelector('#orgmap-fullscreen');

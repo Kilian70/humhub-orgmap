@@ -299,7 +299,7 @@ $top =
 				alt=""
 				aria-hidden="true"
 				loading="eager"
-				decoding="async"
+				decoding="sync"
 				<?= $isBackground ? 'fetchpriority="high"' : '' ?>
 				style="
 					object-fit: <?= $node->background_size === 'contain' ? 'contain' : 'cover' ?>;
