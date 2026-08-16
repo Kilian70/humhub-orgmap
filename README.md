@@ -160,6 +160,12 @@ Administration → ORGMAP
 4.  After updating an existing installation, create a database backup and
     run the pending HumHub database migrations.
 
+## Printing
+
+For the most reliable PDF and physical print output, use a Chromium-based
+browser such as Google Chrome. Firefox may render complex, transparent map
+layers differently depending on the installed printer driver.
+
 ------------------------------------------------------------------------
 
 # Configuration

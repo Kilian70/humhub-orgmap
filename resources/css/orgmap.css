@@ -78,13 +78,17 @@ html[data-bs-theme="dark"] .container:fullscreen {
 
 @media print {
 	@page {
-		size: landscape;
-		margin: 8mm;
+		size: A4 landscape;
+		margin: 5mm;
 	}
 
 	.orgmap-toolbar,
 	.orgmap-sidebar,
 	.orgmap-resize-handle {
+		display: none !important;
+	}
+
+	.container > h1 {
 		display: none !important;
 	}
 
@@ -111,8 +115,17 @@ html[data-bs-theme="dark"] .container:fullscreen {
 
 	.orgmap-layout {
 		box-sizing: border-box !important;
-		padding: 8mm !important;
-		margin-top: 5mm !important;
+		padding: 0 !important;
+		margin: 0 !important;
+	}
+
+	.orgmap-stage {
+		width: var(--orgmap-print-width, 100%) !important;
+		height: var(--orgmap-print-height, auto) !important;
+		max-width: none !important;
+		overflow: visible !important;
+		break-inside: avoid !important;
+		page-break-inside: avoid !important;
 	}
 
 	.orgmap-wrapper,
@@ -122,28 +135,12 @@ html[data-bs-theme="dark"] .container:fullscreen {
 	}
 
 	.orgmap-wrapper {
-		zoom: 0.35;
+		zoom: var(--orgmap-print-scale, 0.35) !important;
 		transform: none !important;
 		transform-origin: top left !important;
 		box-shadow: none !important;
 		break-inside: avoid !important;
 		page-break-inside: avoid !important;
-	}
-
-	.orgmap-wrapper[data-workspace-size="small"] {
-		zoom: 0.48;
-	}
-
-	.orgmap-wrapper[data-workspace-size="large"] {
-		zoom: 0.25;
-	}
-
-	.orgmap-wrapper[data-workspace-size="custom"] {
-		zoom: 0.27;
-	}
-
-	.orgmap-wrapper[data-workspace-size="background"] {
-		zoom: 0.27;
 	}
 
 	/* Druckertreiber reduzieren transparente SVG-Linien sonst teilweise bis
