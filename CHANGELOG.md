@@ -7,6 +7,20 @@ Versioning** where practical.
 
 ------------------------------------------------------------------------
 
+## \[1.4.1\] - 2026-08-18
+
+### Added
+
+-   HumHub runtime tests for fresh module migrations and the node lifecycle
+-   Automated compatibility tests for HumHub 1.18.4 and HumHub 1.19
+    with PHP 8.2 and PHP 8.3
+
+### Changed
+
+-   GitHub quality checks now run with PHP 8.2 and PHP 8.3
+
+------------------------------------------------------------------------
+
 ## \[1.4.0\] - 2026-08-16
 
 ### Released
