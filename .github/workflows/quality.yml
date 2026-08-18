@@ -15,18 +15,23 @@ concurrency:
 
 jobs:
   syntax:
-    name: PHP, JavaScript und Moduldatei
+    name: PHP ${{ matrix.php }}, JavaScript und Moduldatei
     runs-on: ubuntu-latest
     timeout-minutes: 10
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.3']
 
     steps:
       - name: Repository laden
         uses: actions/checkout@v4
 
-      - name: PHP 8.1 einrichten
+      - name: PHP ${{ matrix.php }} einrichten
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: ${{ matrix.php }}
           coverage: none
 
       - name: PHP-Syntax prüfen
