@@ -26,5 +26,5 @@ jobs:
     uses: humhub/module-coding-standards/.github/workflows/codeception-base.yml@main
     with:
       module-id: orgmap
-      humhub-branch: v1.19.0
+      humhub-branch: v1.19.0-beta.1
       php: "['8.2', '8.3']"
