@@ -51,6 +51,14 @@ html[data-bs-theme="dark"] .table-responsive:focus-visible {
 	position: relative;
 	max-width: none;
 	overflow: visible;
+	/* Ein Finger darf die Seite weiterhin verschieben. Die Zwei-Finger-Geste
+	   steuert innerhalb der Karte jedoch die OrgMap-Kamera. */
+	touch-action: pan-x pan-y;
+}
+
+.orgmap-stage.orgmap-pinching {
+	user-select: none;
+	-webkit-user-select: none;
 }
 
 .orgmap-stage > .orgmap-wrapper {

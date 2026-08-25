@@ -40,7 +40,131 @@
 			}
 			});
 
+		initTouchZoom();
+
 			updateZoomControls(false);
+		}
+
+		/*
+		--------------------------------------------------
+		Zwei-Finger-Zoom auf Touch-Geräten
+		--------------------------------------------------
+		*/
+
+		function initTouchZoom() {
+			let pinchStage = null;
+			let pinchStartDistance = 0;
+			let pinchStartZoom = 1;
+			let anchorMapX = 0;
+			let anchorMapY = 0;
+			let pinchWasActive = false;
+
+			function getDistance(firstTouch, secondTouch) {
+				return Math.hypot(
+					secondTouch.clientX - firstTouch.clientX,
+					secondTouch.clientY - firstTouch.clientY
+				);
+			}
+
+			function getMidpoint(firstTouch, secondTouch) {
+				return {
+					x: (firstTouch.clientX + secondTouch.clientX) / 2,
+					y: (firstTouch.clientY + secondTouch.clientY) / 2
+				};
+			}
+
+			function beginPinch(event, stage) {
+				const firstTouch = event.touches[0];
+				const secondTouch = event.touches[1];
+				const midpoint = getMidpoint(firstTouch, secondTouch);
+				const stageRect = stage.getBoundingClientRect();
+				const localX = midpoint.x - stageRect.left;
+				const localY = midpoint.y - stageRect.top;
+
+				pinchStage = stage;
+				pinchStartDistance = getDistance(firstTouch, secondTouch);
+				pinchStartZoom = window.orgmapView.zoom;
+				anchorMapX = (localX - window.orgmapView.panX) / pinchStartZoom;
+				anchorMapY = (localY - window.orgmapView.panY) / pinchStartZoom;
+				pinchWasActive = true;
+				stage.classList.add('orgmap-pinching');
+			}
+
+			document.addEventListener('touchstart', function (event) {
+				if (event.touches.length !== 2) {
+					return;
+				}
+
+				const stage = event.target.closest?.('.orgmap-stage');
+				if (!stage) {
+					return;
+				}
+
+				beginPinch(event, stage);
+			}, {passive: true});
+
+			document.addEventListener('touchmove', function (event) {
+				if (!pinchStage || event.touches.length < 2) {
+					return;
+				}
+
+				event.preventDefault();
+
+				const firstTouch = event.touches[0];
+				const secondTouch = event.touches[1];
+				const currentDistance = getDistance(firstTouch, secondTouch);
+
+				if (pinchStartDistance <= 0 || currentDistance <= 0) {
+					return;
+				}
+
+				const midpoint = getMidpoint(firstTouch, secondTouch);
+				const stageRect = pinchStage.getBoundingClientRect();
+				const localX = midpoint.x - stageRect.left;
+				const localY = midpoint.y - stageRect.top;
+				const nextZoom = Math.max(
+					0.2,
+					Math.min(3, pinchStartZoom * (currentDistance / pinchStartDistance))
+				);
+
+				window.orgmapView.zoom = nextZoom;
+				window.orgmapView.panX = localX - (anchorMapX * nextZoom);
+				window.orgmapView.panY = localY - (anchorMapY * nextZoom);
+
+				applyZoom();
+			}, {passive: false});
+
+			function finishPinch(event) {
+				if (!pinchStage || event.touches.length >= 2) {
+					return;
+				}
+
+				pinchStage.classList.remove('orgmap-pinching');
+				pinchStage = null;
+				pinchStartDistance = 0;
+
+				if (pinchWasActive) {
+					updateZoomControls(true);
+					pinchWasActive = false;
+				}
+			}
+
+			document.addEventListener('touchend', finishPinch, {passive: true});
+			document.addEventListener('touchcancel', finishPinch, {passive: true});
+
+			/* Safari besitzt zusätzlich eigene Gestenereignisse. Innerhalb der
+			   Karte soll dort die OrgMap-Kamera und nicht die ganze Seite zoomen. */
+			document.addEventListener('gesturestart', function (event) {
+				if (event.target.closest?.('.orgmap-stage')) {
+					event.preventDefault();
+				}
+			}, {passive: false});
+
+			document.addEventListener('gesturechange', function (event) {
+				if (event.target.closest?.('.orgmap-stage')) {
+					event.preventDefault();
+				}
+			}, {passive: false});
 		}
 
 		function updateZoomControls(announce) {
