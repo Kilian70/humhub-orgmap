@@ -9,6 +9,10 @@ Versioning** where practical.
 
 ## Unreleased
 
+------------------------------------------------------------------------
+
+## \[1.4.2\] - 2026-08-25
+
 ### Added
 
 -   Two-finger pinch zoom and simultaneous camera movement for OrgMap on
