@@ -11,6 +11,17 @@ Versioning** where practical.
 
 ------------------------------------------------------------------------
 
+## \[1.4.3\] - 2026-08-26
+
+### Fixed
+
+-   Fitting the workspace now consistently uses the same visible background
+    as the map view
+-   Printed mixed-image nodes retain their configured image opacity, color
+    opacity and blend mode
+
+------------------------------------------------------------------------
+
 ## \[1.4.2\] - 2026-08-25
 
 ### Added

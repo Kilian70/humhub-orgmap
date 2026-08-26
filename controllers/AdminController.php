@@ -618,8 +618,14 @@ public function actionSettings()
 
 public function actionFitWorkspaceToBackground()
 {
-	$background = Node::find()->where(['is_background' => 1, 'visible' => 1])->orderBy(['id' => SORT_ASC])->one()
-		?? Node::find()->where(['is_background' => 1])->orderBy(['id' => SORT_ASC])->one();
+	/* Die Kartenansicht lädt nur sichtbare Knoten und ordnet sie zuerst nach
+	 * Ebene, dann nach ID. Dieselbe Auswahl ist hier wichtig: Bei mehreren
+	 * (oder alten, ausgeblendeten) Hintergründen würde sonst auf ein anderes
+	 * Element zentriert als dasjenige, das die Karte für Auto-Fit verwendet. */
+	$background = Node::find()
+		->where(['is_background' => 1, 'visible' => 1])
+		->orderBy(['sort_order' => SORT_ASC, 'id' => SORT_ASC])
+		->one();
 	$width = (int) ($background->width ?? 0);
 	$height = (int) ($background->height ?? 0);
 
