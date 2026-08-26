@@ -36,6 +36,7 @@ class AssetController extends Controller
 	{
 
 		$assets = Asset::find()
+			->with('nodes')
 			->orderBy([
 				'id' => SORT_DESC
 			])

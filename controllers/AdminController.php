@@ -3,17 +3,28 @@
 namespace humhub\modules\orgmap\controllers;
 
 use Yii;
-use humhub\modules\admin\components\Controller;
+use humhub\components\Controller;
 use humhub\modules\orgmap\models\Node;
 use humhub\modules\orgmap\models\Connection;
 use humhub\modules\orgmap\models\SettingsForm;
 use humhub\modules\orgmap\models\Organ;
 use humhub\modules\orgmap\helpers\WorkspaceHelper;
+use humhub\modules\orgmap\permissions\ManageOrgMap;
 use humhub\modules\space\models\Space;
 use yii\filters\VerbFilter;
+use yii\web\ForbiddenHttpException;
 
 class AdminController extends Controller
 {
+	public function beforeAction($action)
+	{
+		if (!Yii::$app->user->can(ManageOrgMap::class)) {
+			throw new ForbiddenHttpException();
+		}
+
+		return parent::beforeAction($action);
+	}
+
 	public function behaviors()
 	{
 		return array_merge(parent::behaviors(), [
@@ -243,7 +254,12 @@ class AdminController extends Controller
 			}
 		}
 	
-		if ($model->save()) {
+		$transaction = Yii::$app->db->beginTransaction();
+		try {
+			if (!$model->save()) {
+				$transaction->rollBack();
+				return $this->render('form', ['model' => $model]);
+			}
 		
 			Connection::deleteAll([
 				'from_node_id' => $model->id
@@ -271,11 +287,20 @@ class AdminController extends Controller
 					$connection->to_node_id =
 						$targetId;
 		
-						$connection->save();
+						if (!$connection->save()) {
+							throw new \RuntimeException('Connection could not be created.');
+						}
 				}
 			}
-		
+
+			$transaction->commit();
 			return $this->redirect(['index']);
+		} catch (\Throwable $exception) {
+			if ($transaction->isActive) {
+				$transaction->rollBack();
+			}
+			Yii::error($exception, __METHOD__);
+			$model->addError('connectionIds', Yii::t('OrgmapModule.base', 'Verbindungen konnten nicht gespeichert werden.'));
 		}
 	}
 	
@@ -332,10 +357,13 @@ class AdminController extends Controller
 		----------------------------------------------------
 		*/
 	
-		if (
-			$model->load(Yii::$app->request->post())
-			&& $model->save()
-		) {
+		if ($model->load(Yii::$app->request->post())) {
+			$transaction = Yii::$app->db->beginTransaction();
+			try {
+				if (!$model->save()) {
+					$transaction->rollBack();
+					return $this->render('form', ['model' => $model]);
+				}
 		
 
 		$currentConnectionIds = [];
@@ -405,11 +433,20 @@ class AdminController extends Controller
 		
 			$connection->style = 'solid';
 		
-				$connection->save();
+				if (!$connection->save()) {
+					throw new \RuntimeException('Connection could not be created.');
+				}
 		}
 
-		
-			return $this->redirect(['index']);
+				$transaction->commit();
+				return $this->redirect(['index']);
+			} catch (\Throwable $exception) {
+				if ($transaction->isActive) {
+					$transaction->rollBack();
+				}
+				Yii::error($exception, __METHOD__);
+				$model->addError('connectionIds', Yii::t('OrgmapModule.base', 'Verbindungen konnten nicht gespeichert werden.'));
+			}
 		}
 			
 		/*

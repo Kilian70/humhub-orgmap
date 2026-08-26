@@ -17,6 +17,12 @@ class Asset extends ActiveRecord
 		return 'orgmap_asset';
 	}
 
+	public function getNodes()
+	{
+		return $this->hasMany(Node::class, ['asset_id' => 'id'])
+			->orderBy(['title' => SORT_ASC]);
+	}
+
 	public function rules()
 	{
 		return [

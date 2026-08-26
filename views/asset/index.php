@@ -89,22 +89,11 @@ $this->title = Yii::t(
 					'Aktionen'
 				) ?>
 			</th>
-		</tr>
+			</tr>
+			</thead>
+			<tbody>
 
-		<?php foreach ($assets as $asset): ?>
-		<?php
-
-		$usedByNodes =
-			\humhub\modules\orgmap\models\Node::find()
-				->where([
-					'asset_id' => $asset->id
-				])
-				->orderBy([
-					'title' => SORT_ASC
-				])
-				->all();
-		
-		?>
+			<?php foreach ($assets as $asset): ?>
 
 			<tr>
 
@@ -170,9 +159,9 @@ $this->title = Yii::t(
 				
 				<td>
 				
-			<?php if ($usedByNodes): ?>
-			
-				<?php foreach ($usedByNodes as $node): ?>
+				<?php if ($asset->nodes): ?>
+
+					<?php foreach ($asset->nodes as $node): ?>
 			
 					<div>
 			
@@ -219,8 +208,6 @@ $this->title = Yii::t(
 				</td>
 
 			</tr>
-			</thead>
-			<tbody>
 
 			<?php endforeach; ?>
 			</tbody>

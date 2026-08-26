@@ -11,6 +11,22 @@ Versioning** where practical.
 
 ------------------------------------------------------------------------
 
+## \[1.4.4\] - 2026-08-26
+
+### Fixed
+
+-   Registered OrgMap permissions globally instead of exposing them in Space
+    permission settings
+-   Allowed users with the global OrgMap management permission to access all
+    OrgMap administration and editing functions consistently
+-   Saved node and connection changes atomically to prevent partial updates
+-   Corrected the asset administration table and removed its per-row database
+    queries
+-   Escaped parent organ names in the administration view
+-   Added HumHub-compliant database and uploaded-file cleanup on module disable
+
+------------------------------------------------------------------------
+
 ## \[1.4.3\] - 2026-08-26
 
 ### Fixed

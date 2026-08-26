@@ -17,12 +17,13 @@
 	);
 	
 	/*
-	Bearbeitungsmodus nur für Admin
+	Bearbeitungsmodus nur mit Verwaltungsberechtigung
 	*/
 	
-	$editMode =
-		Yii::$app->user->isAdmin()
-		&& Yii::$app->request->get('edit') == 1;
+		$canManage = Yii::$app->user->can(\humhub\modules\orgmap\permissions\ManageOrgMap::class);
+		$editMode =
+			$canManage
+			&& Yii::$app->request->get('edit') == 1;
 	
 	/*
 	Linien anzeigen
@@ -60,7 +61,7 @@
 				aria-label="<?= Yii::t('OrgmapModule.base', 'Werkzeuge') ?>"
 			>
 
-        <?php if (Yii::$app->user->isAdmin()): ?>
+	        <?php if ($canManage): ?>
 
 			<a
                 href="<?= Url::to(['/orgmap/admin/index']) ?>"

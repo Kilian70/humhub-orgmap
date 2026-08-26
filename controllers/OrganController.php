@@ -3,13 +3,24 @@
 namespace humhub\modules\orgmap\controllers;
 
 use Yii;
-use humhub\modules\admin\components\Controller;
+use humhub\components\Controller;
 use humhub\modules\orgmap\models\Organ;
 use humhub\modules\orgmap\models\Node;
+use humhub\modules\orgmap\permissions\ManageOrgMap;
 use yii\filters\VerbFilter;
+use yii\web\ForbiddenHttpException;
 
 class OrganController extends Controller
 {
+	public function beforeAction($action)
+	{
+		if (!Yii::$app->user->can(ManageOrgMap::class)) {
+			throw new ForbiddenHttpException();
+		}
+
+		return parent::beforeAction($action);
+	}
+
 	public function behaviors()
 	{
 		return array_merge(parent::behaviors(), [

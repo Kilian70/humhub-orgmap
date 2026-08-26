@@ -114,9 +114,9 @@ $this->title = Yii::t('OrgmapModule.base', 'Organe');
 
                         <td>
 
-                            <?= $organ->parent_id
-                                ? $organ->parent->name
-                                : '-' ?>
+							<?= $organ->parent_id && $organ->parent
+								? Html::encode($organ->parent->name)
+								: '-' ?>
 
                         </td>
 
