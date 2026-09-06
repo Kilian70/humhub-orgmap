@@ -2,6 +2,7 @@
 
 namespace humhub\modules\orgmap;
 
+use humhub\modules\orgmap\permissions\ViewOrgMap;
 use humhub\modules\ui\menu\MenuLink;
 use Yii;
 
@@ -25,13 +26,11 @@ class Events
 			return;
 		}
 
-		$allowGuestAccess = $settings->get('allowGuestAccess', false);
-		
-		if (
-			Yii::$app->user->isGuest
-			&& !$allowGuestAccess
-		) {
-		
+		if (Yii::$app->user->isGuest) {
+			if (!$settings->get('allowGuestAccess', false)) {
+				return;
+			}
+		} elseif (!Yii::$app->user->can(ViewOrgMap::class)) {
 			return;
 		}
 		

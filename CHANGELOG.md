@@ -11,6 +11,23 @@ Versioning** where practical.
 
 ------------------------------------------------------------------------
 
+## \[1.4.5\] - 2026-09-06
+
+### Added
+
+-   Automated permission checks for every OrgMap controller action
+-   Upload validation tests for malformed, oversized and dimension-manipulated
+    image files
+-   An isolated lifecycle test covering module update, uninstall and reinstall
+
+### Fixed
+
+-   The main navigation now follows the global OrgMap view permission
+-   Map and tree routes consistently enforce view access before running actions
+-   Asset uploads now reject damaged images and unsafe pixel dimensions
+
+------------------------------------------------------------------------
+
 ## \[1.4.4\] - 2026-08-26
 
 ### Fixed

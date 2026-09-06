@@ -15,6 +15,19 @@ use yii\filters\VerbFilter;
 
 class MapController extends Controller
 {
+	public function beforeAction($action)
+	{
+		if ($action->id === 'save-position') {
+			if (!Yii::$app->user->can(ManageOrgMap::class)) {
+				throw new ForbiddenHttpException();
+			}
+		} elseif (in_array($action->id, ['index', 'tree'], true)) {
+			$this->ensureViewPermission();
+		}
+
+		return parent::beforeAction($action);
+	}
+
 	public function behaviors()
 	{
 		return array_merge(parent::behaviors(), [
@@ -35,34 +48,6 @@ class MapController extends Controller
 
 	public function actionIndex()
 	{
-	
-	if (
-		Yii::$app->user->isGuest
-	) {
-	
-		$allowGuestAccess =
-			Yii::$app
-				->getModule('orgmap')
-				->settings
-				->get(
-					'allowGuestAccess',
-					false
-				);
-	
-	if (!$allowGuestAccess) {
-	
-		return $this->redirect(
-			Yii::$app->user->loginUrl
-		);
-	}
-	
-	} elseif (
-		!Yii::$app->user->can(ViewOrgMap::class)
-	) {
-	
-		throw new ForbiddenHttpException();
-	}
-	
 		$nodes = Node::find()
 			->with(['organ', 'space', 'asset'])
 			->where(['visible' => 1])
@@ -117,12 +102,6 @@ class MapController extends Controller
     
 	public function actionSavePosition()
 	{
-	
-		if (!Yii::$app->user->can(ManageOrgMap::class)) {
-	
-			throw new ForbiddenHttpException();
-		}
-	
 		Yii::$app->response->format =
 				\yii\web\Response::FORMAT_JSON;
 	
@@ -189,7 +168,6 @@ class MapController extends Controller
 	
 	public function actionTree()
 		{
-			$this->ensureViewPermission();
 			return $this->render('tree', [
 				'organs' => Organ::find()->orderBy(['sort_order' => SORT_ASC])->all(),
 				'treeNodes' => Node::find()

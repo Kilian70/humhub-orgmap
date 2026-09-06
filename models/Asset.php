@@ -9,6 +9,9 @@ use yii\db\ActiveRecord;
 
 class Asset extends ActiveRecord
 {
+	private const MAX_IMAGE_WIDTH = 10000;
+	private const MAX_IMAGE_HEIGHT = 10000;
+	private const MAX_IMAGE_PIXELS = 40000000;
 
 	public $imageFile;
 
@@ -44,7 +47,32 @@ class Asset extends ActiveRecord
 					'maxSize' => 10 * 1024 * 1024,
 					'skipOnEmpty' => false,
 			],
+			[['imageFile'], 'validateImageDimensions', 'skipOnError' => true],
 		];
+	}
+
+	public function validateImageDimensions(string $attribute): void
+	{
+		$file = $this->{$attribute};
+		if (!$file instanceof UploadedFile || !is_file($file->tempName)) {
+			return;
+		}
+
+		$dimensions = @getimagesize($file->tempName);
+		$width = (int) ($dimensions[0] ?? 0);
+		$height = (int) ($dimensions[1] ?? 0);
+
+		if (
+			$width < 1 || $height < 1
+			|| $width > self::MAX_IMAGE_WIDTH
+			|| $height > self::MAX_IMAGE_HEIGHT
+			|| ($width * $height) > self::MAX_IMAGE_PIXELS
+		) {
+			$this->addError(
+				$attribute,
+				Yii::t('OrgmapModule.base', 'Das Bild ist beschädigt oder seine Abmessungen sind zu gross.')
+			);
+		}
 	}
 	
 	/*

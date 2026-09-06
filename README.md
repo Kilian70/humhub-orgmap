@@ -15,7 +15,7 @@
 
 # ORGMAP
 
-**Version:** 1.4.2\
+**Version:** 1.4.5\
 **Author & Maintainer:** Kilian Schmid\
 **Compatible with:** HumHub 1.18 -- 2.x\
 **License:** GNU Affero General Public License v3.0 or later (`AGPL-3.0-or-later`)
