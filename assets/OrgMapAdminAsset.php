@@ -2,7 +2,7 @@
 
 namespace humhub\modules\orgmap\assets;
 
-use yii\web\AssetBundle;
+use humhub\components\assets\AssetBundle;
 
 /**
  * Schlankes Asset-Paket für die OrgMap-Verwaltung.
@@ -15,6 +15,10 @@ use yii\web\AssetBundle;
  */
 class OrgMapAdminAsset extends AssetBundle
 {
+    // Keep existing synchronous POS_END loading after AppAsset and page markup.
+    public $defer = false;
+    public $jsPosition = \yii\web\View::POS_END;
+
     public $sourcePath = '@orgmap/resources';
 
     public $css = [

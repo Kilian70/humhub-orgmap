@@ -3,6 +3,7 @@
 namespace humhub\modules\orgmap\controllers;
 
 use Yii;
+use humhub\modules\orgmap\helpers\AccessHelper;
 use humhub\components\Controller;
 use humhub\modules\orgmap\models\Node;
 use humhub\modules\orgmap\permissions\ManageOrgMap;
@@ -48,9 +49,9 @@ class MapController extends Controller
 
 	public function actionIndex()
 	{
-		$nodes = Node::find()
+		$nodes = AccessHelper::nodeQuery()
 			->with(['organ', 'space', 'asset'])
-			->where(['visible' => 1])
+			->andWhere(['visible' => 1])
 		
 			->orderBy([
 				'sort_order' => SORT_ASC,
@@ -84,7 +85,8 @@ class MapController extends Controller
 			}
 		}
 	
-		$connections = Connection::find()->all();
+		$ids = array_map(static fn(Node $node) => $node->id, $nodes);
+		$connections = Connection::find()->andWhere(['from_node_id' => $ids, 'to_node_id' => $ids])->all();
 		$organs = Organ::find()->orderBy(['sort_order' => SORT_ASC])->all();
 		$treeNodes = array_values(array_filter($nodes, static function (Node $node) {
 			return (bool) $node->show_in_tree;
@@ -122,6 +124,8 @@ class MapController extends Controller
 			throw new \yii\web\NotFoundHttpException();
 		}
 	
+		AccessHelper::assertNode($model);
+
 		if (isset($data['x'])) {
 
 				$model->pos_x = max(-10000, min(20000, (int) $data['x']));
@@ -134,17 +138,17 @@ class MapController extends Controller
 		
 		if (isset($data['radius'])) {
 
-				$model->radius = max(20, min(5000, (int) $data['radius']));
+				$model->radius = $data['radius'];
 		}
 		
 		if (isset($data['width'])) {
 
-				$model->width = max(20, min(5000, (int) $data['width']));
+				$model->width = $data['width'];
 		}
 		
 		if (isset($data['height'])) {
 		
-				$model->height = max(20, min(5000, (int) $data['height']));
+				$model->height = $data['height'];
 		}
 		
 		if (isset($data['label_x'])) {
@@ -157,12 +161,21 @@ class MapController extends Controller
 				$model->label_y = max(-10000, min(10000, (int) $data['label_y']));
 		}
 			
+        if (!$model->validate(['radius', 'width', 'height'])) {
+            Yii::$app->response->statusCode = 422;
+            return ['success' => false, 'errors' => $model->getErrors()];
+        }
 		$saved = $model->save(false);
 	
 		return [
 			'success' => $saved,
 			'x' => $model->pos_x,
-			'y' => $model->pos_y
+			'y' => $model->pos_y,
+            'radius' => $model->radius,
+            'width' => $model->width,
+            'height' => $model->height,
+            'label_x' => $model->label_x,
+            'label_y' => $model->label_y,
 		];
 	}
 	
@@ -170,9 +183,9 @@ class MapController extends Controller
 		{
 			return $this->render('tree', [
 				'organs' => Organ::find()->orderBy(['sort_order' => SORT_ASC])->all(),
-				'treeNodes' => Node::find()
+				'treeNodes' => AccessHelper::nodeQuery()
 					->with(['organ', 'space'])
-					->where(['visible' => 1, 'show_in_tree' => 1])
+					->andWhere(['visible' => 1, 'show_in_tree' => 1])
 					->orderBy(['sort_order' => SORT_ASC])
 					->all(),
 			]);

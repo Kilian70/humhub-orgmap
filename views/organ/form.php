@@ -1,7 +1,7 @@
 <?php
 
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use humhub\helpers\Html;
+use humhub\modules\orgmap\components\ActiveForm;
 use humhub\modules\orgmap\models\Organ;
 use humhub\modules\orgmap\helpers\ActionButtonHelper;
 

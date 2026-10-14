@@ -118,10 +118,10 @@ function initInteractionMove() {
 		) {
 		
 		const dx =
-			event.clientX - state.dragStartX;
+			(event.clientX - state.dragStartX) / window.orgmapView.zoom;
 		
 		const dy =
-			event.clientY - state.dragStartY;
+			(event.clientY - state.dragStartY) / window.orgmapView.zoom;
 		
 		state.selectedConnectionLabel.setAttribute(
 			'x',
@@ -172,10 +172,10 @@ function initInteractionMove() {
 				state.selectedNode.getBoundingClientRect();
 
 			const labelX =
-				event.clientX - rect.left;
+				(event.clientX - rect.left) / window.orgmapView.zoom;
 
 			const labelY =
-				event.clientY - rect.top;
+				(event.clientY - rect.top) / window.orgmapView.zoom;
 
 			label.style.left = labelX + 'px';
 			label.style.top = labelY + 'px';
@@ -232,49 +232,16 @@ function initMouseUp() {
 				return;
 			}
 
-			fetch(
-				saveLabelUrl,
-		
-			{
-				method: 'POST',
-	
-				headers: {
-					'Content-Type': 'application/json',
-					'X-CSRF-Token': yii.getCsrfToken()
-				},
-	
-				body: JSON.stringify({
-	
-					id:
-						state.selectedConnectionLabel
-							.dataset.connectionId,
-	
-					label_offset_x:
-						parseFloat(
-							state.selectedConnectionLabel
-								.getAttribute('x')
-						),
-	
-					label_offset_y:
-						parseFloat(
-							state.selectedConnectionLabel
-								.getAttribute('y')
-						)
-				})
-			}
-			)
-			.then(response => {
-				if (!response.ok) {
-					throw new Error(`Label konnte nicht gespeichert werden (${response.status}).`);
-				}
-				return response.json();
-			})
-			.then(data => {
-				if (!data.success) {
-					throw new Error('Label konnte nicht gespeichert werden.');
-				}
-			})
-			.catch(error => console.error(error));
+            const label = state.selectedConnectionLabel;
+            orgmapPersist(label, saveLabelUrl, {
+                id: label.dataset.connectionId,
+                label_offset_x: parseFloat(label.getAttribute('x')),
+                label_offset_y: parseFloat(label.getAttribute('y')),
+            }, data => {
+                if (data.label_offset_x !== undefined) { label.setAttribute('x', data.label_offset_x); label.dataset.offsetX = data.label_offset_x; }
+                if (data.label_offset_y !== undefined) { label.setAttribute('y', data.label_offset_y); label.dataset.offsetY = data.label_offset_y; }
+            });
+
 	
 		state.selectedConnectionLabel = null;
 	

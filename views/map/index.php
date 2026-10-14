@@ -1,7 +1,7 @@
 	<?php
 	
 		use yii\helpers\Url;
-		use yii\helpers\Html;
+		use humhub\helpers\Html;
 	use humhub\modules\orgmap\assets\OrgMapAsset;
 	use humhub\modules\orgmap\helpers\ConnectionSvgHelper;
 	use humhub\modules\orgmap\helpers\ConnectionRenderHelper;
@@ -226,6 +226,8 @@ $workspaceSize = (string) Yii::$app
 		class="orgmap-main"
 		aria-label="<?= Yii::t('OrgmapModule.base', 'Karte') ?>"
 	>
+        <p id="orgmap-save-status" role="alert" aria-atomic="true"
+           data-error-label="<?= Html::encode(Yii::t('OrgmapModule.base', 'Speichern fehlgeschlagen. Die letzte gespeicherte Darstellung wurde wiederhergestellt.')) ?>"></p>
 	
 		<div
 			class="orgmap-scroll"

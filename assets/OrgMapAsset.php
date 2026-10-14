@@ -2,10 +2,14 @@
 
 namespace humhub\modules\orgmap\assets;
 
-use yii\web\AssetBundle;
+use humhub\components\assets\AssetBundle;
 
 class OrgMapAsset extends AssetBundle
 {
+
+    // Keep existing synchronous POS_END loading after AppAsset and page markup.
+    public $defer = false;
+    public $jsPosition = \yii\web\View::POS_END;
 
     public $sourcePath = '@orgmap/resources';
 
@@ -19,6 +23,7 @@ class OrgMapAsset extends AssetBundle
 
         // Core
         'js/core.js',
+        'js/persistence.js',
 
 		// SVG-Geometrie muss vor Kamera und Interaktionen verfügbar sein
 		'js/svg.js',

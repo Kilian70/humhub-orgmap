@@ -1,6 +1,6 @@
 <?php
 
-use yii\helpers\Html;
+use humhub\helpers\Html;
 use humhub\modules\orgmap\models\Asset;
 use humhub\modules\orgmap\helpers\ActionButtonHelper;
 
@@ -106,7 +106,7 @@ $this->title = Yii::t(
 					<?php if ($asset->filename): ?>
 
 							<img
-								src="<?= Yii::getAlias('@web') ?>/uploads/orgmap/assets/<?= Html::encode($asset->filename) ?>"
+								src="<?= Html::encode($asset->getImageUrl()) ?>"
 								alt=""
 							style="
 								width: 120px;
@@ -161,7 +161,7 @@ $this->title = Yii::t(
 				
 				<?php if ($asset->nodes): ?>
 
-					<?php foreach ($asset->nodes as $node): ?>
+					<?php foreach (\humhub\modules\orgmap\helpers\AccessHelper::filterNodes($asset->nodes) as $node): ?>
 			
 					<div>
 			

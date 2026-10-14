@@ -6,6 +6,19 @@ use Yii;
 
 class BackgroundImageHelper
 {
+    public static function fitsMemoryBudget(int $width, int $height, int $targetWidth, int $targetHeight, ?int $limit = null, ?int $used = null): bool
+    {
+        if ($limit === null) {
+            $setting = trim((string) ini_get('memory_limit'));
+            if ($setting === '-1') { return true; }
+            $unit = strtolower(substr($setting, -1));
+            $limit = (int) $setting * match ($unit) { 'g' => 1073741824, 'm' => 1048576, 'k' => 1024, default => 1 };
+        }
+        // Source decoding, destination buffers and reserve for PHP/core work.
+        $estimate = $width * $height * 12 + $targetWidth * $targetHeight * 8 + 32 * 1048576;
+        return $limit < 0 || ($used ?? memory_get_usage(true)) + $estimate <= $limit;
+    }
+
 	public static function optimize(
 		string $filePath
 	): void
@@ -110,6 +123,10 @@ class BackgroundImageHelper
 			(int) round(
 				$originalHeight * $scale
 			);
+
+        if (!self::fitsMemoryBudget($originalWidth, $originalHeight, $newWidth, $newHeight)) {
+            return; // Keep the already stored original; optimization is optional.
+        }
 		
 		/*
 		----------------------------------------------------

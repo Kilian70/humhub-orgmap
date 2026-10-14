@@ -53,6 +53,8 @@
 	
 		viewButtons.forEach(button => {
 	
+			if (button.dataset.orgmapViewBound === '1') { return; }
+			button.dataset.orgmapViewBound = '1';
 			button.addEventListener('click', () => {
 	
 				const mode =
@@ -95,9 +97,7 @@
 	document.addEventListener('click', function (event) {
 	
 		const isEditMode =
-			window.location.search.includes(
-				'edit=1'
-			);
+			document.querySelector('.orgmap-wrapper')?.dataset.editMode === '1';
 	
 		if (!isEditMode) {
 			return;
@@ -123,9 +123,7 @@
 	document.addEventListener('dblclick', function (event) {
 	
 		const isEditMode =
-			window.location.search.includes(
-				'edit=1'
-			);
+			document.querySelector('.orgmap-wrapper')?.dataset.editMode === '1';
 	
 		if (!isEditMode) {
 			return;

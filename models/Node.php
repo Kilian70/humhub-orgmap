@@ -3,11 +3,15 @@
 namespace humhub\modules\orgmap\models;
 
 use Yii;
-use yii\db\ActiveRecord;
+use humhub\modules\orgmap\components\ActiveRecord;
 use humhub\modules\orgmap\models\Connection;
 
 class Node extends ActiveRecord
 {
+    public const MIN_SIZE = 20;
+    public const MAX_DIMENSION = 10000;
+    public const MAX_RADIUS = 5000;
+    public const MAX_ICON_LENGTH = 100;
 	public function init()
 	{
 		parent::init();
@@ -27,7 +31,7 @@ class Node extends ActiveRecord
 
     public static function tableName()
     {
-        return 'orgmap_node';
+        return \humhub\modules\orgmap\helpers\TableNameHelper::resolve('orgmap_node');
     }
     
     public static function getShapeOptions()
@@ -115,12 +119,26 @@ class Node extends ActiveRecord
 	
 	public $connectionIds = [];
 
+    public function __serialize(): array
+    {
+        return parent::__serialize() + ['connectionIds' => $this->connectionIds];
+    }
+
+    public function __unserialize($data)
+    {
+        parent::__unserialize($data);
+        $this->connectionIds = $data['connectionIds'] ?? [];
+    }
+
     public function rules()
     {
 		return [
 		
 			[['title'], 'required'],
-			[['connectionIds'], 'safe'],
+			[['connectionIds'], 'validateConnectionIds'],
+                [['space_id'], 'validateSpaceAccess'],
+                [['parent_id'], 'validateParentAccess'],
+                [['asset_id'], 'validateAssetAccess'],
 		
 			[[
 				'parent_id',
@@ -165,8 +183,7 @@ class Node extends ActiveRecord
 				'background_size',
 				'custom_image',
 				'image_source',
-				'shape',
-				'icon_class'
+				'shape'
 			], 'string', 'max' => 255],
 			
 				[['content'], 'string'],
@@ -178,7 +195,8 @@ class Node extends ActiveRecord
 				[['type'], 'in', 'range' => ['core', 'organ', 'space', 'tool', 'external']],
 				[['color', 'border_color'], 'match', 'pattern' => '/^#[0-9a-fA-F]{6}$/'],
 				[['url', 'custom_image'], 'url', 'validSchemes' => ['http', 'https'], 'skipOnEmpty' => true],
-				[['radius', 'width', 'height'], 'integer', 'min' => 20, 'max' => 5000],
+                [['icon_class'], 'string', 'max' => self::MAX_ICON_LENGTH],
+                [['radius', 'width', 'height'], 'validateDimension'],
 				[['opacity', 'color_opacity', 'image_opacity'], 'integer', 'min' => 0, 'max' => 100],
 				[['font_size'], 'integer', 'min' => 8, 'max' => 100],
 				[['border_width'], 'integer', 'min' => 0, 'max' => 20],
@@ -192,6 +210,55 @@ class Node extends ActiveRecord
 		];
 		
 			}
+
+    public function validateDimension($attribute): void
+    {
+        // Preserve unchanged historical sizes even when above today's input limits.
+        if (!$this->isNewRecord && (string) $this->$attribute === (string) $this->getOldAttribute($attribute)) {
+            return;
+        }
+        $maximum = $attribute === 'radius' ? self::MAX_RADIUS : self::MAX_DIMENSION;
+        if ($this->$attribute < self::MIN_SIZE || $this->$attribute > $maximum) {
+            $this->addError($attribute, Yii::t('OrgmapModule.base', 'Grösse muss zwischen {min} und {max} liegen.', ['min' => self::MIN_SIZE, 'max' => $maximum]));
+        }
+    }
+
+    public function validateAssetAccess($attribute): void
+    {
+        if (!$this->$attribute) { return; }
+        $asset = Asset::findOne($this->$attribute);
+        if ($asset === null || !$asset->canView()) {
+            $this->addError($attribute, Yii::t('OrgmapModule.base', 'Kein Zugriff auf das Asset.'));
+        }
+    }
+
+    public function validateSpaceAccess($attribute): void
+    {
+        if ($this->$attribute && !\humhub\modules\orgmap\helpers\AccessHelper::visibleSpaces()->andWhere(['id' => $this->$attribute])->exists()) {
+            $this->addError($attribute, Yii::t('OrgmapModule.base', 'Kein Zugriff auf den Space.'));
+        }
+    }
+
+    public function validateParentAccess($attribute): void
+    {
+        if ($this->$attribute && !\humhub\modules\orgmap\helpers\AccessHelper::nodeQuery()->andWhere(['id' => $this->$attribute])->exists()) {
+            $this->addError($attribute, Yii::t('OrgmapModule.base', 'Kein Zugriff auf den Knoten.'));
+        }
+    }
+
+    public function validateConnectionIds($attribute): void
+    {
+        if (!is_array($this->$attribute)) {
+            $this->addError($attribute, Yii::t('OrgmapModule.base', 'Ungültige Verbindungen.'));
+            return;
+        }
+        foreach ($this->$attribute as $id) {
+            if (!is_scalar($id) || !ctype_digit((string) $id) || !\humhub\modules\orgmap\helpers\AccessHelper::nodeQuery()->andWhere(['id' => (int) $id])->exists()) {
+                $this->addError($attribute, Yii::t('OrgmapModule.base', 'Kein Zugriff auf den Knoten.'));
+                return;
+            }
+        }
+    }
 
 	public function validateParentHierarchy($attribute): void
 	{

@@ -2,7 +2,7 @@
 
 namespace humhub\modules\orgmap\widgets;
 
-use yii\base\Widget;
+use humhub\components\Widget;
 
 class IconPickerWidget extends Widget
 {

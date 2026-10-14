@@ -1,7 +1,7 @@
 <?php
 
-use yii\widgets\ActiveForm;
-use yii\helpers\Html;
+use humhub\modules\orgmap\components\ActiveForm;
+use humhub\helpers\Html;
 use yii\helpers\ArrayHelper;
 use kartik\select2\Select2;
 use humhub\modules\orgmap\models\Node;
@@ -17,6 +17,10 @@ use humhub\modules\orgmap\helpers\ActionButtonHelper;
 /** @var $model */
 
 OrgMapAdminAsset::register($this);
+$assetOptions = array_values(array_filter(
+    \humhub\modules\orgmap\models\Asset::find()->andWhere(['deleted_at' => null])->orderBy(['title' => SORT_ASC])->all(),
+    static fn($asset) => $asset->canView()
+));
 
 $this->title = Yii::t('OrgmapModule.base', 'ORG. Kreis');
 ?>
@@ -249,11 +253,7 @@ $this->title = Yii::t('OrgmapModule.base', 'ORG. Kreis');
 	
 				ArrayHelper::map(
 	
-					\humhub\modules\orgmap\models\Asset::find()
-						->orderBy([
-							'title' => SORT_ASC
-						])
-						->all(),
+					$assetOptions,
 	
 					'id',
 	
@@ -268,16 +268,14 @@ $this->title = Yii::t('OrgmapModule.base', 'ORG. Kreis');
 				
 					'options' => array_reduce(
 				
-						\humhub\modules\orgmap\models\Asset::find()->all(),
+						$assetOptions,
 				
 						function ($carry, $asset) {
 				
 							$carry[$asset->id] = [
 				
 								'data-image' =>
-									Yii::getAlias('@web')
-									. '/uploads/orgmap/assets/'
-									. $asset->filename
+									$asset->getImageUrl()
 							];
 				
 							return $carry;
@@ -337,8 +335,8 @@ $this->title = Yii::t('OrgmapModule.base', 'ORG. Kreis');
 		[
 			'data' => ArrayHelper::map(
 	
-				Node::find()
-					->where(['!=', 'id', $model->id])
+				\humhub\modules\orgmap\helpers\AccessHelper::nodeQuery()
+					->andWhere(['!=', 'id', $model->id])
 					->orderBy('title')
 					->all(),
 	
@@ -366,8 +364,8 @@ $this->title = Yii::t('OrgmapModule.base', 'ORG. Kreis');
 	
 	<?php
 
-	$allConnections = Connection::find()
-		->where([
+	$allConnections = \humhub\modules\orgmap\helpers\AccessHelper::connectionQuery()
+		->andWhere([
 			'or',
 			['from_node_id' => $model->id],
 			['to_node_id' => $model->id],

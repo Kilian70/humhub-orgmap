@@ -5,7 +5,8 @@ namespace humhub\modules\orgmap;
 use humhub\modules\orgmap\permissions\ManageOrgMap;
 use humhub\modules\orgmap\permissions\ViewOrgMap;
 use Yii;
-use yii\helpers\FileHelper;
+use humhub\modules\orgmap\services\PreservingMigrationService;
+use humhub\services\MigrationService;
 use yii\helpers\Url;
 
 class Module extends \humhub\components\Module
@@ -28,45 +29,32 @@ class Module extends \humhub\components\Module
 		return Url::to(['/orgmap/admin/index']);
 	}
 
-	/**
-	 * Removes files which are stored outside HumHub's file component before
-	 * the default module uninstall migration is executed.
-	 */
-	public function disable()
-	{
-		$this->removeUploadedAssets();
+    /** Private archive survives runtime/cache cleanup and remains outside public uploads. */
+    public $legacyAssetArchivePath = '@app/orgmap-legacy-assets';
 
-		return parent::disable();
-	}
+    public function enable()
+    {
+        PreservingMigrationService::assertLayout($this->getBasePath());
+        return parent::enable();
+    }
 
-	private function removeUploadedAssets(): void
-	{
-		$moduleUploadPath = Yii::getAlias('@webroot/uploads/orgmap');
-		$assetPath = $moduleUploadPath . DIRECTORY_SEPARATOR . 'assets';
+    /** Disable registration only; data, settings, migration history and files are retained. */
+    public function disable()
+    {
+        if (method_exists($this, 'getModuleService')) {
+            $this->getModuleService()->disable();
+        } else {
+            Yii::$app->moduleManager->disable($this);
+        }
+        return true;
+    }
 
-		try {
-			if (is_link($assetPath)) {
-				if (!unlink($assetPath)) {
-					Yii::warning('Could not remove OrgMap asset directory symlink.', __METHOD__);
-				}
-			} elseif (is_dir($assetPath)) {
-				FileHelper::removeDirectory($assetPath);
-			}
+    public function getMigrationService(): MigrationService
+    {
+        PreservingMigrationService::assertLayout($this->getBasePath());
+        return new PreservingMigrationService($this);
+    }
 
-			if (is_dir($moduleUploadPath) && !is_link($moduleUploadPath)) {
-				$entries = scandir($moduleUploadPath);
-				if ($entries === ['.', '..'] && !rmdir($moduleUploadPath)) {
-					Yii::warning('Could not remove empty OrgMap upload directory.', __METHOD__);
-				}
-			}
-		} catch (\Throwable $exception) {
-			Yii::warning(
-				'Could not completely remove OrgMap asset files: ' . $exception->getMessage(),
-				__METHOD__
-			);
-		}
-	}
-	
 	/*
 	--------------------------------------------------
 	Permissions

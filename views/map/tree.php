@@ -1,6 +1,10 @@
 <?php
 
-use yii\helpers\Html;
+use humhub\helpers\Html;
+use humhub\modules\orgmap\assets\OrgMapTreeAsset;
+
+OrgMapTreeAsset::register($this);
+
 $nodes = $treeNodes;
 $nodesByOrgan = [];
 $nodesWithoutOrgan = [];
@@ -163,8 +167,7 @@ if ($count === 0) {
 			if ($space) {
 
 				$link =
-					rtrim($space->getUrl(), '/')
-					. '/about';
+					\humhub\modules\orgmap\helpers\SpacePresentationHelper::aboutUrl($space);
 			}
 		}
 
@@ -256,7 +259,7 @@ if ($count === 0) {
 	} elseif ($node->space && $node->link_type === 'space_home') {
 		$link = $node->space->getUrl();
 	} elseif ($node->space && $node->link_type === 'space_about') {
-		$link = rtrim($node->space->getUrl(), '/') . '/about';
+		$link = \humhub\modules\orgmap\helpers\SpacePresentationHelper::aboutUrl($node->space);
 	}
 	if ($link === '#' && $node->space) {
 		$link = $node->space->getUrl();

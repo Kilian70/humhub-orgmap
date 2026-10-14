@@ -7,7 +7,86 @@ Versioning** where practical.
 
 ------------------------------------------------------------------------
 
-## Unreleased
+## [1.4.7] - 2026-10-14 (prerelease)
+
+### Fixed
+
+- Automatically archive verified historical migration leftovers from overlay uploads
+  before web/module migration discovery; preserve all originals in unique batches.
+  Reject changed files, symlinks and unsafe/unwritable paths. Add a file-only
+  `orgmap-migration/prepare` preflight for global CLI updates.
+
+
+## [1.4.6] - Unreleased
+
+The reviewed compatibility corrections below are assigned to version 1.4.6
+to distinguish them from the original 1.4.5 installation. No release or deployment
+has been performed.
+
+### Fixed
+
+
+- Retain Space IDs on OrgMap nodes after Core Space deletion; keep orphaned
+  nodes and their files inaccessible. Repair existing Space foreign keys without
+  rewriting records, other constraints or original files.
+- Convert node and connection label movements into local coordinates at the
+  current zoom, preserving existing stored positions and failed-save rollback.
+
+- Load tree assets on direct standalone tree requests so search and group toggles
+  work on both supported HumHub versions. Ignore non-element mouse event targets
+  without losing tree hover highlighting.
+
+- Correct the Codeception permission-test user and form lifecycle; retain strict
+  positive assertions and allow explicitly marked isolated local databases.
+
+- Use shared HumHub ActiveRecord facilities with an adapter for the existing
+  integer metadata columns. Retain historical creation values and unknown authors;
+  track real edits without treating no-op saves as historical changes.
+- Use HumHub form, widget, HTML and asset base classes while retaining native
+  dropdown change events, client validation, node connection selections during
+  serialization and synchronous script loading at the end of the page.
+
+- Handle failed position/label saves, expired sessions and HumHub user gates;
+  restore the last confirmed layout and show an accessible error message.
+- Initialize replacement map elements after PJAX without accumulating tree,
+  panning, dragging or view-switch handlers.
+- Correct tree search result announcements and Space about links; use the
+  version-appropriate Space image API, including 1.19 image events.
+- Check preview decoding against the actual PHP memory budget; keep originals
+  usable when optional optimization is skipped.
+- Align node dimensions with workspaces up to 10,000 pixels and icon validation
+  with the existing 100-character column. Retain unchanged historical dimensions
+  and reject invalid requested sizes without partial position updates.
+- Pin the reusable runtime workflow and configure HumHub 1.18.0, 1.18.6 and
+  1.19.0 with PHP 8.2/8.3. Replace the unverified 2.x compatibility claim.
+
+- Route OrgMap images through HumHub's protected file storage on 1.18 and 1.19.
+  Keep original uploads and store optimized background previews separately.
+- Preserve tables, settings, migration history and images when disabling the
+  module; reject destructive uninstall requests.
+- Replace the executable legacy migration sequence with an additive upgrade.
+  Keep the 35 published migration files unchanged in `migrations/legacy/`.
+- Resolve existing table prefixes without renaming or merging tables; reject
+  ambiguous layouts before making schema changes.
+- Apply Space visibility to map, tree, administration, object validation and
+  image access, including connections between nodes.
+
+### Added
+
+- Complete module Codeception results for HumHub 1.18.6 and 1.19.0 on PHP 8.3.30:
+  59 tests and 226 assertions passed on each; see `docs/ai/REVIEW-CODECEPTION.md`.
+
+- P3 metadata, form rendering, widget and asset integration regressions; see
+  `docs/ai/REVIEW-P3.md`.
+
+- P2 integration and headless browser regressions; details and limitations in
+  `docs/ai/REVIEW-P2.md`.
+
+- Isolated integration coverage for both supported HumHub versions, including
+  legacy data retention, file import failures, permissions and module lifecycle.
+- Upgrade and review notes in `docs/ai/REVIEW-P1.md`. Read them before deploying:
+  copying this tree over an old installation without removing stale executable
+  migration files is not a supported update procedure.
 
 ------------------------------------------------------------------------
 

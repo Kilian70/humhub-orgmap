@@ -13,7 +13,7 @@ use Yii;
 use yii\base\Action;
 use yii\filters\VerbFilter;
 use yii\web\ForbiddenHttpException;
-use yii\web\User;
+use humhub\modules\user\components\User;
 
 class ControllerPermissionsTest extends OrgMapTestCase
 {
@@ -87,10 +87,13 @@ class ControllerPermissionsTest extends OrgMapTestCase
 	{
 		$settings = Yii::$app->getModule('orgmap')->settings;
 		$originalValue = $settings->get('allowGuestAccess', false);
+        $coreSettings = Yii::$app->getModule('user')->settings;
+        $originalCoreValue = $coreSettings->get('auth.allowGuestAccess', false);
 		$this->setUser(true, false, ViewOrgMap::class);
 		$controller = new MapController('map', Yii::$app->getModule('orgmap'));
 
 		try {
+            $coreSettings->set('auth.allowGuestAccess', true);
 			$settings->set('allowGuestAccess', true);
 			$this->assertControllerDoesNotReject($controller, $actionId);
 
@@ -99,6 +102,7 @@ class ControllerPermissionsTest extends OrgMapTestCase
 			$controller->beforeAction(new Action($actionId, $controller));
 		} finally {
 			$settings->set('allowGuestAccess', $originalValue);
+            $coreSettings->set('auth.allowGuestAccess', $originalCoreValue);
 		}
 	}
 
@@ -167,6 +171,11 @@ class ControllerPermissionsTest extends OrgMapTestCase
 			'identityClass' => \humhub\modules\user\models\User::class,
 			'enableSession' => false,
 		]);
+        if (!$isGuest) {
+            $identity = \humhub\modules\user\models\User::findOne(1);
+            $this->assertNotNull($identity, 'Default user fixture is required for core access checks.');
+            $user->setIdentity($identity);
+        }
 		Yii::$app->set('user', $user);
 	}
 
@@ -176,7 +185,16 @@ class ControllerPermissionsTest extends OrgMapTestCase
 		$controller->action = $action;
 		Yii::$app->controller = $controller;
 
-		$this->assertIsBool($controller->beforeAction($action));
+        $originalMethod = $_SERVER['REQUEST_METHOD'] ?? null;
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        $originalCsrf = Yii::$app->request->enableCsrfValidation;
+        Yii::$app->request->enableCsrfValidation = false; // Direct beforeAction unit test only.
+        try {
+            $this->assertTrue($controller->beforeAction($action));
+        } finally {
+            Yii::$app->request->enableCsrfValidation = $originalCsrf;
+            if ($originalMethod === null) { unset($_SERVER['REQUEST_METHOD']); } else { $_SERVER['REQUEST_METHOD'] = $originalMethod; }
+        }
 	}
 
 	private function controllerId(string $controllerClass): string

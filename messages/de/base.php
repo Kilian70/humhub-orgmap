@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'Speichern fehlgeschlagen. Die letzte gespeicherte Darstellung wurde wiederhergestellt.' => 'Speichern fehlgeschlagen. Die letzte gespeicherte Darstellung wurde wiederhergestellt.',
+    'Grösse muss zwischen {min} und {max} liegen.' => 'Grösse muss zwischen {min} und {max} liegen.',
 
     /*
     |--------------------------------------------------------------------------
@@ -245,4 +247,8 @@ return [
 	'Die Anpassung verschiebt die gesamte Karte gemeinsam, damit ihre Anordnung erhalten bleibt.' => 'Die Anpassung verschiebt die gesamte Karte gemeinsam, damit ihre Anordnung erhalten bleibt.',
 	'Kein geeignetes Hintergrundbild gefunden.' => 'Kein geeignetes Hintergrundbild gefunden.',
 
+    'Kein Zugriff auf den Space.' => 'Kein Zugriff auf den Space.',
+    'Kein Zugriff auf den Knoten.' => 'Kein Zugriff auf den Knoten.',
+    'Ungültige Verbindungen.' => 'Ungültige Verbindungen.',
+    'Kein Zugriff auf das Asset.' => 'Kein Zugriff auf das Asset.',
 ];

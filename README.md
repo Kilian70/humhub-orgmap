@@ -15,9 +15,9 @@
 
 # ORGMAP
 
-**Version:** 1.4.5\
+**Version:** 1.4.7\
 **Author & Maintainer:** Kilian Schmid\
-**Compatible with:** HumHub 1.18 -- 2.x\
+**Supported release lines:** HumHub 1.18 and 1.19 (verified versions below)\
 **License:** GNU Affero General Public License v3.0 or later (`AGPL-3.0-or-later`)
 
 ------------------------------------------------------------------------
@@ -157,8 +157,14 @@ Administration → Modules
 
 Administration → ORGMAP
 
-4.  After updating an existing installation, create a database backup and
-    run the pending HumHub database migrations.
+4.  Before updating an existing installation, back up the database, configuration,
+    complete module directory and file storage. Verified historical migration files
+    left by an overlay upload are now automatically archived before normal web/module
+    migrations are enumerated. Changed files or unsafe paths stop the update.
+    For global CLI migrations, run the file-only preflight first:
+    `php protected/yii orgmap-migration/prepare`. Then use the regular HumHub update process.
+
+See [installation, upgrade and backup instructions](INSTALLATION-UPGRADE.md).
 
 ## Printing
 
@@ -287,6 +293,15 @@ Planned features:
 
 See **CHANGELOG.md** for release history.
 
+The compatibility corrections were verified with HumHub 1.18.6 and 1.19.0 on
+PHP 8.3.30 / MySQL 8.0.44 with local file storage. Codeception passed 63 tests
+with 333 assertions on each verified core. The follow-up migration and targeted
+browser checks passed in both local installations; the user confirmed manual
+ALT label dragging at 50% and 200%, saving and reloading.
+See [installation, upgrade and backup instructions](INSTALLATION-UPGRADE.md)
+for the package scope and deployment precautions. Other runtime combinations
+require separate verification; compatibility with HumHub 2.x is not claimed.
+
 ------------------------------------------------------------------------
 
 # Support
@@ -294,3 +309,8 @@ See **CHANGELOG.md** for release history.
 ORGMAP is actively developed.
 
 Contributions, feature requests and bug reports are welcome.
+
+## Veröffentlichung 1.4.7
+
+Das geprüfte Installations-ZIP steht unter den GitHub-Releases bereit.
+[Prüfstand und verbleibende Grenzen](docs/TESTING-1.4.7.md).

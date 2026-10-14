@@ -3,13 +3,13 @@
 namespace humhub\modules\orgmap\models;
 
 use Yii;
-use yii\db\ActiveRecord;
+use humhub\modules\orgmap\components\ActiveRecord;
 
 class Organ extends ActiveRecord
 {
     public static function tableName()
     {
-        return 'orgmap_organ';
+        return \humhub\modules\orgmap\helpers\TableNameHelper::resolve('orgmap_organ');
     }
 
 	public function rules()

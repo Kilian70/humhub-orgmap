@@ -1,6 +1,6 @@
 <?php
 
-use yii\helpers\Html;
+use humhub\helpers\Html;
 use humhub\modules\orgmap\helpers\ActionButtonHelper;
 
 /** @var $organs */

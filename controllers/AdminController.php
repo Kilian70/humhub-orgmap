@@ -3,6 +3,7 @@
 namespace humhub\modules\orgmap\controllers;
 
 use Yii;
+use humhub\modules\orgmap\helpers\AccessHelper;
 use humhub\components\Controller;
 use humhub\modules\orgmap\models\Node;
 use humhub\modules\orgmap\models\Connection;
@@ -10,7 +11,6 @@ use humhub\modules\orgmap\models\SettingsForm;
 use humhub\modules\orgmap\models\Organ;
 use humhub\modules\orgmap\helpers\WorkspaceHelper;
 use humhub\modules\orgmap\permissions\ManageOrgMap;
-use humhub\modules\space\models\Space;
 use yii\filters\VerbFilter;
 use yii\web\ForbiddenHttpException;
 
@@ -56,7 +56,7 @@ class AdminController extends Controller
 		$model->load(Yii::$app->request->post());
 	
 			if (!$model->save()) {
-				return $this->render('index', ['model' => $model, 'spaces' => Space::find()->all(), 'nodes' => Node::find()->all(), 'organs' => Organ::find()->all()]);
+				return $this->render('index', ['model' => $model, 'spaces' => AccessHelper::visibleSpaces()->all(), 'nodes' => AccessHelper::nodeQuery()->all(), 'organs' => Organ::find()->all()]);
 			}
 	
 		Yii::$app->session->setFlash(
@@ -82,7 +82,7 @@ class AdminController extends Controller
 	----------------------------------------------------
 	*/
 	
-	$spaces = Space::find()
+	$spaces = AccessHelper::visibleSpaces()
 		->orderBy([
 			'name' => SORT_ASC
 		])
@@ -94,7 +94,7 @@ class AdminController extends Controller
 	----------------------------------------------------
 	*/
 	
-	$nodes = Node::find()
+	$nodes = AccessHelper::nodeQuery()
 		->orderBy([
 			'sort_order' => SORT_ASC,
 			'title' => SORT_ASC,
@@ -165,7 +165,8 @@ class AdminController extends Controller
 	
 	if ($space_id) {
 	
-		$space = Space::findOne($space_id);
+		$space = AccessHelper::visibleSpaces()->andWhere(['id' => $space_id])->one();
+        if (!$space) { throw new ForbiddenHttpException(); }
 	
 		if ($space) {
 	
@@ -269,7 +270,7 @@ class AdminController extends Controller
 		
 					foreach ($model->connectionIds as $targetId) {
 						$targetId = (int) $targetId;
-						if ($targetId === (int) $model->id || !Node::find()->where(['id' => $targetId])->exists()) {
+						if ($targetId === (int) $model->id || !AccessHelper::nodeQuery()->andWhere(['id' => $targetId])->exists()) {
 							continue;
 						}
 		
@@ -320,13 +321,14 @@ class AdminController extends Controller
 	{
 	
 			$model = Node::findOne($id);
+        if ($model) { AccessHelper::assertNode($model); }
 
 			if (!$model) {
 				throw new \yii\web\NotFoundHttpException();
 			}
 			
-			$connections = Connection::find()
-			->where([
+			$connections = AccessHelper::connectionQuery()
+			->andWhere([
 				'or',
 				['from_node_id' => $model->id],
 				['to_node_id' => $model->id],
@@ -415,7 +417,7 @@ class AdminController extends Controller
 		
 			foreach ($connectionsToAdd as $targetId) {
 				$targetId = (int) $targetId;
-				if ($targetId === (int) $model->id || !Node::find()->where(['id' => $targetId])->exists()) {
+				if ($targetId === (int) $model->id || !AccessHelper::nodeQuery()->andWhere(['id' => $targetId])->exists()) {
 					continue;
 				}
 		
@@ -490,6 +492,7 @@ class AdminController extends Controller
 	{
 	
 		$model = Node::findOne($id);
+        if ($model) { AccessHelper::assertNode($model); }
 	
 		if (!$model) {
 	
@@ -514,6 +517,7 @@ class AdminController extends Controller
 	{
 	
 		$model = Node::findOne($id);
+        if ($model) { AccessHelper::assertNode($model); }
 	
 		if (!$model) {
 	
@@ -537,6 +541,7 @@ class AdminController extends Controller
 		{
 	
 		$model = Node::findOne($id);
+        if ($model) { AccessHelper::assertNode($model); }
 	
 			if ($model) {
 				$transaction = Yii::$app->db->beginTransaction();
@@ -570,6 +575,7 @@ class AdminController extends Controller
 	{
 	
 		$model = Connection::findOne($id);
+        if ($model) { AccessHelper::assertConnection($model); }
 	
 		if (!$model) {
 	
@@ -659,8 +665,8 @@ public function actionFitWorkspaceToBackground()
 	 * Ebene, dann nach ID. Dieselbe Auswahl ist hier wichtig: Bei mehreren
 	 * (oder alten, ausgeblendeten) Hintergründen würde sonst auf ein anderes
 	 * Element zentriert als dasjenige, das die Karte für Auto-Fit verwendet. */
-	$background = Node::find()
-		->where(['is_background' => 1, 'visible' => 1])
+	$background = AccessHelper::nodeQuery()
+		->andWhere(['is_background' => 1, 'visible' => 1])
 		->orderBy(['sort_order' => SORT_ASC, 'id' => SORT_ASC])
 		->one();
 	$width = (int) ($background->width ?? 0);
@@ -678,7 +684,7 @@ public function actionFitWorkspaceToBackground()
 
 	try {
 		if ($deltaX !== 0 || $deltaY !== 0) {
-			Node::updateAllCounters(['pos_x' => $deltaX, 'pos_y' => $deltaY]);
+			Node::updateAllCounters(['pos_x' => $deltaX, 'pos_y' => $deltaY], ['id' => AccessHelper::nodeQuery()->select('id')->column()]);
 		}
 
 		$settings = Yii::$app->getModule('orgmap')->settings;
@@ -728,6 +734,8 @@ public function actionSaveConnectionLabel()
 		throw new \yii\web\NotFoundHttpException();
 	}
 
+    AccessHelper::assertConnection($model);
+
 	$model->label_offset_x =
 		max(-10000, min(10000, (int) ($data['label_offset_x'] ?? 0)));
 
@@ -737,7 +745,9 @@ public function actionSaveConnectionLabel()
 	$saved = $model->save(false);
 
 	return [
-		'success' => $saved
+		'success' => $saved,
+        'label_offset_x' => $model->label_offset_x,
+        'label_offset_y' => $model->label_offset_y,
 	];
 }
 	

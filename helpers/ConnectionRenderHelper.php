@@ -2,7 +2,7 @@
 
 namespace humhub\modules\orgmap\helpers;
 
-use yii\helpers\Html;
+use humhub\helpers\Html;
 
 class ConnectionRenderHelper
 {

@@ -1,7 +1,7 @@
 <?php
 
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use humhub\helpers\Html;
+use humhub\modules\orgmap\components\ActiveForm;
 use humhub\modules\orgmap\helpers\ActionButtonHelper;
 
 /*
@@ -41,7 +41,8 @@ $this->title =
 		'workspace_size'
 	) ?>
 
-	<?= Html::dropDownList(
+    <?php // Native control: the existing workspace change handler needs no automatic Select2. ?>
+	<?= \yii\helpers\Html::dropDownList(
 
 		'workspace_size',
 

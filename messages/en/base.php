@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'Speichern fehlgeschlagen. Die letzte gespeicherte Darstellung wurde wiederhergestellt.' => 'Saving failed. The last saved layout has been restored.',
+    'Grösse muss zwischen {min} und {max} liegen.' => 'Size must be between {min} and {max}.',
 
 /*
 |--------------------------------------------------------------------------
@@ -408,4 +410,8 @@ return [
 'Kein geeignetes Hintergrundbild gefunden.'
 	=> 'No suitable background image was found.',
     
-    ];
+        'Kein Zugriff auf den Space.' => 'You cannot access this space.',
+    'Kein Zugriff auf den Knoten.' => 'You cannot access this node.',
+    'Ungültige Verbindungen.' => 'Invalid connections.',
+    'Kein Zugriff auf das Asset.' => 'You cannot access this asset.',
+];

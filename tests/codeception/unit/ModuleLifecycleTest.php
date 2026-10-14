@@ -9,7 +9,7 @@ use yii\helpers\FileHelper;
 
 class ModuleLifecycleTest extends OrgMapTestCase
 {
-	public function testUpdateUninstallAndReinstall(): void
+	public function testUpdateDisableAndReenablePreservesData(): void
 	{
 		$this->assertIsolatedTestDatabase();
 
@@ -31,8 +31,9 @@ class ModuleLifecycleTest extends OrgMapTestCase
 
 			$this->assertNotFalse($module->disable());
 			Yii::$app->db->schema->refresh();
-			$this->assertNull(Yii::$app->db->schema->getTableSchema('orgmap_node', true));
-			$this->assertDirectoryDoesNotExist($assetPath);
+			$this->assertNotNull(Yii::$app->db->schema->getTableSchema(\humhub\modules\orgmap\models\Node::tableName(), true));
+			$this->assertFileExists($assetPath . '/test.png');
+            $this->assertSame('test', file_get_contents($assetPath . '/test.png'));
 
 			$this->assertNotFalse($module->enable());
 			Yii::$app->db->schema->refresh();
@@ -49,10 +50,9 @@ class ModuleLifecycleTest extends OrgMapTestCase
 	{
 		$databaseName = (string) Yii::$app->db->createCommand('SELECT DATABASE()')->queryScalar();
 
-		$this->assertSame(
-			'humhub_test',
-			$databaseName,
-			'Lifecycle tests may only run against the isolated humhub_test database.'
-		);
+        if ($databaseName === 'humhub_test') { return; } // Official CI convention.
+        $this->assertMatchesRegularExpression('/^orgmap_test_codeception_(118|119)_[a-f0-9]{8}$/', $databaseName);
+        $this->assertSame(getenv('ORGMAP_ISOLATED_CODECEPTION_DB'), $databaseName,
+            'A separately named local database must match the explicit isolation marker.');
 	}
 }

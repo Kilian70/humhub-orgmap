@@ -5,13 +5,15 @@
 	*/
 	
 	function initTreeNavigation() {
+	if (window.orgmapTreeNavigationInitialized) { return; }
+	window.orgmapTreeNavigationInitialized = true;
 
 document.addEventListener(
 	'mouseenter',
 	function (e) {
 
 		const link =
-			e.target.closest('.tree-link');
+			(e.target instanceof Element) ? e.target.closest('.tree-link') : null;
 
 		if (!link) {
 			return;
@@ -63,7 +65,7 @@ document.addEventListener(
 	function (e) {
 
 		const link =
-			e.target.closest('.tree-link');
+			(e.target instanceof Element) ? e.target.closest('.tree-link') : null;
 
 		if (!link) {
 			return;
@@ -536,7 +538,7 @@ document.addEventListener(
 			).filter(card => card.style.display !== 'none').length;
 				const status = document.getElementById('tree-search-status');
 				if (status) {
-					const resultLabel = search.dataset.resultLabel || 'Results';
+					const resultLabel = e.target.dataset.resultLabel || 'Results';
 					status.textContent = value ? `${resultLabel}: ${visibleCount}` : '';
 				}
 	}

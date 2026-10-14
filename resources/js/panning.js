@@ -6,18 +6,9 @@ Panning
 
 function initPanning() {
 
-	if (window.orgmapInitialized.panning) {
-		return;
-	}
-
-	window.orgmapInitialized.panning = true;
-
-	const currentWrapper =
-		document.querySelector('.orgmap-wrapper');
-
-	if (!currentWrapper) {
-		return;
-	}
+    const currentWrapper = document.querySelector('.orgmap-wrapper');
+    if (!currentWrapper || currentWrapper.dataset.orgmapPanning === '1') { return; }
+    currentWrapper.dataset.orgmapPanning = '1';
 
 	currentWrapper.addEventListener('mousedown', function (event) {
 
@@ -46,29 +37,7 @@ function initPanning() {
 			event.clientY - window.orgmapView.panY;
 	});
 
-	/*
-	--------------------------------------------------
-	Sicherheit MouseUp
-	--------------------------------------------------
-	*/
-
-	document.addEventListener('mouseup', function () {
-
-		if (!state.isPanning) {
-			return;
-		}
-
-		state.isPanning = false;
-	});
-
-	window.addEventListener('mouseup', function () {
-
-		if (!state.isPanning) {
-			return;
-		}
-
-		state.isPanning = false;
-	});
 }
 
 initPanning();
+$(document).on('pjax:success', initPanning);

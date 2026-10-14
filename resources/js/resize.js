@@ -5,6 +5,7 @@
 		*/
 
 		function handleResize(size) {
+            size = Math.round(size);
 
 			state.selectedNode.style.width =
 				size + 'px';
@@ -28,7 +29,7 @@
 			}
 		
 			state.selectedNode.dataset.radius =
-				size / 2;
+				Math.round(size / 2);
 			
 			state.selectedNode.dataset.width =
 				size;

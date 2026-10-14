@@ -3,7 +3,7 @@
 namespace humhub\modules\orgmap\models;
 
 use Yii;
-use yii\db\ActiveRecord;
+use humhub\modules\orgmap\components\ActiveRecord;
 
 class Connection extends ActiveRecord
 {
@@ -114,7 +114,7 @@ class Connection extends ActiveRecord
 	
 	public static function tableName()
 	{
-		return 'orgmap_connection';
+		return \humhub\modules\orgmap\helpers\TableNameHelper::resolve('orgmap_connection');
 	}
 
 	public function rules()
@@ -146,6 +146,7 @@ class Connection extends ActiveRecord
 				'type'
 			], 'string', 'max' => 50],
 			
+				[['from_node_id', 'to_node_id'], 'validateNodeAccess'],
 				[['arrow'], 'default', 'value' => 'none'],
 				[['type'], 'in', 'range' => array_keys(self::getTypeOptions())],
 				[['arrow'], 'in', 'range' => array_keys(self::getArrowOptions())],
@@ -160,6 +161,13 @@ class Connection extends ActiveRecord
 				[['to_node_id'], 'exist', 'targetClass' => Node::class, 'targetAttribute' => ['to_node_id' => 'id']],
 		];
 	}
+
+    public function validateNodeAccess($attribute): void
+    {
+        if ($this->$attribute && !\humhub\modules\orgmap\helpers\AccessHelper::nodeQuery()->andWhere(['id' => $this->$attribute])->exists()) {
+            $this->addError($attribute, Yii::t('OrgmapModule.base', 'Kein Zugriff auf den Knoten.'));
+        }
+    }
 
 	public function getFromNode()
 	{

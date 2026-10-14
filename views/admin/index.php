@@ -1,6 +1,6 @@
 <?php
 
-use yii\helpers\Html;
+use humhub\helpers\Html;
 use humhub\modules\orgmap\models\Node;
 use humhub\modules\orgmap\models\Organ;
 use humhub\modules\orgmap\assets\OrgMapAdminAsset;
@@ -421,8 +421,8 @@ $organNames[0] = Yii::t(
 
        <?php
 
-$externalNodes = Node::find()
-    ->where(['is_external' => 1])
+$externalNodes = \humhub\modules\orgmap\helpers\AccessHelper::nodeQuery()
+    ->andWhere(['is_external' => 1])
     ->andWhere(['space_id' => null])
     ->all();
 

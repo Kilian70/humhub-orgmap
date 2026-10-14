@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace humhub\modules\orgmap\helpers;
 
 use Yii;
-use yii\helpers\Html;
+use humhub\helpers\Html;
 
 class ActionButtonHelper
 {

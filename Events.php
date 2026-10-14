@@ -8,6 +8,24 @@ use Yii;
 
 class Events
 {
+    public static function onBeforeMigration($event): void
+    {
+        self::prepareMigrationFiles($event->sender, $event->action->id);
+    }
+
+    private static function prepareMigrationFiles($controller, ?string $action): void
+    {
+        if (!$controller instanceof \humhub\commands\MigrateController
+            || !in_array($action, ['up', 'new'], true)) {
+            return;
+        }
+        $modulePath = __DIR__;
+        $direct = realpath(Yii::getAlias($controller->migrationPath)) === realpath($modulePath . '/migrations');
+        $moduleId = property_exists($controller, 'moduleId') ? $controller->moduleId : null;
+        if ($direct || ($controller->includeModuleMigrations && ($moduleId === null || $moduleId === 'orgmap'))) {
+            \humhub\modules\orgmap\services\LegacyMigrationArchive::prepare($modulePath);
+        }
+    }
 
     public static function onTopMenuInit($event)
     {

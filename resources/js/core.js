@@ -19,9 +19,9 @@
 		resizeStartSize: 0
 	};
 	
-	const MIN_NODE_SIZE = 60;
+	const MIN_NODE_SIZE = 40;
 	
-	const MAX_NODE_SIZE = 600;
+	const MAX_NODE_SIZE = 10000;
 
 	/*
 	--------------------------------------------------

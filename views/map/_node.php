@@ -2,7 +2,7 @@
 
 use humhub\modules\orgmap\helpers\NodeStyleHelper;
 
-use yii\helpers\Html;
+use humhub\helpers\Html;
 
 /*
 --------------------------------------------------
@@ -23,8 +23,7 @@ if ($node->space_id) {
 		if ($node->link_type === 'space_about') {
 
 			$link =
-				rtrim($space->getUrl(), '/')
-				. '/about';
+				\humhub\modules\orgmap\helpers\SpacePresentationHelper::aboutUrl($space);
 
 		} elseif (
 			$node->link_type === 'space_home'
@@ -35,9 +34,7 @@ if ($node->space_id) {
 
 		try {
 
-			$spaceImage = $space
-				->getProfileImage()
-				->getUrl();
+			$spaceImage = \humhub\modules\orgmap\helpers\SpacePresentationHelper::imageUrl($space);
 
 		} catch (\Exception $e) {
 
@@ -94,9 +91,7 @@ if (
 	) {
 
 		$imageToUse =
-			Yii::getAlias('@web')
-			. '/uploads/orgmap/assets/'
-			. $asset->filename;
+			$asset->getImageUrl();
 	}
 }
 
@@ -252,6 +247,8 @@ $top =
 		data-width="<?= (int) $nodeWidth ?>"
 		data-height="<?= (int) $nodeHeight ?>"
 		data-radius="<?= (int) $node->radius ?>"
+        <?php if ($node->label_x !== null): ?>data-label-x="<?= (int) $node->label_x ?>"<?php endif; ?>
+        <?php if ($node->label_y !== null): ?>data-label-y="<?= (int) $node->label_y ?>"<?php endif; ?>
 
 			<?php if (!$editMode && $tabIndex !== '-1' && $link !== '#'): ?>
 
@@ -361,8 +358,8 @@ $top =
 					role="slider"
 					tabindex="0"
 					aria-label="<?= Yii::t('OrgmapModule.base', 'Grösse') ?>"
-					aria-valuemin="40"
-					aria-valuemax="2000"
+					aria-valuemin="<?= \humhub\modules\orgmap\models\Node::MIN_SIZE ?>"
+					aria-valuemax="<?= \humhub\modules\orgmap\models\Node::MAX_DIMENSION ?>"
 					aria-valuenow="<?= (int) $nodeWidth ?>"
 				></div>
 
