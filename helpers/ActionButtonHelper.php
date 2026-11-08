@@ -6,6 +6,7 @@ namespace humhub\modules\orgmap\helpers;
 
 use Yii;
 use humhub\helpers\Html;
+use humhub\modules\ui\icon\widgets\Icon;
 
 class ActionButtonHelper
 {
@@ -18,9 +19,7 @@ class ActionButtonHelper
 	
 		return Html::a(
 	
-			$visible
-					? '<i class="fa fa-eye" aria-hidden="true"></i>'
-					: '<i class="fa fa-eye-slash" aria-hidden="true"></i>',
+			$visible ? Icon::get('eye') : Icon::get('eye-slash'),
 			$url,
 	
 			[
@@ -60,7 +59,7 @@ class ActionButtonHelper
 
 		return Html::a(
 
-				'<i class="fa fa-pencil" aria-hidden="true"></i>',
+				Icon::get('pencil'),
 
 			$url,
 
@@ -90,7 +89,7 @@ class ActionButtonHelper
 	
 		return Html::a(
 	
-				'<i class="fa fa-align-center" aria-hidden="true"></i>',
+				Icon::get('align-center'),
 	
 			$url,
 	
@@ -124,7 +123,7 @@ class ActionButtonHelper
 	
 		return Html::a(
 	
-				'<i class="fa fa-trash" aria-hidden="true"></i>',
+				Icon::get('trash'),
 	
 			$url,
 	
@@ -178,7 +177,7 @@ class ActionButtonHelper
 	
 		return Html::a(
 	
-				'<i class="fa fa-arrow-left" aria-hidden="true"></i> '
+				Icon::get('arrow-left') . ' '
 			. Yii::t(
 				'OrgmapModule.base',
 				'Zurück'
@@ -197,7 +196,7 @@ class ActionButtonHelper
 	
 		return Html::a(
 	
-				'<i class="fa fa-image" aria-hidden="true"></i> '
+				Icon::get('image') . ' '
 			. Yii::t(
 				'OrgmapModule.base',
 				'Assets'
@@ -229,7 +228,7 @@ class ActionButtonHelper
 	
 		return Html::a(
 	
-				'<i class="fa fa-gear" aria-hidden="true"></i> '
+				Icon::get('cog') . ' '
 			. Yii::t(
 				'OrgmapModule.base',
 				'Einstellungen'

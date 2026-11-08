@@ -29,7 +29,6 @@ class OrgMapAsset extends AssetBundle
 		'js/svg.js',
 
 		// Main
-		'js/icon-picker.js',
 		'js/orgmap.js',
 		'js/tree.js',
 

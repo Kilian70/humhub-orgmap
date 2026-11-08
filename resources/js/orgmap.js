@@ -276,14 +276,20 @@
 
 	document.addEventListener('fullscreenchange', function () {
 		const button = document.querySelector('#orgmap-fullscreen');
-		const icon = button?.querySelector('i');
-		if (!button || !icon) {
+		if (!button) {
 			return;
 		}
 
-		icon.classList.toggle('fa-expand', !document.fullscreenElement);
-		icon.classList.toggle('fa-compress', Boolean(document.fullscreenElement));
-		button.setAttribute('aria-pressed', String(Boolean(document.fullscreenElement)));
+		const isFullscreen = Boolean(document.fullscreenElement);
+		const enterIcon = button.querySelector('[data-orgmap-fullscreen-enter]');
+		const exitIcon = button.querySelector('[data-orgmap-fullscreen-exit]');
+		if (enterIcon) {
+			enterIcon.hidden = isFullscreen;
+		}
+		if (exitIcon) {
+			exitIcon.hidden = !isFullscreen;
+		}
+		button.setAttribute('aria-pressed', String(isFullscreen));
 		const label = document.fullscreenElement
 			? button.dataset.labelExit
 			: button.dataset.labelEnter;

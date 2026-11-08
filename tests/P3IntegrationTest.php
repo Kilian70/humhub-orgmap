@@ -108,7 +108,7 @@ foreach ([$mapAsset, $adminAsset] as $bundle) {
     }
 }
 check($mapAsset->js === (new OrgMapAsset())->js && array_search('js/persistence.js', $mapAsset->js, true) < array_search('js/dragging.js', $mapAsset->js, true), 'Persistence script order changed');
-check($adminAsset->js === ['js/icon-picker.js'], 'Administration unexpectedly loads map scripts');
+check($adminAsset->js === [], 'Administration unexpectedly loads custom scripts');
 
 $app->controller = new humhub\modules\orgmap\controllers\AdminController('admin', $module);
 $app->request->enableCsrfValidation = true;

@@ -5,6 +5,7 @@
 	use humhub\modules\orgmap\assets\OrgMapAsset;
 	use humhub\modules\orgmap\helpers\ConnectionSvgHelper;
 	use humhub\modules\orgmap\helpers\ConnectionRenderHelper;
+	use humhub\modules\ui\icon\widgets\Icon;
 	
 	OrgMapAsset::register($this);
 	
@@ -69,7 +70,7 @@
 				title="<?= Yii::t('OrgmapModule.base', 'Verwaltung') ?>"
 				aria-label="<?= Yii::t('OrgmapModule.base', 'Verwaltung') ?>"
 			>
-				<i class="fa fa-cog" aria-hidden="true"></i>
+				<?= Icon::get('cog') ?>
             </a>
 
 <a
@@ -78,7 +79,7 @@
 	title="<?= Yii::t('OrgmapModule.base', 'Bearbeitungsmodus') ?>"
 	aria-label="<?= Yii::t('OrgmapModule.base', 'Bearbeitungsmodus') ?>"
 >
-	<i class="fa fa-pencil" aria-hidden="true"></i>
+	<?= Icon::get('pencil') ?>
 </a>
 
         <?php endif; ?>
@@ -172,7 +173,8 @@
 	data-label-enter="<?= Yii::t('OrgmapModule.base', 'Vollbild') ?>"
 	data-label-exit="<?= Yii::t('OrgmapModule.base', 'Vollbild verlassen') ?>"
 >
-	<i class="fa fa-expand"></i>
+	<span data-orgmap-fullscreen-enter><?= Icon::get('expand') ?></span>
+	<span data-orgmap-fullscreen-exit hidden><?= Icon::get('compress') ?></span>
 </button>
 
 <button
@@ -182,7 +184,7 @@
 	title="<?= Yii::t('OrgmapModule.base', 'Drucken') ?>"
 	aria-label="<?= Yii::t('OrgmapModule.base', 'Drucken') ?>"
 >
-	<i class="fa fa-print"></i>
+	<?= Icon::get('print') ?>
 </button>
 		</p>
     

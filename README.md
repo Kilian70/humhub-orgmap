@@ -15,9 +15,9 @@
 
 # ORGMAP
 
-**Version:** 1.4.7\
+**Version:** 1.4.9\
 **Author & Maintainer:** Kilian Schmid\
-**Supported release lines:** HumHub 1.18 and 1.19 (verified versions below)\
+**Supported release lines:** HumHub 1.19 and 1.20\
 **License:** GNU Affero General Public License v3.0 or later (`AGPL-3.0-or-later`)
 
 ------------------------------------------------------------------------
@@ -293,11 +293,11 @@ Planned features:
 
 See **CHANGELOG.md** for release history.
 
-The compatibility corrections were verified with HumHub 1.18.6 and 1.19.0 on
-PHP 8.3.30 / MySQL 8.0.44 with local file storage. Codeception passed 63 tests
-with 333 assertions on each verified core. The follow-up migration and targeted
-browser checks passed in both local installations; the user confirmed manual
-ALT label dragging at 50% and 200%, saving and reloading.
+The current release was verified with HumHub 1.19.3 on PHP 8.3.30 / MySQL
+8.0.44 with local file storage. Codeception passed 65 tests with 356 assertions,
+plus the module browser test. HumHub 1.20 icon compatibility follows the official
+HumHub icon renderer and icon picker APIs; a local 1.20 runtime was not available
+for this release.
 See [installation, upgrade and backup instructions](INSTALLATION-UPGRADE.md)
 for the package scope and deployment precautions. Other runtime combinations
 require separate verification; compatibility with HumHub 2.x is not claimed.
@@ -310,10 +310,10 @@ ORGMAP is actively developed.
 
 Contributions, feature requests and bug reports are welcome.
 
-## Veröffentlichung 1.4.7
+## Veröffentlichung 1.4.9
 
 Das geprüfte Installations-ZIP steht unter den GitHub-Releases bereit.
-[Prüfstand und verbleibende Grenzen](docs/TESTING-1.4.7.md).
+[Prüfstand und verbleibende Grenzen](docs/TESTING-1.4.9.md).
 
 
 

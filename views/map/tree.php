@@ -2,6 +2,7 @@
 
 use humhub\helpers\Html;
 use humhub\modules\orgmap\assets\OrgMapTreeAsset;
+use humhub\modules\ui\icon\widgets\Icon;
 
 OrgMapTreeAsset::register($this);
 
@@ -202,7 +203,7 @@ if ($count === 0) {
 
 		<?php if (!empty($node->icon_class)): ?>
 	
-			<i class="fa <?= Html::encode($node->icon_class) ?>" aria-hidden="true"></i>
+			<?= Icon::get($node->icon_class) ?>
 	
 		<?php endif; ?>
 	
@@ -290,7 +291,7 @@ if ($count === 0) {
 
 			<?php if (!empty($node->icon_class)): ?>
 		
-					<i class="fa <?= Html::encode($node->icon_class) ?>" aria-hidden="true"></i>
+					<?= Icon::get($node->icon_class) ?>
 		
 			<?php endif; ?>
 		

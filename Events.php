@@ -60,7 +60,7 @@ class Events
 
             'url' => ['/orgmap/map/index'],
 
-            'icon' => 'fa-circle-o',
+            'icon' => 'circle-o',
 
             'sortOrder' => $settings->get('topMenuSortOrder', 250),
 

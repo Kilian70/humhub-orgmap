@@ -7,6 +7,16 @@ Versioning** where practical.
 
 ------------------------------------------------------------------------
 
+## [1.4.9] - 2026-11-08
+
+### Changed
+
+- Use HumHub's icon renderer and icon picker instead of fixed Font Awesome
+  markup and lists, allowing HumHub 1.20 to provide Tabler Icons.
+- Remove HumHub 1.18 support; the minimum supported version is now 1.19.
+
+------------------------------------------------------------------------
+
 ## [1.4.8] - 2026-11-08
 
 ### Improved

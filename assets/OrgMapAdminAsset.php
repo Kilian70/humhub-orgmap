@@ -7,7 +7,7 @@ use humhub\components\assets\AssetBundle;
 /**
  * Schlankes Asset-Paket für die OrgMap-Verwaltung.
  *
- * Die Verwaltungsseiten benötigen die Modulgestaltung und den Icon-Picker,
+ * Die Verwaltungsseiten benötigen die Modulgestaltung und HumHubs Icon-Picker,
  * aber keine Karten-, Kamera- oder Interaktionsskripte. Würde dort das
  * vollständige Kartenpaket geladen, markiert HumHub es bei einem späteren
  * PJAX-Wechsel bereits als vorhanden, obwohl es ohne Karte initialisiert
@@ -27,9 +27,7 @@ class OrgMapAdminAsset extends AssetBundle
         'css/nodes.css',
     ];
 
-    public $js = [
-        'js/icon-picker.js',
-    ];
+    public $js = [];
 
     public $depends = [
         'humhub\assets\AppAsset',
