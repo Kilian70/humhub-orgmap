@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const http = require('node:http');
 const {chromium} = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
-const scripts = ['core', 'persistence', 'svg', 'icon-picker', 'orgmap', 'tree', 'zoom', 'panning', 'dragging', 'resize', 'interaction'];
+const scripts = ['core', 'persistence', 'svg', 'orgmap', 'tree', 'zoom', 'panning', 'dragging', 'resize', 'interaction'];
 let mode = 'success', requests = [], checks = 0;
 const check = (value, message) => { assert(value, message); checks++; };
 const markup = edit => `
