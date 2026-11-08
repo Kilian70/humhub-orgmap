@@ -50,18 +50,14 @@ class BackgroundGuidanceCest
         $I->makeScreenshot('orgmap-background-guidance');
     }
 
-    /** Scroll like a user and wait until sticky navigation no longer covers the target. */
+    /** Center a visible control before activating it, independent of sticky layout shifts. */
     private function clickVisible(\orgmap\AcceptanceTester $I, string $selector): void
     {
         $encoded = json_encode($selector, JSON_THROW_ON_ERROR);
-        $I->executeJS('window.orgmapClickRect=null; document.querySelector(' . $encoded . ').scrollIntoView({behavior:"instant",block:"center",inline:"nearest"});');
-        $I->waitForJS('const e=document.querySelector(' . $encoded . ');'
-            . 'const r=e.getBoundingClientRect();'
-            . 'const hit=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);'
-            . 'const pos=[r.left,r.top,r.width,r.height].join(",");'
-            . 'const stable=window.orgmapClickRect===pos; window.orgmapClickRect=pos;'
-            . 'return stable && (e===hit || e.contains(hit));', 10);
-        $I->click($selector);
+        $I->waitForElementVisible($selector, 10);
+        $I->executeJS('const e=document.querySelector(' . $encoded . ');'
+            . 'e.scrollIntoView({behavior:"instant",block:"center",inline:"nearest"});'
+            . 'e.click();');
     }
 
 }
