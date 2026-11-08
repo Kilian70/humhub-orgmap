@@ -10,7 +10,7 @@
         "structure",
         "network"
     ],
-    "version": "1.4.9",
+    "version": "1.4.10",
     "humhub": {
         "minVersion": "1.19"
     }

@@ -7,6 +7,15 @@ Versioning** where practical.
 
 ------------------------------------------------------------------------
 
+## [1.4.10] - 2026-11-08
+
+### Fixed
+
+- Remove the remaining JavaScript initialization calls for the retired custom
+  icon picker after switching to HumHub's core picker.
+
+------------------------------------------------------------------------
+
 ## [1.4.9] - 2026-11-08
 
 ### Changed

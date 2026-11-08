@@ -15,7 +15,7 @@
 
 # ORGMAP
 
-**Version:** 1.4.9\
+**Version:** 1.4.10\
 **Author & Maintainer:** Kilian Schmid\
 **Supported release lines:** HumHub 1.19 and 1.20\
 **License:** GNU Affero General Public License v3.0 or later (`AGPL-3.0-or-later`)
@@ -310,10 +310,10 @@ ORGMAP is actively developed.
 
 Contributions, feature requests and bug reports are welcome.
 
-## Veröffentlichung 1.4.9
+## Veröffentlichung 1.4.10
 
 Das geprüfte Installations-ZIP steht unter den GitHub-Releases bereit.
-[Prüfstand und verbleibende Grenzen](docs/TESTING-1.4.9.md).
+[Prüfstand und verbleibende Grenzen](docs/TESTING-1.4.10.md).
 
 
 

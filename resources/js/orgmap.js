@@ -82,15 +82,11 @@
 		fullscreenButton.disabled = true;
 	}
 	
-	initIconPicker();
-	
 	$(document).on(
 		'pjax:success',
 		function () {
 	
 			initOrgmapViewSwitcher();
-	
-			initIconPicker();
 		}
 	);
 	
