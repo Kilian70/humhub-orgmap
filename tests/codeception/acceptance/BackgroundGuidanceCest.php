@@ -43,7 +43,8 @@ class BackgroundGuidanceCest
         $I->waitForElementVisible('#orgmap-position-warning');
         $I->click('#center-node');
         $I->dontSeeElement('#orgmap-position-warning');
-        $I->checkOption('#node-is_background');
+        $I->scrollTo('label[for="node-is_background"]', 0, -150);
+        $I->click('label[for="node-is_background"]');
         $I->seeElement('#orgmap-background-help');
         $I->click('#fill-workspace');
         $I->dontSeeElement('#orgmap-position-warning');
