@@ -299,6 +299,11 @@ $this->title = Yii::t('OrgmapModule.base', 'ORG. Kreis');
 	
 	</div>	
 
+	<div id="orgmap-image-warning" class="alert alert-warning" role="status" hidden>
+    <?= Html::encode(Yii::t('OrgmapModule.base', 'Ein Bild ist ausgewählt, wird bei dieser Darstellung aber nicht angezeigt.')) ?>
+    <?= Html::button(Html::encode(Yii::t('OrgmapModule.base', 'Ausgewähltes Bild anzeigen')), ['type' => 'button', 'id' => 'orgmap-show-image', 'class' => 'btn btn-default btn-sm']) ?>
+</div>
+
 	<div class="orgmap-color-opacity-field">
 		<?= $form->field($model, 'color_opacity')->input('number', [
 			'min' => 0,
@@ -558,7 +563,7 @@ $this->title = Yii::t('OrgmapModule.base', 'ORG. Kreis');
 	>
 		<?= Yii::t(
 			'OrgmapModule.base',
-			'Zentrieren'
+			'Element in der Karte zentrieren'
 		) ?>
 	</button>
 
@@ -569,21 +574,31 @@ $this->title = Yii::t('OrgmapModule.base', 'ORG. Kreis');
 	>
 		<?= Yii::t(
 			'OrgmapModule.base',
-			'Arbeitsfläche ausfüllen'
+			'Hintergrund auf Kartengrösse setzen'
 		) ?>
 	</button>
 
 </div>
 
-<?= $form->field($model, 'pos_x')->textInput() ?>
+<div id="orgmap-position-warning" class="alert alert-warning" role="status" hidden>
+    <?= Html::encode(Yii::t('OrgmapModule.base', 'Dieses Element liegt teilweise ausserhalb der Karte. Mit «Element in der Karte zentrieren» wird nur dieses Element verschoben.')) ?>
+</div>
+<p class="help-block">
+    <?= Html::encode(Yii::t('OrgmapModule.base', 'Die Position bezeichnet die Mitte des Elements. Grössen und Positionen werden erst mit «Speichern» übernommen.')) ?>
+</p>
+<div id="orgmap-background-help" class="alert alert-info" hidden>
+    <?= Html::encode(Yii::t('OrgmapModule.base', '«Hintergrund auf Kartengrösse setzen» verändert nur diesen Hintergrund. Um die gesamte Karte gemeinsam einzupassen, zuerst speichern und danach die Arbeitsfläche in den Einstellungen an den Hintergrund anpassen.')) ?>
+    <?= Html::a(Html::encode(Yii::t('OrgmapModule.base', 'Zu den Karteneinstellungen')), ['/orgmap/admin/settings']) ?>
+</div>
+<?= $form->field($model, 'pos_x')->label(Yii::t('OrgmapModule.base', 'Mittelpunkt X'))->textInput() ?>
 
-<?= $form->field($model, 'pos_y')->textInput() ?>
+<?= $form->field($model, 'pos_y')->label(Yii::t('OrgmapModule.base', 'Mittelpunkt Y'))->textInput() ?>
 
 <?= $form->field($model, 'radius')->textInput() ?>
 
-<?= $form->field($model, 'width')->textInput() ?>
+<?= $form->field($model, 'width')->label(Yii::t('OrgmapModule.base', 'Breite (Pixel)'))->textInput() ?>
 
-<?= $form->field($model, 'height')->textInput() ?>
+<?= $form->field($model, 'height')->label(Yii::t('OrgmapModule.base', 'Höhe (Pixel)'))->textInput() ?>
 
 <?= $form->field($model, 'sort_order')->textInput() ?>
 
@@ -854,6 +869,7 @@ centerNodeButton.addEventListener(
 		document.getElementById(
 			'node-pos_y'
 		).value = $centerY;
+		updateFormGuidance();
 	}
 );
 }
@@ -888,6 +904,7 @@ if (fillWorkspaceButton) {
 				'node-height'
 			).value =
 				$workspaceHeight;
+			updateFormGuidance();
 		}
 	);
 }
@@ -926,6 +943,41 @@ if (backgroundCheckbox) {
 
 	updateWorkspaceButtons();
 }
+
+// Guidance never changes existing values until the user chooses a correction.
+function updateFormGuidance() {
+    const field = name => document.getElementById('node-' + name);
+    const source = field('image_source').value;
+    const hasImage = (source === 'asset' && field('asset_id').value !== '')
+        || (source === 'custom' && field('custom_image').value.trim() !== '')
+        || (source === 'space' && field('space_id').value !== '');
+    document.getElementById('orgmap-image-warning').hidden =
+        !hasImage || ['image', 'mixed'].includes(field('display_mode').value);
+    document.getElementById('orgmap-background-help').hidden = !field('is_background').checked;
+    const x = Number(field('pos_x').value);
+    const y = Number(field('pos_y').value);
+    const radius = Number(field('radius').value) || 80;
+    const width = Number(field('width').value) || radius * 2;
+    const height = Number(field('height').value) || radius * 2;
+    const clipped = field('pos_x').value.trim() === '' || field('pos_y').value.trim() === ''
+        || !Number.isFinite(x) || !Number.isFinite(y)
+        || x - width / 2 < 0 || y - height / 2 < 0
+        || x + width / 2 > $workspaceWidth || y + height / 2 > $workspaceHeight;
+    document.getElementById('orgmap-position-warning').hidden = !clipped;
+}
+
+document.getElementById('orgmap-show-image').addEventListener('click', function () {
+    document.getElementById('node-display_mode').value = 'image';
+    document.getElementById('node-display_mode').dispatchEvent(new Event('change', {bubbles: true}));
+});
+
+['display_mode', 'image_source', 'asset_id', 'custom_image', 'pos_x', 'pos_y',
+ 'width', 'height', 'radius', 'is_background'].forEach(name => {
+    const input = document.getElementById('node-' + name);
+    input.addEventListener('input', updateFormGuidance);
+    input.addEventListener('change', updateFormGuidance);
+});
+updateFormGuidance();
 
 JS);
 ?>

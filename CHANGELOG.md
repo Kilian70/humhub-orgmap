@@ -7,6 +7,15 @@ Versioning** where practical.
 
 ------------------------------------------------------------------------
 
+## [1.4.8] - 2026-11-08
+
+### Improved
+
+- Hinweis auf verborgene ausgewählte Bilder mit expliziter Korrekturschaltfläche.
+- Hinweis bei Elementen ausserhalb der Karte und klare Beschriftungen für
+  Mittelpunkt, Einzelhintergrund und gemeinsame Karteneinpassung.
+- Bestehende Werte bleiben bis zur bewussten Bearbeitung unverändert.
+
 ## [1.4.7] - 2026-11-08
 
 ### Fixed

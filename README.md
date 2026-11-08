@@ -314,3 +314,17 @@ Contributions, feature requests and bug reports are welcome.
 
 Das geprüfte Installations-ZIP steht unter den GitHub-Releases bereit.
 [Prüfstand und verbleibende Grenzen](docs/TESTING-1.4.7.md).
+
+
+
+### Hilfe bei Hintergrund und Position (ab 1.4.8)
+
+Das Bearbeitungsformular warnt, wenn ein ausgewähltes Bild wegen «Nur Farbe»
+oder «Kein Hintergrund» verborgen bleibt. «Ausgewähltes Bild anzeigen» schaltet
+auf Bilddarstellung um; gespeichert wird erst mit «Speichern».
+Bei Elementen ausserhalb der Karte erscheint ein Positionshinweis.
+«Element in der Karte zentrieren» verschiebt nur das bearbeitete Element.
+«Hintergrund auf Kartengrösse setzen» ändert dessen Grösse und Mittelpunkt,
+aber keine anderen Elemente. Zum gemeinsamen Einpassen der Anordnung zuerst
+speichern und danach in den Karteneinstellungen die Arbeitsfläche an den
+Hintergrund anpassen.

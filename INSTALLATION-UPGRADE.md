@@ -1,10 +1,13 @@
 # OrgMap – Installation, Update und Sicherung
 
-Modulversion **1.4.7**, GitHub-Vorabversion vom 14.10.2026, mit den geprüften
-Kompatibilitätskorrekturen. Das Installationspaket enthält Version 1.4.7. Dasselbe Paket gilt für
-HumHub 1.18 und 1.19. Tatsächlich abgenommen: **1.18.6 und 1.19.0**, PHP 8.3.30,
-MySQL 8.0.44, lokaler Dateispeicher. Weitere Kombinationen sind nicht pauschal
-abgenommen, insbesondere PHP 8.2, HumHub 1.18.0 und Remote-/S3-Speicher.
+Modulversion **1.4.8**, stabile Veröffentlichung vom 08.11.2026.
+Diese Version ergänzt die Hintergrund-Bedienhilfe und benötigt keine neue
+Datenbankmigration gegenüber 1.4.7. Geprüft: **HumHub 1.19.3**, PHP 8.3.30,
+MySQL 8.0.44 und Firefox 159.0.1 im gemeinsamen isolierten Testlabor.
+Die Mindestversion 1.18 bleibt unverändert. Auf ausdrücklichen Nutzerwunsch
+wurde HumHub 1.18 für diese Änderung nicht erneut geprüft; daraus folgt keine
+neue 1.18-Abnahme. Weitere PHP-/Datenbankstände und externe Dateispeicher
+sind durch diese Läufe nicht abgedeckt.
 
 ## Vorher sichern
 

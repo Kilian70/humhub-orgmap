@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        humhub: ['v1.18.0', 'v1.18.6', 'v1.19.0']
+        humhub: ['v1.19.3']
         php: ['8.2', '8.3']
     uses: humhub/module-coding-standards/.github/workflows/codeception-base.yml@d307975192d4615971583dbbd73cedb64b0a08f7
     with:
