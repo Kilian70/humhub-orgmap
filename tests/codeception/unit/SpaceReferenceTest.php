@@ -24,8 +24,13 @@ class SpaceReferenceTest extends OrgMapTestCase
         $db = Yii::$app->db;
         $database = (string) $db->createCommand('SELECT DATABASE()')->queryScalar();
         if ($database !== 'humhub_test') {
-            $this->assertMatchesRegularExpression('/^orgmap_test_codeception_(118|119)_[a-f0-9]{8}$/', $database);
-            $this->assertSame(getenv('ORGMAP_ISOLATED_CODECEPTION_DB'), $database);
+            $explicitDatabase = getenv('ORGMAP_ISOLATED_CODECEPTION_DB')
+                ?: getenv('HUMHUB_TEST_DB_NAME');
+            $this->assertMatchesRegularExpression(
+                '/^(orgmap_test_codeception_(118|119)_[a-f0-9]{8}|humhub_auto_(118|119))$/',
+                $database
+            );
+            $this->assertSame($explicitDatabase, $database);
         }
         $identity = Yii::$app->user->identity;
         try {

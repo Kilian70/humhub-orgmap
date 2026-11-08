@@ -50,9 +50,20 @@ class ModuleLifecycleTest extends OrgMapTestCase
 	{
 		$databaseName = (string) Yii::$app->db->createCommand('SELECT DATABASE()')->queryScalar();
 
-        if ($databaseName === 'humhub_test') { return; } // Official CI convention.
-        $this->assertMatchesRegularExpression('/^orgmap_test_codeception_(118|119)_[a-f0-9]{8}$/', $databaseName);
-        $this->assertSame(getenv('ORGMAP_ISOLATED_CODECEPTION_DB'), $databaseName,
-            'A separately named local database must match the explicit isolation marker.');
+		if ($databaseName === 'humhub_test') {
+			return; // Official CI convention.
+		}
+
+		$explicitDatabase = getenv('ORGMAP_ISOLATED_CODECEPTION_DB')
+			?: getenv('HUMHUB_TEST_DB_NAME');
+		$this->assertMatchesRegularExpression(
+			'/^(orgmap_test_codeception_(118|119)_[a-f0-9]{8}|humhub_auto_(118|119))$/',
+			$databaseName
+		);
+		$this->assertSame(
+			$explicitDatabase,
+			$databaseName,
+			'A separately named local database must match the explicit isolation marker.'
+		);
 	}
 }
