@@ -20,7 +20,7 @@ jobs:
       matrix:
         humhub: ['v1.19.3']
         php: ['8.2', '8.3']
-    uses: humhub/module-coding-standards/.github/workflows/codeception-base.yml@d307975192d4615971583dbbd73cedb64b0a08f7
+    uses: humhub/module-coding-standards/.github/workflows/codeception-base.yml@e834750c27074b0e7d4c08ddbebf911bd26c5dfa
     with:
       module-id: orgmap
       humhub-branch: ${{ matrix.humhub }}
